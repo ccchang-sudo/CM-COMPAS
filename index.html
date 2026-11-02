@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>普考歷屆試題複習系統｜中國科技大學管理學院</title>
+<style>
+:root {
+  --paper: #eef1f5; --card: #ffffff; --ink: #1b2433; --ink-2: #4b5567; --rule: #cdd5e0;
+  --blue: #1f3f8a; --blue-soft: #e2e8f6; --graphite: #2a2e36; --on-graphite: #f3f5f8;
+  --ok: #17724a; --ok-soft: #dcf2e6; --bad: #b0372d; --bad-soft: #f8e0dd;
+  --sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #11151c; --card: #19202a; --ink: #e8ecf2; --ink-2: #a4aebd; --rule: #2f3847;
+    --blue: #93abe9; --blue-soft: #222c47; --graphite: #e8ecf2; --on-graphite: #11151c;
+    --ok: #62d09b; --ok-soft: #153325; --bad: #ff8e82; --bad-soft: #3a1f1d; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #11151c; --card: #19202a; --ink: #e8ecf2; --ink-2: #a4aebd; --rule: #2f3847;
+  --blue: #93abe9; --blue-soft: #222c47; --graphite: #e8ecf2; --on-graphite: #11151c;
+  --ok: #62d09b; --ok-soft: #153325; --bad: #ff8e82; --bad-soft: #3a1f1d; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.7; }
+button, select, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.inner { max-width: 860px; margin: 0 auto; }
+
+.top { background: var(--blue); color: #fff; padding-block: 10px; font-size: 14px; letter-spacing: .08em; }
+.top .inner { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.top b { font-weight: 700; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .top { background: #1c2745; color: #dbe4fb; } }
+:root[data-theme="dark"] .top { background: #1c2745; color: #dbe4fb; }
+
+main { padding-block: 28px 56px; }
+h1 { font-size: clamp(26px, 5vw, 38px); line-height: 1.25; margin: 0 0 8px; text-wrap: balance; }
+h2 { font-size: 20px; margin: 0 0 12px; }
+.lead { color: var(--ink-2); margin: 0 0 20px; }
+.panel { background: var(--card); border: 1px solid var(--rule); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.btn { border: 1.5px solid var(--ink-2); background: transparent; border-radius: 6px; padding: 8px 18px; font-weight: 500; }
+.btn:hover:not(:disabled) { background: var(--blue-soft); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.primary { background: var(--graphite); color: var(--on-graphite); border-color: var(--graphite); }
+.btn.primary:hover:not(:disabled) { opacity: .9; background: var(--graphite); }
+.btn.confirm { background: var(--bad); border-color: var(--bad); color: #fff; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.row.gap-lg { gap: 14px; margin-top: 18px; }
+.note { font-size: 13.5px; color: var(--ink-2); }
+
+/* setup */
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px 18px; }
+label.f { display: grid; gap: 4px; font-size: 14px; color: var(--ink-2); min-width: 0; }
+select { width: 100%; padding: 8px 10px; border: 1.5px solid var(--ink-2); border-radius: 6px; background: var(--card); }
+.modes { display: grid; gap: 8px; margin: 4px 0 14px; }
+.modes label { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; cursor: pointer; }
+.modes label:has(input:checked) { border-color: var(--blue); background: var(--blue-soft); }
+.modes input { margin-top: 6px; }
+.modes small { display: block; color: var(--ink-2); font-size: 13px; }
+.stat { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 14.5px; }
+.stat b { font-variant-numeric: tabular-nums; }
+.count { font-weight: 700; color: var(--blue); font-variant-numeric: tabular-nums; }
+
+/* practice */
+.phead { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.prog { font-weight: 700; font-variant-numeric: tabular-nums; }
+.timer { font-family: var(--mono); font-size: 20px; font-variant-numeric: tabular-nums; }
+.timer.low { color: var(--bad); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.chip { font-size: 12.5px; border: 1px solid var(--rule); border-radius: 999px; padding: 1px 10px; color: var(--ink-2); }
+.qtext { margin: 0 0 14px; font-size: 17.5px; overflow-wrap: anywhere; }
+.tablewrap { overflow-x: auto; max-width: 100%; margin: 8px 0; }
+.tablewrap table { border-collapse: collapse; font-size: 14px; }
+.tablewrap th, .tablewrap td { border: 1px solid var(--rule); padding: 3px 12px; text-align: center; white-space: nowrap; }
+.opts { display: grid; gap: 8px; }
+.opt { display: flex; gap: 12px; align-items: center; text-align: left; width: 100%; background: transparent; border: 1px solid var(--rule); border-radius: 6px; padding: 9px 12px; min-width: 0; }
+.opt:hover:not(:disabled) { background: var(--blue-soft); }
+.opt .bub { flex: none; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--ink-2); display: grid; place-items: center; font-family: var(--mono); font-size: 13px; }
+.opt .tx { min-width: 0; overflow-wrap: anywhere; }
+.opt.sel { border-color: var(--graphite); }
+.opt.sel .bub { background: var(--graphite); color: var(--on-graphite); border-color: var(--graphite); }
+.opt.correct { background: var(--ok-soft); border-color: var(--ok); }
+.opt.correct .bub { background: var(--ok); border-color: var(--ok); color: #fff; }
+.opt.wrong { background: var(--bad-soft); border-color: var(--bad); }
+.opt.wrong .bub { background: var(--bad); border-color: var(--bad); color: #fff; }
+.opt:disabled { cursor: default; color: var(--ink); }
+.verdict { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+.verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--ink-2); }
+.exp { margin-top: 12px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--blue-soft); border-radius: 0 6px 6px 0; }
+.exp p { margin: 0; }
+
+/* summary */
+.score { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.score .num { font-size: clamp(56px, 12vw, 84px); font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
+table.weak { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+table.weak th, table.weak td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--rule); }
+table.weak td.n, table.weak th.n { text-align: right; font-variant-numeric: tabular-nums; }
+.meter { height: 8px; background: var(--rule); border-radius: 4px; overflow: hidden; min-width: 60px; }
+.meter i { display: block; height: 100%; background: var(--blue); }
+details.wq { border: 1px solid var(--rule); border-radius: 6px; padding: 8px 12px; margin-top: 8px; }
+details.wq summary { cursor: pointer; font-weight: 500; overflow-wrap: anywhere; }
+details.wq .body { padding-top: 8px; }
+textarea.copy { width: 100%; min-height: 160px; border: 1.5px solid var(--ink-2); border-radius: 6px; background: var(--card); padding: 8px; font-family: var(--mono); font-size: 13px; }
+.foot { margin-top: 30px; font-size: 13px; color: var(--ink-2); }
+.err { border-color: var(--bad); }
+@media print {
+  .top, .btn, .row, .noprint { display: none !important; }
+  body { background: #fff; color: #000; }
+  .panel { border: 1px solid #999; break-inside: avoid; }
+  details.wq { display: block; } details.wq .body { display: block; }
+}
+</style>
+</head>
+<body>
+<div class="top gutter"><div class="inner"><b>中國科技大學　管理學院</b><span>國家考試題庫複習系統</span></div></div>
+
+<main class="gutter"><div class="inner">
+
+  <section id="vLoading"><p class="lead">題庫載入中…</p></section>
+
+  <section id="vError" class="panel err" hidden>
+    <h2>題庫載入失敗</h2>
+    <p id="errMsg"></p>
+    <p class="note">若你是在自己電腦直接雙擊 index.html，瀏覽器的安全限制會擋住題庫檔。請改用網址開啟，或在專案資料夾執行 <code>python3 -m http.server 8000</code> 後開啟 http://localhost:8000。</p>
+  </section>
+
+  <section id="vCover" hidden>
+    <h1>普通考試　歷屆試題複習系統</h1>
+    <p class="lead">亂數出題、自己輸入答案、送出後立即評分並看完整詳解。免登入，紀錄只存在這台裝置的瀏覽器裡。</p>
+    <div class="panel">
+      <div class="stat" id="coverStat"></div>
+      <div class="row gap-lg"><button type="button" class="btn primary" id="btnEnter">進入系統</button></div>
+    </div>
+    <p class="note">本系統供複習準備公務人員普通考試之用。試題與標準答案來自考選部，詳解為教學用途整理，不是官方答案。</p>
+  </section>
+
+  <section id="vSetup" hidden>
+    <h1>設定練習</h1>
+    <p class="lead" id="setupLead"></p>
+    <div class="panel">
+      <div class="grid2">
+        <label class="f">考試等別<select id="selExam"></select></label>
+        <label class="f">應試科目<select id="selSubject"></select></label>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>練習模式</h2>
+      <div class="modes" id="modes">
+        <label><input type="radio" name="mode" value="random" checked><span>隨機出題<small>從符合條件的題目中亂數抽題，同一輪不重複</small></span></label>
+        <label><input type="radio" name="mode" value="tag"><span>依考點練習<small>指定考點，針對弱項集中練</small></span></label>
+        <label><input type="radio" name="mode" value="wrong"><span>錯題重練<small>只出最近一次沒答對的題目</small></span></label>
+      </div>
+      <div class="grid2">
+        <label class="f" id="fTag" hidden>考點<select id="selTag"></select></label>
+        <label class="f">年度<select id="selYear"></select></label>
+        <label class="f">本輪題數<select id="selN"><option value="10">10 題</option><option value="20">20 題</option><option value="50">50 題</option><option value="0">全部符合的題目</option></select></label>
+        <label class="f">計時<select id="selTime"><option value="0">不計時</option><option value="72">每題 72 秒（正式考試步調）</option><option value="45">每題 45 秒（加壓練習）</option></select></label>
+      </div>
+      <p class="note" style="margin-top:14px">符合條件的題目：<span class="count" id="poolCount">0</span> 題</p>
+      <div class="row gap-lg">
+        <button type="button" class="btn primary" id="btnStart">開始練習</button>
+        <button type="button" class="btn" id="btnResume" hidden>接續上次紀錄</button>
+        <button type="button" class="btn" id="btnBackCover">回封面</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>我的紀錄</h2>
+      <div class="stat" id="allStat"></div>
+      <div class="row gap-lg">
+        <button type="button" class="btn" id="btnExport">備份紀錄（下載檔案）</button>
+        <label class="btn" style="cursor:pointer">匯入備份<input type="file" id="fileImport" accept="application/json,.json" hidden></label>
+      </div>
+      <p class="note" id="backupMsg" style="margin-bottom:0">換電腦或清除瀏覽器資料之前，請先備份。</p>
+    </div>
+  </section>
+
+  <section id="vPractice" hidden>
+    <div class="phead">
+      <span class="prog" id="pProg"></span>
+      <span class="timer" id="pTimer" hidden></span>
+      <button type="button" class="btn" id="btnEndEarly">結束並檢視紀錄</button>
+    </div>
+    <div class="panel">
+      <div class="chips" id="pChips"></div>
+      <p class="qtext" id="pQ"></p>
+      <div class="opts" id="pOpts" role="group" aria-label="選項"></div>
+      <div class="row gap-lg" id="pActions">
+        <button type="button" class="btn primary" id="btnSubmit" disabled>送出答案並評分</button>
+        <button type="button" class="btn" id="btnSkip">略過此題</button>
+      </div>
+      <div id="pFeedback" hidden aria-live="polite">
+        <p class="verdict" id="fbVerdict"></p>
+        <div class="note" id="fbAnswer"></div>
+        <div class="exp"><p id="fbExp"></p></div>
+        <p class="note" id="fbNote" hidden></p>
+        <div class="row gap-lg">
+          <button type="button" class="btn primary" id="btnNext">下一題</button>
+          <button type="button" class="btn" id="btnEnd">結束並檢視紀錄</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vSummary" hidden>
+    <h1>本次練習紀錄</h1>
+    <div class="panel">
+      <div class="score"><span class="num" id="sNum">0</span><span class="note" id="sOf"></span></div>
+      <div class="stat" id="sStat" style="margin-top:8px"></div>
+    </div>
+    <div class="panel" id="weakPanel">
+      <h2>各考點答對率</h2>
+      <table class="weak"><thead><tr><th>考點</th><th class="n">答對</th><th style="width:34%">答對率</th></tr></thead><tbody id="weakBody"></tbody></table>
+    </div>
+    <div class="panel" id="wrongPanel">
+      <h2>答錯與未答的題目</h2>
+      <div id="wrongList"></div>
+    </div>
+    <div class="panel noprint">
+      <div class="row">
+        <button type="button" class="btn primary" id="btnContinue">繼續練習</button>
+        <button type="button" class="btn" id="btnPrint">列印／存成 PDF</button>
+        <button type="button" class="btn" id="btnCopy">複製文字紀錄</button>
+        <button type="button" class="btn" id="btnClear">清除全部紀錄重新開始</button>
+      </div>
+      <textarea class="copy" id="copyBox" hidden readonly aria-label="文字紀錄"></textarea>
+      <p class="note" id="sumMsg" style="margin-bottom:0"></p>
+    </div>
+  </section>
+
+  <p class="foot">題目來源：考選部考畢試題查詢平臺。詳解為教學用途整理，非官方答案；法規與制度請以現行規定為準。若發現與考選部公告不符之處，請回報系統維護者。</p>
+</div></main>
+
+<script src="core.js"></script>
+<script>
+(function () {
+  "use strict";
+  var C = window.MoexCore;
+  var LS = "cute-mgmt-moex-v1";
+  var LET = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  var BANK = null, BYID = {};
+  var S = { records: [], wrong: {}, session: null };
+  var view = null, chosen = null, tickId = null, left = 0, armed = {};
+
+  function $(id) { return document.getElementById(id); }
+  function esc(t) { var d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
+  function load() { try { var s = JSON.parse(localStorage.getItem(LS)); if (s && typeof s === "object") { S.records = Array.isArray(s.records) ? s.records : []; S.wrong = s.wrong && typeof s.wrong === "object" ? s.wrong : {}; S.session = s.session || null; } } catch (e) {} }
+  function save() { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} }
+
+  var VIEWS = ["vLoading", "vError", "vCover", "vSetup", "vPractice", "vSummary"];
+  function show(v) {
+    view = v;
+    VIEWS.forEach(function (id) { $(id).hidden = id !== v; });
+    window.scrollTo(0, 0);
+  }
+  function twoStep(btn, label, fn) {
+    var key = btn.id;
+    if (!armed[key]) {
+      var orig = btn.textContent;
+      btn.textContent = label; btn.classList.add("confirm");
+      armed[key] = setTimeout(function () { armed[key] = null; btn.textContent = orig; btn.classList.remove("confirm"); }, 4000);
+      return;
+    }
+    clearTimeout(armed[key]); armed[key] = null; btn.classList.remove("confirm");
+    fn();
+  }
+
+  /* ---------- 啟動 ---------- */
+  function fetchJson(url) { return fetch(url, { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error(url + " → HTTP " + r.status); return r.json(); }); }
+  function boot() {
+    load();
+    fetchJson("data/bank.json").catch(function () { return fetchJson("bank.json"); }).then(function (b) {
+      var errs = C.validateBank(b);
+      if (errs.length) throw new Error("題庫格式有誤：" + errs.slice(0, 5).join("；") + (errs.length > 5 ? "…（共 " + errs.length + " 項）" : ""));
+      BANK = b; b.questions.forEach(function (q) { BYID[q.id] = q; });
+      initSetup(); renderCoverStat(); show("vCover");
+    }).catch(function (e) { $("errMsg").textContent = String(e.message || e); show("vError"); });
+  }
+
+  /* ---------- 封面與統計 ---------- */
+  function totals() {
+    var n = S.records.length, ok = S.records.filter(function (r) { return r.status === "ok"; }).length;
+    var wrongN = Object.keys(S.wrong).filter(function (id) { return S.wrong[id].last !== "ok" && BYID[id]; }).length;
+    return { n: n, ok: ok, rate: n ? Math.round(ok / n * 100) : 0, wrongN: wrongN };
+  }
+  function statHtml() {
+    var t = totals();
+    return "<span>題庫 <b>" + BANK.questions.length + "</b> 題</span><span>累計作答 <b>" + t.n + "</b> 題</span><span>答對率 <b>" + (t.n ? t.rate + "%" : "—") + "</b></span><span>錯題本 <b>" + t.wrongN + "</b> 題</span>";
+  }
+  function renderCoverStat() { $("coverStat").innerHTML = statHtml(); }
+
+  /* ---------- 設定畫面 ---------- */
+  function uniq(a) { return a.filter(function (v, i) { return a.indexOf(v) === i; }); }
+  function opt(v, t) { var o = document.createElement("option"); o.value = v; o.textContent = t; return o; }
+  function fill(sel, items, first) { sel.innerHTML = ""; if (first) sel.appendChild(opt("", first)); items.forEach(function (it) { sel.appendChild(opt(it[0], it[1])); }); }
+  function curMode() { return document.querySelector('input[name="mode"]:checked').value; }
+  function filters() {
+    var m = curMode();
+    return { subject: $("selSubject").value, year: $("selYear").value, tag: m === "tag" ? $("selTag").value : "", mode: m === "wrong" ? "wrong" : "random", wrongMap: S.wrong };
+  }
+  function initSetup() {
+    var exams = uniq(BANK.questions.map(function (q) { return q.exam; }));
+    fill($("selExam"), exams.map(function (e) { return [e, e]; }));
+    refreshSubjects();
+  }
+  function refreshSubjects() {
+    var ex = $("selExam").value;
+    var subs = uniq(BANK.questions.filter(function (q) { return q.exam === ex; }).map(function (q) { return q.subject; }));
+    fill($("selSubject"), subs.map(function (s) { return [s, s]; }));
+    refreshFilters();
+  }
+  function refreshFilters() {
+    var sub = $("selSubject").value;
+    var qs = BANK.questions.filter(function (q) { return q.subject === sub; });
+    var years = uniq(qs.map(function (q) { return q.year_roc; })).sort(function (a, b) { return b - a; });
+    var keepY = $("selYear").value, keepT = $("selTag").value;
+    fill($("selYear"), years.map(function (y) { return [String(y), "民國 " + y + " 年"]; }), "不限年度");
+    var tags = uniq([].concat.apply([], qs.map(function (q) { return q.tags || []; }))).sort();
+    fill($("selTag"), tags.map(function (t) { return [t, t]; }));
+    if (years.map(String).indexOf(keepY) >= 0) $("selYear").value = keepY;
+    if (tags.indexOf(keepT) >= 0) $("selTag").value = keepT;
+    $("setupLead").textContent = "目前題庫：" + $("selExam").value + "　" + sub + "，共 " + qs.length + " 題。";
+    $("fTag").hidden = curMode() !== "tag";
+    updatePool();
+  }
+  function updatePool() {
+    var pool = C.buildPool(BANK.questions, filters());
+    $("poolCount").textContent = pool.length;
+    $("btnStart").disabled = pool.length === 0;
+    $("allStat").innerHTML = statHtml();
+    var s = S.session;
+    $("btnResume").hidden = !(s && !s.finished && s.queue.every(function (id) { return BYID[id]; }) && s.idx < s.queue.length);
+  }
+
+  /* ---------- 練習 ---------- */
+  function startSession() {
+    var f = filters();
+    var pool = C.buildPool(BANK.questions, f);
+    if (!pool.length) return;
+    var n = parseInt($("selN").value, 10) || 0;
+    S.session = {
+      subject: f.subject, mode: curMode(), tag: f.tag, year: f.year,
+      queue: C.drawQueue(pool, n), idx: 0, results: {}, timed: parseInt($("selTime").value, 10) || 0,
+      startedAt: Date.now(), finished: false
+    };
+    save(); showQuestion();
+  }
+  function modeName(m) { return { random: "隨機出題", tag: "依考點練習", wrong: "錯題重練" }[m] || m; }
+  function showQuestion() {
+    var s = S.session;
+    if (s.idx >= s.queue.length) return finish();
+    var q = BYID[s.queue[s.idx]];
+    show("vPractice");
+    chosen = null;
+    $("pProg").textContent = "第 " + (s.idx + 1) + " / " + s.queue.length + " 題";
+    var chips = [modeName(s.mode), "民國 " + q.year_roc + " 年第 " + q.question_no + " 題", q.area].concat(q.tags || []);
+    $("pChips").innerHTML = chips.filter(Boolean).map(function (c) { return '<span class="chip">' + esc(c) + "</span>"; }).join("");
+    $("pQ").innerHTML = q.question;
+    var box = $("pOpts"); box.innerHTML = "";
+    q.options.forEach(function (t, j) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "opt"; b.dataset.i = j; b.setAttribute("aria-pressed", "false");
+      b.innerHTML = '<span class="bub">' + LET[j] + '</span><span class="tx"></span>';
+      b.querySelector(".tx").textContent = t;
+      box.appendChild(b);
+    });
+    $("btnSubmit").disabled = true;
+    $("pActions").hidden = false; $("pFeedback").hidden = true;
+    startTimer(s.timed);
+  }
+  function startTimer(sec) {
+    stopTimer();
+    var el = $("pTimer");
+    if (!sec) { el.hidden = true; return; }
+    left = sec; el.hidden = false; drawTimer();
+    tickId = setInterval(function () {
+      left--; drawTimer();
+      if (left <= 0) { stopTimer(); submit(true); }
+    }, 1000);
+  }
+  function drawTimer() {
+    var el = $("pTimer"), m = Math.floor(Math.max(0, left) / 60), r = Math.max(0, left) % 60;
+    el.textContent = (m < 10 ? "0" : "") + m + ":" + (r < 10 ? "0" : "") + r;
+    el.classList.toggle("low", left <= 10);
+  }
+  function stopTimer() { if (tickId) { clearInterval(tickId); tickId = null; } }
+
+  function submit(auto) {
+    var s = S.session;
+    if (!s || s.finished || $("pFeedback").hidden === false) return;
+    stopTimer();
+    var q = BYID[s.queue[s.idx]];
+    var letter = chosen == null ? null : LET[chosen];
+    var g = C.grade(q, letter);
+    s.results[q.id] = { chosen: letter, status: g.status, pts: g.pts, gift: g.gift };
+    S.records.push({ id: q.id, ts: Date.now(), chosen: letter, status: g.status });
+    if (S.records.length > 5000) S.records = S.records.slice(-5000);
+    var w = S.wrong[q.id] || { bad: 0, last: "ok" };
+    if (g.status === "ok") w.last = "ok"; else { w.last = g.status; w.bad++; }
+    w.ts = Date.now(); S.wrong[q.id] = w;
+    save();
+    renderFeedback(q, s.results[q.id], auto);
+  }
+  function renderFeedback(q, r, auto) {
+    var accept = (q.accept && q.accept.length) ? q.accept : [q.answer];
+    document.querySelectorAll("#pOpts .opt").forEach(function (b) {
+      var j = +b.dataset.i, L = LET[j];
+      b.disabled = true;
+      b.classList.toggle("correct", accept.indexOf(L) >= 0);
+      b.classList.toggle("wrong", r.chosen === L && accept.indexOf(L) < 0);
+      b.classList.toggle("sel", false);
+    });
+    var v = $("fbVerdict");
+    if (r.gift) { v.className = "verdict ok"; v.textContent = "本題公告一律給分　+" + r.pts + " 分"; }
+    else if (r.status === "ok") { v.className = "verdict ok"; v.textContent = "答對了　+" + r.pts + " 分"; }
+    else if (r.status === "bad") { v.className = "verdict bad"; v.textContent = "答錯了　0 分"; }
+    else { v.className = "verdict skip"; v.textContent = (auto ? "時間到，未作答" : "已略過") + "　0 分"; }
+    $("fbAnswer").textContent = "你的答案：" + (r.chosen || "未作答") + "　正確答案：" + accept.join(" 或 ");
+    $("fbExp").innerHTML = q.explanation;
+    var n = $("fbNote"); n.hidden = !q.correction_note; n.textContent = q.correction_note || "";
+    $("pActions").hidden = true; $("pFeedback").hidden = false;
+    var last = S.session.idx >= S.session.queue.length - 1;
+    $("btnNext").textContent = last ? "看本次紀錄" : "下一題";
+    $("btnNext").focus({ preventScroll: true });
+  }
+  function next() { S.session.idx++; save(); showQuestion(); }
+
+  /* ---------- 結算 ---------- */
+  function finish() {
+    stopTimer();
+    var s = S.session;
+    s.finished = true;
+    // 提前結束時，未作答的題目不納入統計
+    s.queue = s.queue.filter(function (id) { return s.results[id]; });
+    save(); renderSummary(); show("vSummary");
+  }
+  function renderSummary() {
+    var s = S.session, sm = C.summarize(BYID, s.queue, s.results);
+    $("sNum").textContent = sm.earned;
+    $("sOf").textContent = "／ " + sm.possible + " 分";
+    $("sStat").innerHTML = "<span>共 <b>" + sm.total + "</b> 題</span><span>答對 <b>" + sm.ok + "</b></span><span>答錯 <b>" + sm.bad + "</b></span><span>未答 <b>" + sm.skip + "</b></span><span>答對率 <b>" + Math.round(sm.accuracy * 100) + "%</b></span>";
+    $("weakPanel").hidden = sm.total === 0;
+    $("weakBody").innerHTML = sm.weak.map(function (w) {
+      var pct = Math.round(w.rate * 100);
+      return "<tr><td>" + esc(w.tag) + '</td><td class="n">' + w.ok + " / " + w.n + '</td><td><div class="meter" role="img" aria-label="' + pct + '%"><i style="width:' + pct + '%"></i></div></td></tr>';
+    }).join("");
+    var bad = s.queue.filter(function (id) { return s.results[id].status !== "ok"; });
+    $("wrongPanel").hidden = false;
+    $("wrongList").innerHTML = bad.length ? bad.map(function (id) {
+      var q = BYID[id], r = s.results[id];
+      return '<details class="wq"><summary>民國 ' + q.year_roc + " 年第 " + q.question_no + " 題　你的答案 " + (r.chosen || "未答") + "，正確答案 " + ((q.accept && q.accept.length) ? q.accept : [q.answer]).join(" 或 ") + '</summary><div class="body"><p>' + q.question + "</p><ol type=\"A\">" + q.options.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + '</ol><div class="exp"><p>' + q.explanation + "</p></div></div></details>";
+    }).join("") : (sm.total ? "<p>這一輪全部答對。</p>" : "<p>這一輪尚未送出任何答案。</p>");
+    $("copyBox").hidden = true; $("sumMsg").textContent = "";
+  }
+  function textRecord() {
+    var s = S.session, sm = C.summarize(BYID, s.queue, s.results), L = [];
+    L.push("中國科技大學管理學院 國家考試題庫複習系統　練習紀錄");
+    L.push("科目：" + s.subject + "　模式：" + modeName(s.mode) + "　日期：" + new Date(s.startedAt).toLocaleDateString("zh-TW"));
+    L.push("得分：" + sm.earned + " / " + sm.possible + "　答對 " + sm.ok + "、答錯 " + sm.bad + "、未答 " + sm.skip + "（答對率 " + Math.round(sm.accuracy * 100) + "%）");
+    L.push("");
+    L.push("各考點：");
+    sm.weak.forEach(function (w) { L.push("  " + w.tag + "　" + w.ok + "/" + w.n); });
+    L.push("");
+    L.push("逐題：");
+    s.queue.forEach(function (id) {
+      var q = BYID[id], r = s.results[id];
+      L.push("  民國" + q.year_roc + "年第" + q.question_no + "題　" + ({ ok: "答對", bad: "答錯", skip: "未答" })[r.status] + "　你的答案 " + (r.chosen || "—") + "　正確答案 " + q.answer);
+    });
+    return L.join("\n");
+  }
+
+  /* ---------- 事件 ---------- */
+  $("btnEnter").addEventListener("click", function () { updatePool(); show("vSetup"); });
+  $("btnBackCover").addEventListener("click", function () { renderCoverStat(); show("vCover"); });
+  $("selExam").addEventListener("change", refreshSubjects);
+  $("selSubject").addEventListener("change", refreshFilters);
+  ["selYear", "selTag"].forEach(function (id) { $(id).addEventListener("change", updatePool); });
+  $("modes").addEventListener("change", function () { $("fTag").hidden = curMode() !== "tag"; updatePool(); });
+  $("btnStart").addEventListener("click", startSession);
+  $("btnResume").addEventListener("click", function () { showQuestion(); var s = S.session, id = s.queue[s.idx], r = s.results[id]; if (r) { stopTimer(); renderFeedback(BYID[id], r, false); } });
+  $("pOpts").addEventListener("click", function (e) {
+    var b = e.target.closest(".opt"); if (!b || b.disabled) return;
+    chosen = +b.dataset.i;
+    document.querySelectorAll("#pOpts .opt").forEach(function (x) { var on = x === b; x.classList.toggle("sel", on); x.setAttribute("aria-pressed", on ? "true" : "false"); });
+    $("btnSubmit").disabled = false;
+  });
+  $("btnSubmit").addEventListener("click", function () { submit(false); });
+  $("btnSkip").addEventListener("click", function () { chosen = null; submit(false); });
+  $("btnNext").addEventListener("click", next);
+  $("btnEnd").addEventListener("click", finish);
+  $("btnEndEarly").addEventListener("click", function () {
+    finish(); // 目前這題若尚未送出，不納入統計
+  });
+  $("btnContinue").addEventListener("click", function () { S.session = null; save(); updatePool(); show("vSetup"); });
+  $("btnPrint").addEventListener("click", function () { try { window.print(); } catch (e) {} });
+  $("btnCopy").addEventListener("click", function () {
+    var t = textRecord(), box = $("copyBox");
+    box.value = t; box.hidden = false;
+    var done = function () { $("sumMsg").textContent = "已複製文字紀錄。"; };
+    var fallback = function () { box.focus(); box.select(); $("sumMsg").textContent = "請按 Ctrl+C（Mac 按 ⌘+C）複製上方文字。"; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, fallback); else fallback();
+  });
+  $("btnClear").addEventListener("click", function () {
+    twoStep($("btnClear"), "再按一次確認清除", function () { S = { records: [], wrong: {}, session: null }; save(); updatePool(); renderCoverStat(); show("vSetup"); });
+  });
+  $("btnExport").addEventListener("click", function () {
+    var data = JSON.stringify({ app: "cute-mgmt-moex", version: 1, exported: new Date().toISOString(), records: S.records, wrong: S.wrong }, null, 1);
+    try {
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([data], { type: "application/json" }));
+      a.download = "moex-練習紀錄-" + new Date().toISOString().slice(0, 10) + ".json";
+      document.body.appendChild(a); a.click(); a.remove();
+      $("backupMsg").textContent = "已產生備份檔，請確認瀏覽器已下載。";
+    } catch (e) { $("backupMsg").textContent = "這個瀏覽器無法下載檔案，請改用電腦版瀏覽器。"; }
+  });
+  $("fileImport").addEventListener("change", function (e) {
+    var f = e.target.files[0]; if (!f) return;
+    var fr = new FileReader();
+    fr.onload = function () {
+      try {
+        var d = JSON.parse(fr.result);
+        if (!d || d.app !== "cute-mgmt-moex" || !Array.isArray(d.records) || typeof d.wrong !== "object") throw new Error("格式不符");
+        S.records = d.records.slice(-5000); S.wrong = d.wrong; S.session = null; save(); updatePool(); renderCoverStat();
+        $("backupMsg").textContent = "已匯入 " + d.records.length + " 筆作答紀錄。";
+      } catch (err) { $("backupMsg").textContent = "匯入失敗：這不是本系統的備份檔。"; }
+      e.target.value = "";
+    };
+    fr.readAsText(f);
+  });
+
+  boot();
+})();
+</script>
+</body>
+</html>

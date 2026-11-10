@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>普考歷屆試題複習系統｜中國科技大學管理學院</title>
+<title>公務人員考試歷屆試題複習系統｜中國科技大學管理學院</title>
 <style>
 :root {
   --paper: #eef1f5; --card: #ffffff; --ink: #1b2433; --ink-2: #4b5567; --rule: #cdd5e0;
@@ -134,13 +134,13 @@ textarea.copy { width: 100%; min-height: 160px; border: 1.5px solid var(--ink-2)
   </section>
 
   <section id="vCover" hidden>
-    <h1>普通考試　歷屆試題複習系統</h1>
+    <h1>公務人員考試　歷屆試題複習系統</h1>
     <p class="lead">亂數出題、自己輸入答案、送出後立即評分並看完整詳解。免登入，紀錄只存在這台裝置的瀏覽器裡。</p>
     <div class="panel">
       <div class="stat" id="coverStat"></div>
       <div class="row gap-lg"><button type="button" class="btn primary" id="btnEnter">進入系統</button></div>
     </div>
-    <p class="note">本系統供複習準備公務人員普通考試之用。試題與標準答案來自考選部，詳解為教學用途整理，不是官方答案。</p>
+    <p class="note">本系統供複習準備公務人員普通考試與初等考試之用。試題與標準答案來自考選部，詳解為教學用途整理，不是官方答案。</p>
   </section>
 
   <section id="vSetup" hidden>
@@ -361,7 +361,7 @@ textarea.copy { width: 100%; min-height: 160px; border: 1.5px solid var(--ink-2)
     show("vPractice");
     chosen = null;
     $("pProg").textContent = "第 " + (s.idx + 1) + " / " + s.queue.length + " 題";
-    var chips = [modeName(s.mode), "民國 " + q.year_roc + " 年第 " + q.question_no + " 題", q.area].concat(q.tags || []);
+    var chips = [modeName(s.mode), "民國 " + q.year_roc + " 年第 " + q.question_no + " 題", q.categories && q.categories.length ? "類科：" + q.categories.join("、") : "", q.area].concat(q.tags || []);
     $("pChips").innerHTML = chips.filter(Boolean).map(function (c) { return '<span class="chip">' + esc(c) + "</span>"; }).join("");
     $("pQ").innerHTML = q.question;
     var box = $("pOpts"); box.innerHTML = "";
@@ -456,7 +456,7 @@ textarea.copy { width: 100%; min-height: 160px; border: 1.5px solid var(--ink-2)
     $("wrongPanel").hidden = false;
     $("wrongList").innerHTML = bad.length ? bad.map(function (id) {
       var q = BYID[id], r = s.results[id];
-      return '<details class="wq"><summary>民國 ' + q.year_roc + " 年第 " + q.question_no + " 題　你的答案 " + (r.chosen || "未答") + "，正確答案 " + ((q.accept && q.accept.length) ? q.accept : [q.answer]).join(" 或 ") + '</summary><div class="body"><p>' + q.question + "</p><ol type=\"A\">" + q.options.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + '</ol><div class="exp"><p>' + q.explanation + "</p></div></div></details>";
+      return '<details class="wq"><summary>民國 ' + q.year_roc + " 年第 " + q.question_no + " 題　你的答案 " + (r.chosen || "未答") + "，正確答案 " + ((q.accept && q.accept.length) ? q.accept : [q.answer]).join(" 或 ") + '</summary><div class="body"><p>' + q.question + "</p><ol type=\"A\">" + q.options.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + '</ol><div class="exp"><p>' + q.explanation + "</p></div>" + (q.correction_note ? '<p class="note">' + esc(q.correction_note) + "</p>" : "") + "</div></details>";
     }).join("") : (sm.total ? "<p>這一輪全部答對。</p>" : "<p>這一輪尚未送出任何答案。</p>");
     $("copyBox").hidden = true; $("sumMsg").textContent = "";
   }

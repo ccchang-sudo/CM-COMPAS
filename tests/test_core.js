@@ -20,7 +20,11 @@ const KEYS = {
   "公務人員高等考試三級考試|經濟學|113": "DACDCCDCCDDABCABBACABDBBD",
   "公務人員高等考試三級考試|經濟學|114": "BACACBBCDADABDACBCADBBADB",
   "公務人員高等考試三級考試|經濟學|115": "DADDBCCBBDAABABCCADBBDBAC",
-  "公務人員高等考試三級考試|經濟學與貨幣銀行學|115": "DBBDADBBADCBBBDDCADDBABDC"
+  "公務人員高等考試三級考試|經濟學與貨幣銀行學|115": "DBBDADBBADCBBBDDCADDBABDC",
+  // 初等考試統計學大意（單選 40 題，每題 2.5 分）
+  "公務人員初等考試|統計學大意|113": "BDDDCBBBAACCDBABBDBCDABBDBCBBCCAADDCCDBA",
+  "公務人員初等考試|統計學大意|114": "BCDBAAACADDBDBDACCCAAABBCACCDDCBBDBCABCB",
+  "公務人員初等考試|統計學大意|115": "DDCDCBCBAADCABBBABCBACAAADAADDCBCCCCDABD"
 };
 Object.keys(KEYS).forEach(k => {
   const [exam, subj, y] = k.split("|");
@@ -33,11 +37,15 @@ Object.keys(KEYS).forEach(k => {
 const total = {};
 bank.questions.filter(q => q.exam === "公務人員高等考試三級考試").forEach(q => { const k = q.subject + q.year_roc; total[k] = (total[k] || 0) + q.points; });
 Object.keys(total).forEach(k => assert.strictEqual(total[k], 50, k + " 測驗題滿分 50 分"));
+// 初等考試統計學大意每份 40 題 × 2.5 分 = 100 分
+const st = bank.questions.filter(q => q.subject === "統計學大意");
+assert.strictEqual(st.length, 120);
+["113", "114", "115"].forEach(y => assert.strictEqual(st.filter(q => String(q.year_roc) === y).reduce((s, q) => s + q.points, 0), 100, y + " 統計學大意滿分"));
 // 考選部更正答案：113 年經濟學第 11 題 C 或 D 均給分
 const qc = bank.questions.find(q => q.id === "113-g3econ-11");
 assert.deepStrictEqual(qc.accept, ["C", "D"]);
 assert.strictEqual(C.grade(qc, "C").status, "ok"); assert.strictEqual(C.grade(qc, "D").status, "ok"); assert.strictEqual(C.grade(qc, "A").status, "bad");
-assert.strictEqual(bank.questions.length, 460);
+assert.strictEqual(bank.questions.length, 580);
 
 const pool = C.buildPool(bank.questions, { subject: "經濟學概要", mode: "random" });
 assert.strictEqual(pool.length, 150);
@@ -47,7 +55,7 @@ assert.strictEqual(q10.length, 10); assert.strictEqual(new Set(q10).size, 10);
 const all = C.drawQueue(pool, 0); assert.strictEqual(new Set(all).size, 150);
 assert.notDeepStrictEqual(all, pool.map(q => q.id));
 
-assert.strictEqual(C.buildPool(bank.questions, { year: "113" }).length, 145);
+assert.strictEqual(C.buildPool(bank.questions, { year: "113" }).length, 185);
 assert.strictEqual(C.buildPool(bank.questions, { subject: "經濟學大意", year: "114" }).length, 50);
 assert.strictEqual(C.buildPool(bank.questions, { subject: "經濟學概要", year: "115" }).length, 50);
 assert.strictEqual(C.buildPool(bank.questions, { year: "112" }).length, 0);

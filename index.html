@@ -6,8 +6,10 @@
 <title>公務人員考試歷屆試題複習系統｜中國科技大學管理學院</title>
 <style>
 :root {
-  --paper: #eef1f5; --card: #ffffff; --ink: #1b2433; --ink-2: #4b5567; --rule: #cdd5e0;
+  --paper: #f6f4f0; --card: #ffffff; --ink: #1b2433; --ink-2: #4b5567; --rule: #ddd8cf;
   --blue: #1f3f8a; --blue-soft: #e2e8f6; --graphite: #2a2e36; --on-graphite: #f3f5f8;
+  --navy: #1f3f8a;
+  --serif: "Noto Serif TC", "Source Han Serif TC", "Songti TC", "PMingLiU", "Times New Roman", serif;
   --ok: #17724a; --ok-soft: #dcf2e6; --bad: #b0372d; --bad-soft: #f8e0dd;
   --sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
   --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -16,13 +18,13 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --paper: #11151c; --card: #19202a; --ink: #e8ecf2; --ink-2: #a4aebd; --rule: #2f3847;
-    --blue: #93abe9; --blue-soft: #222c47; --graphite: #e8ecf2; --on-graphite: #11151c;
+    --blue: #93abe9; --blue-soft: #222c47; --graphite: #e8ecf2; --on-graphite: #11151c; --navy: #3d5fb8;
     --ok: #62d09b; --ok-soft: #153325; --bad: #ff8e82; --bad-soft: #3a1f1d; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --paper: #11151c; --card: #19202a; --ink: #e8ecf2; --ink-2: #a4aebd; --rule: #2f3847;
-  --blue: #93abe9; --blue-soft: #222c47; --graphite: #e8ecf2; --on-graphite: #11151c;
+  --blue: #93abe9; --blue-soft: #222c47; --graphite: #e8ecf2; --on-graphite: #11151c; --navy: #3d5fb8;
   --ok: #62d09b; --ok-soft: #153325; --bad: #ff8e82; --bad-soft: #3a1f1d; color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -36,22 +38,31 @@ button { cursor: pointer; }
 .gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 .inner { max-width: 860px; margin: 0 auto; }
 
-.top { background: var(--blue); color: #fff; padding-block: 10px; font-size: 14px; letter-spacing: .08em; }
-.top .inner { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.top { background: transparent; color: var(--navy); padding-block: 14px 10px; font-size: 15px; letter-spacing: .06em; }
+.top .inner { display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--rule); padding-bottom: 10px; }
 .top b { font-weight: 700; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .top { background: #1c2745; color: #dbe4fb; } }
-:root[data-theme="dark"] .top { background: #1c2745; color: #dbe4fb; }
 
-main { padding-block: 28px 56px; }
-h1 { font-size: clamp(26px, 5vw, 38px); line-height: 1.25; margin: 0 0 8px; text-wrap: balance; }
+main { padding-block: 20px 56px; }
+h1 { font-family: var(--serif); font-size: clamp(26px, 5vw, 38px); line-height: 1.25; margin: 0 0 8px; text-wrap: balance; }
+
+/* cover */
+.cover-card { background: var(--card); border: 1px solid var(--rule); border-radius: 16px; padding: clamp(32px, 7vw, 64px) 24px clamp(36px, 7vw, 60px); text-align: center; margin-bottom: 16px; }
+.cover-logo { display: block; width: min(360px, 78%); height: auto; margin: 0 auto 22px; }
+.cover-dept { color: var(--navy); font-weight: 700; font-size: clamp(15px, 2.6vw, 18px); letter-spacing: .14em; margin: 0; }
+.cover-rule { width: 80px; height: 3px; background: var(--navy); border: 0; border-radius: 2px; margin: 28px auto; }
+.cover-card h1 { font-size: clamp(26px, 5.4vw, 36px); margin: 0 0 12px; }
+.cover-sub { color: var(--ink-2); margin: 0 0 8px; font-size: clamp(14px, 2.4vw, 16px); }
+.cover-stat { justify-content: center; margin-top: 18px; color: var(--ink-2); }
+.btn.cover-btn { margin-top: 30px; padding: 14px 52px; border-radius: 10px; font-weight: 700; font-size: 17px; letter-spacing: .08em; background: var(--navy); border-color: var(--navy); color: #fff; }
+.btn.cover-btn:hover:not(:disabled) { background: var(--navy); opacity: .9; }
 h2 { font-size: 20px; margin: 0 0 12px; }
 .lead { color: var(--ink-2); margin: 0 0 20px; }
 .panel { background: var(--card); border: 1px solid var(--rule); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
 .btn { border: 1.5px solid var(--ink-2); background: transparent; border-radius: 6px; padding: 8px 18px; font-weight: 500; }
 .btn:hover:not(:disabled) { background: var(--blue-soft); }
 .btn:disabled { opacity: .45; cursor: not-allowed; }
-.btn.primary { background: var(--graphite); color: var(--on-graphite); border-color: var(--graphite); }
-.btn.primary:hover:not(:disabled) { opacity: .9; background: var(--graphite); }
+.btn.primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+.btn.primary:hover:not(:disabled) { opacity: .9; background: var(--navy); }
 .btn.confirm { background: var(--bad); border-color: var(--bad); color: #fff; }
 .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .row.gap-lg { gap: 14px; margin-top: 18px; }
@@ -121,7 +132,7 @@ textarea.copy { width: 100%; min-height: 160px; border: 1.5px solid var(--ink-2)
 </style>
 </head>
 <body>
-<div class="top gutter"><div class="inner"><b>中國科技大學　管理學院</b><span>國家考試題庫複習系統</span></div></div>
+<div class="top gutter"><div class="inner"><b>中國科技大學　管理學院</b></div></div>
 
 <main class="gutter"><div class="inner">
 
@@ -134,11 +145,14 @@ textarea.copy { width: 100%; min-height: 160px; border: 1.5px solid var(--ink-2)
   </section>
 
   <section id="vCover" hidden>
-    <h1>公務人員考試　歷屆試題複習系統</h1>
-    <p class="lead">亂數出題、自己輸入答案、送出後立即評分並看完整詳解。免登入，紀錄只存在這台裝置的瀏覽器裡。</p>
-    <div class="panel">
-      <div class="stat" id="coverStat"></div>
-      <div class="row gap-lg"><button type="button" class="btn primary" id="btnEnter">進入系統</button></div>
+    <div class="cover-card">
+      <img class="cover-logo" src="logo.png" alt="中國科技大學 China University of Technology">
+      <p class="cover-dept">管理學院</p>
+      <hr class="cover-rule">
+      <h1>國家考試題庫複習系統</h1>
+      <p class="cover-sub">歷屆試題隨機練習・自我評分・複習紀錄匯出</p>
+      <div class="stat cover-stat" id="coverStat"></div>
+      <button type="button" class="btn cover-btn" id="btnEnter">進入系統</button>
     </div>
     <p class="note">本系統供複習準備公務人員普通考試與初等考試之用。試題與標準答案來自考選部，詳解為教學用途整理，不是官方答案。</p>
   </section>

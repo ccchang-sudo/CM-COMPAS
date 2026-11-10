@@ -29,7 +29,12 @@ const KEYS = {
   "公務人員初等考試|會計學大意|115": "DACABADCDBCACBAABACDBCBAADCABBDBBCDACDBC",
   "公務人員高等考試三級考試|中級會計學|115": "BBDBACCDDCBADCBAABCA",
   "公務人員高等考試三級考試|會計學|115": "AADADCBCCBBBCDDDCBDBCBABA",
-  "公務人員普通考試|會計學概要|115": "CDDADBCBCCCCDCBBCDDB"
+  "公務人員普通考試|會計學概要|115": "CDDADBCBCCCCDCBBCDDB",
+  // 114 年會計類（答案卡；初等會計學大意 4511、高考三級中級會計學 2225、會計學 4222、普考會計學概要 3413）
+  "公務人員初等考試|會計學大意|114": "AADADBDBCCDBCBACCACBADBCBDBCCBDDACADCAAD",
+  "公務人員高等考試三級考試|中級會計學|114": "BBCBBCBCCCBACABCCBCC",
+  "公務人員高等考試三級考試|會計學|114": "DACBACBBABDBBCDABBDCDCBCA",
+  "公務人員普通考試|會計學概要|114": "BDBCAADCABAABCCBBBAD"
 };
 Object.keys(KEYS).forEach(k => {
   const [exam, subj, y] = k.split("|");
@@ -52,15 +57,21 @@ assert.deepStrictEqual(qc.accept, ["C", "D"]);
 assert.strictEqual(C.grade(qc, "C").status, "ok"); assert.strictEqual(C.grade(qc, "D").status, "ok"); assert.strictEqual(C.grade(qc, "A").status, "bad");
 // 115 年會計類：初等 40 題×2.5=100 分；高考三級、普考測驗題各 50 分
 const sumPts = s => bank.questions.filter(q => q.subject === s).reduce((a, q) => a + q.points, 0);
-assert.strictEqual(sumPts("會計學大意"), 100);
-assert.strictEqual(sumPts("中級會計學"), 50);
-assert.strictEqual(sumPts("會計學"), 50);
-assert.strictEqual(sumPts("會計學概要"), 50);
+// 會計類各收錄 114、115 兩年，故總分為單年度的兩倍
+assert.strictEqual(sumPts("會計學大意"), 200);
+assert.strictEqual(sumPts("中級會計學"), 100);
+assert.strictEqual(sumPts("會計學"), 100);
+assert.strictEqual(sumPts("會計學概要"), 100);
+const sumPtsY = (s, y) => bank.questions.filter(q => q.subject === s && q.year_roc === y).reduce((a, q) => a + q.points, 0);
+[114, 115].forEach(y => {
+  assert.strictEqual(sumPtsY("會計學大意", y), 100, y + " 會計學大意滿分");
+  ["中級會計學", "會計學", "會計學概要"].forEach(s => assert.strictEqual(sumPtsY(s, y), 50, y + " " + s + " 測驗題滿分"));
+});
 // 高考三級會計學第 12 題考選部公告一律給分
 const qg12 = bank.questions.find(q => q.id === "115-g3acct-12");
 assert.strictEqual(qg12.give_all, true);
 assert.deepStrictEqual(C.grade(qg12, null), { status: "ok", pts: 2, gift: true });
-assert.strictEqual(bank.questions.length, 685);
+assert.strictEqual(bank.questions.length, 790);
 
 const pool = C.buildPool(bank.questions, { subject: "經濟學概要", mode: "random" });
 assert.strictEqual(pool.length, 150);

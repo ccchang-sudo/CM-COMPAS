@@ -7,21 +7,37 @@ assert.deepStrictEqual(C.validateBank(bank), []);
 
 // 各年度標準答案（來自考選部答案卡）
 const KEYS = {
-  "公務人員普通考試|113": "ACBBABDCDBDAABAACACADCBCAACCDCCDAABBDABCBDDCDDBDDA",
-  "公務人員普通考試|114": "BCBCDADAABDDBBACCDCBBCBCCDAADDCBCBBDDCCDCDACDACBCB",
-  "公務人員普通考試|115": "ADCBCDCBBBACABADBAABBDBADDBCBDADABADCDCBDBCCACBDBC",
-  "公務人員初等考試|113": "ACCADCBADACBCBDDAADABBACBBCCDABCCDBABCBDDBCBDADDAA",
-  "公務人員初等考試|114": "BACCACCABBCCDCCBABADAABDBDCACBDCBDCAABDDADCBDBDBDD",
-  "公務人員初等考試|115": "DCAABCBDACCDACDBBACDBADBDDBBACCACCADCDBDBBADCABBDA"
+  "公務人員普通考試|經濟學概要|113": "ACBBABDCDBDAABAACACADCBCAACCDCCDAABBDABCBDDCDDBDDA",
+  "公務人員普通考試|經濟學概要|114": "BCBCDADAABDDBBACCDCBBCBCCDAADDCBCBBDDCCDCDACDACBCB",
+  "公務人員普通考試|經濟學概要|115": "ADCBCDCBBBACABADBAABBDBADDBCBDADABADCDCBDBCCACBDBC",
+  "公務人員初等考試|經濟學大意|113": "ACCADCBADACBCBDDAADABBACBBCCDABCCDBABCBDDBCBDADDAA",
+  "公務人員初等考試|經濟學大意|114": "BACCACCABBCCDCCBABADAABDBDCACBDCBDCAABDDADCBDBDBDD",
+  "公務人員初等考試|經濟學大意|115": "DCAABCBDACCDACDBBACDBADBDDBBACCACCADCDBDBBADCABBDA",
+  // 高等考試三級（答案卡；113 年經濟學第 11 題為更正題，答 C 或 D 均給分，此處以 D 記錄）
+  "公務人員高等考試三級考試|經濟學與財政學概論|113": "CDBDABBABBBBAAACDACC",
+  "公務人員高等考試三級考試|經濟學與財政學概論|114": "DBCBACBDBABCABAAACAA",
+  "公務人員高等考試三級考試|經濟學與財政學概論|115": "CCACBBDBDABADABAADDB",
+  "公務人員高等考試三級考試|經濟學|113": "DACDCCDCCDDABCABBACABDBBD",
+  "公務人員高等考試三級考試|經濟學|114": "BACACBBCDADABDACBCADBBADB",
+  "公務人員高等考試三級考試|經濟學|115": "DADDBCCBBDAABABCCADBBDBAC",
+  "公務人員高等考試三級考試|經濟學與貨幣銀行學|115": "DBBDADBBADCBBBDDCADDBABDC"
 };
 Object.keys(KEYS).forEach(k => {
-  const [exam, y] = k.split("|");
-  const qs = bank.questions.filter(q => q.exam === exam && String(q.year_roc) === y).sort((a, b) => a.question_no - b.question_no);
-  assert.strictEqual(qs.length, 50, k + " 題數");
+  const [exam, subj, y] = k.split("|");
+  const qs = bank.questions.filter(q => q.exam === exam && q.subject === subj && String(q.year_roc) === y).sort((a, b) => a.question_no - b.question_no);
+  assert.strictEqual(qs.length, KEYS[k].length, k + " 題數");
   assert.strictEqual(qs.map(q => q.answer).join(""), KEYS[k], k + " 答案與考選部答案卡一致");
   qs.forEach((q, i) => assert.strictEqual(q.question_no, i + 1));
 });
-assert.strictEqual(bank.questions.length, 300);
+// 每份試卷的滿分應為 100 分的一半（測驗題 50 分）
+const total = {};
+bank.questions.filter(q => q.exam === "公務人員高等考試三級考試").forEach(q => { const k = q.subject + q.year_roc; total[k] = (total[k] || 0) + q.points; });
+Object.keys(total).forEach(k => assert.strictEqual(total[k], 50, k + " 測驗題滿分 50 分"));
+// 考選部更正答案：113 年經濟學第 11 題 C 或 D 均給分
+const qc = bank.questions.find(q => q.id === "113-g3econ-11");
+assert.deepStrictEqual(qc.accept, ["C", "D"]);
+assert.strictEqual(C.grade(qc, "C").status, "ok"); assert.strictEqual(C.grade(qc, "D").status, "ok"); assert.strictEqual(C.grade(qc, "A").status, "bad");
+assert.strictEqual(bank.questions.length, 460);
 
 const pool = C.buildPool(bank.questions, { subject: "經濟學概要", mode: "random" });
 assert.strictEqual(pool.length, 150);
@@ -31,7 +47,7 @@ assert.strictEqual(q10.length, 10); assert.strictEqual(new Set(q10).size, 10);
 const all = C.drawQueue(pool, 0); assert.strictEqual(new Set(all).size, 150);
 assert.notDeepStrictEqual(all, pool.map(q => q.id));
 
-assert.strictEqual(C.buildPool(bank.questions, { year: "113" }).length, 100);
+assert.strictEqual(C.buildPool(bank.questions, { year: "113" }).length, 145);
 assert.strictEqual(C.buildPool(bank.questions, { subject: "經濟學大意", year: "114" }).length, 50);
 assert.strictEqual(C.buildPool(bank.questions, { subject: "經濟學概要", year: "115" }).length, 50);
 assert.strictEqual(C.buildPool(bank.questions, { year: "112" }).length, 0);

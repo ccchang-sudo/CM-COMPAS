@@ -24,7 +24,12 @@ const KEYS = {
   // 初等考試統計學大意（單選 40 題，每題 2.5 分）
   "公務人員初等考試|統計學大意|113": "BDDDCBBBAACCDBABBDBCDABBDBCBBCCAADDCCDBA",
   "公務人員初等考試|統計學大意|114": "BCDBAAACADDBDBDACCCAAABBCACCDDCBBDBCABCB",
-  "公務人員初等考試|統計學大意|115": "DDCDCBCBAADCABBBABCBACAAADAADDCBCCCCDABD"
+  "公務人員初等考試|統計學大意|115": "DDCDCBCBAADCABBBABCBACAAADAADDCBCCCCDABD",
+  // 115 年會計類（答案卡；高考三級會計學第 12 題考選部公告一律給分，此處以 B 記錄）
+  "公務人員初等考試|會計學大意|115": "DACABADCDBCACBAABACDBCBAADCABBDBBCDACDBC",
+  "公務人員高等考試三級考試|中級會計學|115": "BBDBACCDDCBADCBAABCA",
+  "公務人員高等考試三級考試|會計學|115": "AADADCBCCBBBCDDDCBDBCBABA",
+  "公務人員普通考試|會計學概要|115": "CDDADBCBCCCCDCBBCDDB"
 };
 Object.keys(KEYS).forEach(k => {
   const [exam, subj, y] = k.split("|");
@@ -45,7 +50,17 @@ assert.strictEqual(st.length, 120);
 const qc = bank.questions.find(q => q.id === "113-g3econ-11");
 assert.deepStrictEqual(qc.accept, ["C", "D"]);
 assert.strictEqual(C.grade(qc, "C").status, "ok"); assert.strictEqual(C.grade(qc, "D").status, "ok"); assert.strictEqual(C.grade(qc, "A").status, "bad");
-assert.strictEqual(bank.questions.length, 580);
+// 115 年會計類：初等 40 題×2.5=100 分；高考三級、普考測驗題各 50 分
+const sumPts = s => bank.questions.filter(q => q.subject === s).reduce((a, q) => a + q.points, 0);
+assert.strictEqual(sumPts("會計學大意"), 100);
+assert.strictEqual(sumPts("中級會計學"), 50);
+assert.strictEqual(sumPts("會計學"), 50);
+assert.strictEqual(sumPts("會計學概要"), 50);
+// 高考三級會計學第 12 題考選部公告一律給分
+const qg12 = bank.questions.find(q => q.id === "115-g3acct-12");
+assert.strictEqual(qg12.give_all, true);
+assert.deepStrictEqual(C.grade(qg12, null), { status: "ok", pts: 2, gift: true });
+assert.strictEqual(bank.questions.length, 685);
 
 const pool = C.buildPool(bank.questions, { subject: "經濟學概要", mode: "random" });
 assert.strictEqual(pool.length, 150);

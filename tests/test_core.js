@@ -21,6 +21,10 @@ const KEYS = {
   "公務人員高等考試三級考試|經濟學|114": "BACACBBCDADABDACBCADBBADB",
   "公務人員高等考試三級考試|經濟學|115": "DADDBCCBBDAABABCCADBBDBAC",
   "公務人員高等考試三級考試|經濟學與貨幣銀行學|115": "DBBDADBBADCBBBDDCADDBABDC",
+  // 初等考試運輸學大意（交通行政，單選 50 題，每題 2 分；試題代號 113 年 4512、114 年 4515、115 年 4514）
+  "公務人員初等考試|運輸學大意|113": "BCADBBADABBAADCBCABCBCBBCACBCBCCDBDDABCBABAACBCABB",
+  "公務人員初等考試|運輸學大意|114": "BBBDDAACCBBBCADBABDDCDDCDDACAAAABDDACCDCCAAACBAACC",
+  "公務人員初等考試|運輸學大意|115": "DDBACAABCDCCDBAAADCBCBACABCCAAAABDCAADCDCBABCCBBBD",
   // 初等考試統計學大意（單選 40 題，每題 2.5 分）
   "公務人員初等考試|統計學大意|113": "BDDDCBBBAACCDBABBDBCDABBDBCBBCCAADDCCDBA",
   "公務人員初等考試|統計學大意|114": "BCDBAAACADDBDBDACCCAAABBCACCDDCBBDBCABCB",
@@ -81,7 +85,7 @@ const qa6 = bank.questions.find(q => q.id === "113-acct-6");
 assert.strictEqual(qa6.answer, "C");
 assert.ok(qa6.correction_note.includes("C"));
 assert.strictEqual(C.grade(qa6, "C").status, "ok"); assert.strictEqual(C.grade(qa6, "A").status, "bad");
-assert.strictEqual(bank.questions.length, 895);
+assert.strictEqual(bank.questions.length, 1045);
 
 const pool = C.buildPool(bank.questions, { subject: "經濟學概要", mode: "random" });
 assert.strictEqual(pool.length, 150);
@@ -91,10 +95,19 @@ assert.strictEqual(q10.length, 10); assert.strictEqual(new Set(q10).size, 10);
 const all = C.drawQueue(pool, 0); assert.strictEqual(new Set(all).size, 150);
 assert.notDeepStrictEqual(all, pool.map(q => q.id));
 
-assert.strictEqual(C.buildPool(bank.questions, { year: "113" }).length, 290);
+assert.strictEqual(C.buildPool(bank.questions, { year: "113" }).length, 340);
 assert.strictEqual(C.buildPool(bank.questions, { subject: "經濟學大意", year: "114" }).length, 50);
 assert.strictEqual(C.buildPool(bank.questions, { subject: "經濟學概要", year: "115" }).length, 50);
 assert.strictEqual(C.buildPool(bank.questions, { year: "112" }).length, 0);
+// 初等考試運輸學大意（交通行政）：3 年各 50 題、每題 2 分，滿分 100
+const tr = bank.questions.filter(q => q.subject === "運輸學大意");
+assert.strictEqual(tr.length, 150);
+["113", "114", "115"].forEach(y => {
+  const t = tr.filter(q => String(q.year_roc) === y);
+  assert.strictEqual(t.length, 50, y + " 運輸學大意題數");
+  assert.strictEqual(t.reduce((a, q) => a + q.points, 0), 100, y + " 運輸學大意滿分");
+  t.forEach(q => assert.deepStrictEqual(q.categories, ["交通行政"]));
+});
 const tagN = C.buildPool(bank.questions, { tag: "凱因斯模型" }).length;
 assert.ok(tagN >= 3, "考點篩選至少含 113 年 3 題");
 

@@ -30,6 +30,11 @@ const KEYS = {
   "公務人員高等考試三級考試|中級會計學|115": "BBDBACCDDCBADCBAABCA",
   "公務人員高等考試三級考試|會計學|115": "AADADCBCCBBBCDDDCBDBCBABA",
   "公務人員普通考試|會計學概要|115": "CDDADBCBCCCCDCBBCDDB",
+  // 113 年會計類（答案卡；初等會計學大意 4508、高考三級中級會計學 2321、會計學 4318、普考會計學概要 3416；普考第 6 題考選部更正答 C 給分，此處以 C 記錄）
+  "公務人員初等考試|會計學大意|113": "DACDDBDCCAACABACADDADCABBBCBBDDADBCBDACB",
+  "公務人員高等考試三級考試|中級會計學|113": "BCCAAADBDBCBDAADDAAC",
+  "公務人員高等考試三級考試|會計學|113": "CDDADDCBBDCBADCDBCCBACABA",
+  "公務人員普通考試|會計學概要|113": "DCDDCCCABBCCDDDBCDDC",
   // 114 年會計類（答案卡；初等會計學大意 4511、高考三級中級會計學 2225、會計學 4222、普考會計學概要 3413）
   "公務人員初等考試|會計學大意|114": "AADADBDBCCDBCBACCACBADBCBDBCCBDDACADCAAD",
   "公務人員高等考試三級考試|中級會計學|114": "BBCBBCBCCCBACABCCBCC",
@@ -57,13 +62,13 @@ assert.deepStrictEqual(qc.accept, ["C", "D"]);
 assert.strictEqual(C.grade(qc, "C").status, "ok"); assert.strictEqual(C.grade(qc, "D").status, "ok"); assert.strictEqual(C.grade(qc, "A").status, "bad");
 // 115 年會計類：初等 40 題×2.5=100 分；高考三級、普考測驗題各 50 分
 const sumPts = s => bank.questions.filter(q => q.subject === s).reduce((a, q) => a + q.points, 0);
-// 會計類各收錄 114、115 兩年，故總分為單年度的兩倍
-assert.strictEqual(sumPts("會計學大意"), 200);
-assert.strictEqual(sumPts("中級會計學"), 100);
-assert.strictEqual(sumPts("會計學"), 100);
-assert.strictEqual(sumPts("會計學概要"), 100);
+// 會計類各收錄 113、114、115 三年，故總分為單年度的三倍
+assert.strictEqual(sumPts("會計學大意"), 300);
+assert.strictEqual(sumPts("中級會計學"), 150);
+assert.strictEqual(sumPts("會計學"), 150);
+assert.strictEqual(sumPts("會計學概要"), 150);
 const sumPtsY = (s, y) => bank.questions.filter(q => q.subject === s && q.year_roc === y).reduce((a, q) => a + q.points, 0);
-[114, 115].forEach(y => {
+[113, 114, 115].forEach(y => {
   assert.strictEqual(sumPtsY("會計學大意", y), 100, y + " 會計學大意滿分");
   ["中級會計學", "會計學", "會計學概要"].forEach(s => assert.strictEqual(sumPtsY(s, y), 50, y + " " + s + " 測驗題滿分"));
 });
@@ -71,7 +76,12 @@ const sumPtsY = (s, y) => bank.questions.filter(q => q.subject === s && q.year_r
 const qg12 = bank.questions.find(q => q.id === "115-g3acct-12");
 assert.strictEqual(qg12.give_all, true);
 assert.deepStrictEqual(C.grade(qg12, null), { status: "ok", pts: 2, gift: true });
-assert.strictEqual(bank.questions.length, 790);
+// 113 年普考會計學概要第 6 題考選部更正：答 C 給分
+const qa6 = bank.questions.find(q => q.id === "113-acct-6");
+assert.strictEqual(qa6.answer, "C");
+assert.ok(qa6.correction_note.includes("C"));
+assert.strictEqual(C.grade(qa6, "C").status, "ok"); assert.strictEqual(C.grade(qa6, "A").status, "bad");
+assert.strictEqual(bank.questions.length, 895);
 
 const pool = C.buildPool(bank.questions, { subject: "經濟學概要", mode: "random" });
 assert.strictEqual(pool.length, 150);
@@ -81,7 +91,7 @@ assert.strictEqual(q10.length, 10); assert.strictEqual(new Set(q10).size, 10);
 const all = C.drawQueue(pool, 0); assert.strictEqual(new Set(all).size, 150);
 assert.notDeepStrictEqual(all, pool.map(q => q.id));
 
-assert.strictEqual(C.buildPool(bank.questions, { year: "113" }).length, 185);
+assert.strictEqual(C.buildPool(bank.questions, { year: "113" }).length, 290);
 assert.strictEqual(C.buildPool(bank.questions, { subject: "經濟學大意", year: "114" }).length, 50);
 assert.strictEqual(C.buildPool(bank.questions, { subject: "經濟學概要", year: "115" }).length, 50);
 assert.strictEqual(C.buildPool(bank.questions, { year: "112" }).length, 0);

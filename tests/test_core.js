@@ -85,7 +85,20 @@ const qa6 = bank.questions.find(q => q.id === "113-acct-6");
 assert.strictEqual(qa6.answer, "C");
 assert.ok(qa6.correction_note.includes("C"));
 assert.strictEqual(C.grade(qa6, "C").status, "ok"); assert.strictEqual(C.grade(qa6, "A").status, "bad");
-assert.strictEqual(bank.questions.length, 1045);
+// 題庫規模：總題數與各年度題數（新增或刪除題目時請同步更新；115 年多一份經濟學與貨幣銀行學 25 題）
+assert.strictEqual(bank.questions.length, 2320);
+// 每份試卷（考試別＋科目＋年度）的結構：題號從 1 連續編號、滿分為 50（高考三級、普考概要類）或 100 分。
+// 這些科目（民法、行政法、財政學、稅務法規等）沒有逐題對照考選部答案卡，只能檢查結構；答案正確性請以考選部公布為準。
+const groups = {};
+bank.questions.forEach(q => { const k = [q.exam, q.subject, q.year_roc].join("|"); (groups[k] = groups[k] || []).push(q); });
+Object.keys(groups).forEach(k => {
+  const g = groups[k].slice().sort((a, b) => a.question_no - b.question_no);
+  g.forEach((q, i) => assert.strictEqual(q.question_no, i + 1, k + " 題號應從 1 連續編號"));
+  const pts = g.reduce((a, q) => a + q.points, 0);
+  assert.ok(pts === 50 || pts === 100, k + " 滿分應為 50 或 100，實際 " + pts);
+  g.forEach(q => assert.ok(q.categories && q.categories.length, q.id + " 缺少適用類科"));
+});
+assert.strictEqual(Object.keys(groups).length, 67, "試卷份數（22 個科目 × 113–115 年，加上僅 115 年的經濟學與貨幣銀行學）");
 
 const pool = C.buildPool(bank.questions, { subject: "經濟學概要", mode: "random" });
 assert.strictEqual(pool.length, 150);
@@ -95,7 +108,9 @@ assert.strictEqual(q10.length, 10); assert.strictEqual(new Set(q10).size, 10);
 const all = C.drawQueue(pool, 0); assert.strictEqual(new Set(all).size, 150);
 assert.notDeepStrictEqual(all, pool.map(q => q.id));
 
-assert.strictEqual(C.buildPool(bank.questions, { year: "113" }).length, 340);
+assert.strictEqual(C.buildPool(bank.questions, { year: "113" }).length, 765);
+assert.strictEqual(C.buildPool(bank.questions, { year: "114" }).length, 765);
+assert.strictEqual(C.buildPool(bank.questions, { year: "115" }).length, 790);
 assert.strictEqual(C.buildPool(bank.questions, { subject: "經濟學大意", year: "114" }).length, 50);
 assert.strictEqual(C.buildPool(bank.questions, { subject: "經濟學概要", year: "115" }).length, 50);
 assert.strictEqual(C.buildPool(bank.questions, { year: "112" }).length, 0);

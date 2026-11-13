@@ -195,6 +195,11 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
         <button type="button" class="btn" id="btnBackCover">回封面</button>
       </div>
     </div>
+    <div class="panel err" id="essayErr" hidden>
+      <h2>申論題功能未能載入</h2>
+      <p id="essayErrMsg" style="margin:0 0 8px"></p>
+      <p class="note" style="margin:0">選擇題不受影響。部署到 GitHub Pages 時請確認這幾個檔案都已上傳：<code>index.html</code>、<code>core.js</code>、<code>data/essays.json</code>；上傳後等 1～2 分鐘，並用 Ctrl+F5（Mac 為 ⌘+Shift+R）強制重新整理。</p>
+    </div>
     <div class="panel" id="essayPanel" hidden>
       <h2>申論題練習</h2>
       <p class="note" style="margin-top:0">考選部不公布申論題標準答案。本系統提供編者整理的參考答案與評分細目：先自己作答，送出後系統先做關鍵字初判，再由你對照參考答案確認每個得分點。正式考試每題約 30 分鐘。</p>
@@ -291,7 +296,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
   <p class="foot">題目來源：考選部考畢試題查詢平臺。詳解為教學用途整理，非官方答案；法規與制度請以現行規定為準。若發現與考選部公告不符之處，請回報系統維護者。</p>
 </div></main>
 
-<script src="core.js"></script>
+<script src="core.js?v=essay1"></script>
 <script>
 (function () {
   "use strict";
@@ -339,10 +344,11 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
 
   function loadEssays() {
     return fetchJson("data/essays.json").then(function (e) {
+      if (typeof C.validateEssays !== "function") throw new Error("core.js 不是新版（缺少申論題函式）。請確認已上傳新版 core.js，並強制重新整理。");
       var errs = C.validateEssays(e);
       if (errs.length) throw new Error("申論題資料格式有誤：" + errs.slice(0, 3).join("；"));
       ESSAYS = e.essays; EBYID = {}; ESSAYS.forEach(function (q) { EBYID[q.id] = q; });
-    }).catch(function (err) { ESSAYS = []; EBYID = {}; ESSAY_ERR = String(err.message || err); if (window.console) console.warn(ESSAY_ERR); });
+    }).catch(function (err) { ESSAYS = []; EBYID = {}; ESSAY_ERR = /HTTP 404/.test(String(err.message || err)) ? "找不到 data/essays.json（HTTP 404）。請確認 data 資料夾內已上傳 essays.json。" : String(err.message || err); if (window.console) console.warn(ESSAY_ERR); });
   }
 
   /* ---------- 封面與統計 ---------- */
@@ -556,6 +562,8 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
       .sort(function (a, b) { return b.year_roc - a.year_roc || a.question_no - b.question_no; });
     var keep = $("selEssay").value;
     $("essayPanel").hidden = list.length === 0;
+    $("essayErr").hidden = !ESSAY_ERR;
+    if (ESSAY_ERR) $("essayErrMsg").textContent = ESSAY_ERR;
     fill($("selEssay"), list.map(function (e) {
       return [e.id, "民國 " + e.year_roc + " 年第 " + e.question_no + " 題（" + e.points + " 分）" + (e.tags && e.tags[0] ? "　" + e.tags.slice(0, 2).join("、") : "") + (hasDraft(e.id) ? "　［有草稿］" : "")];
     }));

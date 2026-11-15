@@ -132,6 +132,17 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
 .eres { margin-top: 14px; border-top: 1px solid var(--rule); padding-top: 12px; }
 .hint { font-size: 12.5px; color: var(--ink-2); display: block; }
 .hist { margin: 10px 0 0; padding-left: 20px; font-size: 14.5px; }
+/* essay feedback */
+.fb { border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 6px; padding: 12px 14px; margin: 12px 0; }
+.fb.lv-excellent { border-color: var(--ok); background: var(--ok-soft); }
+.fb.lv-low { border-color: var(--bad); background: var(--bad-soft); }
+.fb p { margin: 4px 0; }
+.fb .fbh { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+.fb h4 { margin: 12px 0 2px; font-size: 14.5px; }
+.fb ul, .fb ol { margin: 4px 0; padding-left: 22px; line-height: 1.7; }
+.fb li { margin: 4px 0; }
+.fb .hint { margin-top: 2px; }
+.panel.err { border-color: var(--bad); }
 @media print {
   .top, .btn, .row, .noprint { display: none !important; }
   body { background: #fff; color: #000; }
@@ -257,6 +268,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
       <p class="qtext" id="eQ" style="margin-bottom:0"></p>
     </div>
     <div id="eParts"></div>
+    <div class="panel" id="eFeedback" hidden></div>
     <div class="panel noprint">
       <div class="score"><span class="num" id="eTotal">0</span><span class="note" id="eOf"></span></div>
       <div class="row gap-lg">
@@ -573,6 +585,10 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
       var e = EBYID[a.id];
       return "<li>" + new Date(a.ts).toLocaleDateString("zh-TW") + "　民國 " + e.year_roc + " 年" + esc(e.subject) + "第 " + e.question_no + " 題　<b>" + fs(a.earned) + " / " + a.possible + "</b> 分" + (a.parts < a.of ? "（評 " + a.parts + "/" + a.of + " 小題）" : "") + "</li>";
     }).join("") + "</ul>" : "";
+    var weak = C.aggregateWeak(essayState().attempts, EBYID, { recent: 30, limit: 5 });
+    if (weak.length) $("essayHist").innerHTML += '<p class="note" style="margin:14px 0 0">常漏的得分點（最近 30 次作答）：</p><ol class="hist">' + weak.map(function (w) {
+      return "<li><b>" + esc(w.partLabel + " " + w.label) + "</b>　<span class=\"note\">" + w.seen + " 次中漏 " + w.missed + " 次</span>" + (w.advice ? '<span class="hint">' + esc(w.advice) + "</span>" : "") + "</li>";
+    }).join("") + "</ol>";
   }
 
   function partState(pid) {
@@ -631,6 +647,35 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     if (a > 0) return '<span class="det-part">△ 部分</span>';
     return '<span class="det-miss">✗ 未偵測到</span>';
   }
+  function fbPartHtml(fb) {
+    var h = '<div class="fb lv-' + fb.level.key + '"><p class="fbh">意見與建議：' + esc(fb.level.title) + "（" + fs(fb.earned) + " / " + fb.possible + " 分）</p><p>" + esc(fb.level.msg) + "</p>";
+    if (fb.strengths.length) h += "<h4>做得好的地方</h4><ul>" + fb.strengths.map(function (x) { return "<li>✓ " + esc(x.label) + "</li>"; }).join("") + "</ul>";
+    if (fb.gaps.length) h += "<h4>優先補強（依失分高低排序）</h4><ol>" + fb.gaps.map(function (g) {
+      return "<li><b>" + esc(g.label) + "</b>　<span class=\"note\">" + (g.status === "miss" ? "未寫到" : "寫得不完整") + "，失 " + fs(g.lost) + " 分</span>" + (g.advice ? '<span class="hint">' + esc(g.advice) + "</span>" : "") + "</li>";
+    }).join("") + "</ol>";
+    if (fb.form.length) h += "<h4>作答表現</h4><ul>" + fb.form.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>";
+    if (fb.calibration) h += "<h4>自評校準</h4><p>" + esc(fb.calibration) + "</p>";
+    return h + "</div>";
+  }
+  function renderPartFeedback(div, p) {
+    var st = partState(p.id), box = div.querySelector(".pfb"); if (!box) return;
+    box.innerHTML = st.graded ? fbPartHtml(C.buildPartFeedback(p, st)) : "";
+  }
+  function renderEssayFeedback() {
+    var e = curEssay, box = $("eFeedback"), states = {};
+    e.parts.forEach(function (p) { states[p.id] = partState(p.id); });
+    var fb = C.buildEssayFeedback(e, states);
+    if (!fb.parts.length) { box.hidden = true; box.innerHTML = ""; return; }
+    var h = "<h2>整題意見與建議</h2>" + '<div class="fb lv-' + fb.level.key + '"><p class="fbh">' + esc(fb.level.title) + "（已評小題 " + fs(fb.earned) + " / " + fb.possible + " 分，約 " + Math.round(fb.pct * 100) + "%）</p><p>" + esc(fb.level.msg) + "</p>";
+    if (fb.ungraded.length) h += '<p class="note">尚未評分：' + esc(fb.ungraded.join("、")) + "。以上建議只根據已評分的小題。</p>";
+    if (fb.priorities.length) h += "<h4>下次優先補強</h4><ol>" + fb.priorities.map(function (g) {
+      return "<li><b>" + esc(g.partLabel + " " + g.label) + "</b>　<span class=\"note\">失 " + fs(g.lost) + " 分</span>" + (g.advice ? '<span class="hint">' + esc(g.advice) + "</span>" : "") + "</li>";
+    }).join("") + "</ol>";
+    else h += "<p>每個得分點都拿到了。可以把時間壓縮，並練習用更精簡的方式寫出同樣的推導。</p>";
+    if (fb.kindTips.length) h += "<h4>答題策略</h4><ul>" + fb.kindTips.map(function (t) { return "<li>" + esc(t.tip) + "</li>"; }).join("") + "</ul>";
+    h += "<h4>時間配置（一題以 30 分鐘估）</h4><p>" + fb.time.map(function (t) { return esc(t.label) + " " + t.points + " 分 ≈ " + t.minutes + " 分鐘"; }).join("；") + "。先寫會的得分點，卡關的步驟留空繼續往下寫，最後再回來補。</p>";
+    box.innerHTML = h + "</div>"; box.hidden = false;
+  }
   function showPartResult(div, p) {
     var st = partState(p.id), res = div.querySelector(".eres");
     div.querySelector("textarea").readOnly = true;
@@ -643,6 +688,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     res.innerHTML = '<p class="verdict pv"></p>' +
       '<table class="weak rub"><thead><tr><th>評分細目</th><th class="c">系統初判</th><th class="c">你確認的分數</th><th class="c">配分</th></tr></thead><tbody>' + rows + "</tbody></table>" +
       '<p class="note">系統只比對關鍵字與公式寫法：你用不同寫法時可能漏判，只是提到名詞但推導錯誤時也可能誤判。請對照下方參考答案，自行調整「你確認的分數」。</p>' +
+      '<div class="pfb" aria-live="polite"></div>' +
       '<details class="wq" open><summary>參考答案與常見錯誤</summary><div class="body"><div class="exp"><p>' + p.model_answer + "</p></div>" + (p.pitfalls ? '<p class="note">' + esc(p.pitfalls) + "</p>" : "") + '<p class="note">參考答案為編者整理，非考選部公布；閱卷者可能接受其他合理的解法與寫法。</p></div></details>';
     res.hidden = false;
     res.querySelectorAll("select.sc").forEach(function (sel) {
@@ -658,8 +704,10 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     $("eTotal").textContent = fs(sm.earned);
     $("eOf").textContent = "／ " + e.points + " 分（已評 " + graded + " / " + e.parts.length + " 小題）";
     $("btnEssaySave").disabled = graded === 0;
+    renderEssayFeedback();
     document.querySelectorAll("#eParts .epart").forEach(function (div) {
       var pv = div.querySelector(".pv"); if (!pv) return;
+      var pp = e.parts.filter(function (x) { return x.id === div.dataset.pid; })[0]; if (pp) renderPartFeedback(div, pp);
       var r = sm.parts[div.dataset.pid]; pv.textContent = "本小題得分　" + fs(r.earned) + " / " + r.possible + " 分";
     });
   }
@@ -668,7 +716,9 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     e.parts.forEach(function (p) { var st = partState(p.id); if (st.graded) { ps[p.id] = st.scores; graded++; } });
     if (!graded) return;
     var sm = C.summarizeEssay(e, ps), es = essayState();
-    es.attempts.push({ id: e.id, ts: Date.now(), earned: sm.earned, possible: e.points, parts: graded, of: e.parts.length });
+    var res = {};
+    e.parts.forEach(function (p) { var st = partState(p.id); if (st.graded) p.rubric.forEach(function (r) { res[p.id + ":" + r.id] = (Number(st.scores[r.id]) || 0) >= r.points ? 1 : 0; }); });
+    es.attempts.push({ id: e.id, ts: Date.now(), earned: sm.earned, possible: e.points, parts: graded, of: e.parts.length, res: res });
     if (es.attempts.length > 200) es.attempts = es.attempts.slice(-200);
     delete es.drafts[e.id]; save(); curEssay = null;
     updatePool(); show("vSetup");

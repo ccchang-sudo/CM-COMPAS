@@ -186,7 +186,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
         <label class="f">應試科目<select id="selSubject"></select></label>
       </div>
     </div>
-    <div class="panel">
+    <div class="panel" id="mcqPanel">
       <h2>練習模式</h2>
       <div class="modes" id="modes">
         <label><input type="radio" name="mode" value="random" checked><span>隨機出題<small>從符合條件的題目中亂數抽題，同一輪不重複</small></span></label>
@@ -271,6 +271,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     <div class="panel">
       <div class="chips" id="eChips"></div>
       <p class="qtext" id="eQ" style="margin-bottom:0"></p>
+      <p class="note" id="eFig" hidden style="margin:10px 0 0">本題要求繪圖。本系統無法繪圖，請用文字描述：標明橫軸與縱軸，說明各條曲線的名稱與斜率、交點的位置，以及哪一塊面積是消費者剩餘、生產者剩餘或無謂損失。評分是比對文字，不是看圖。你仍應在紙上實際畫一次圖練習。</p>
     </div>
     <div id="eParts"></div>
     <div class="panel noprint">
@@ -317,7 +318,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
   <p class="foot">題目來源：考選部考畢試題查詢平臺。詳解為教學用途整理，非官方答案；法規與制度請以現行規定為準。若發現與考選部公告不符之處，請回報系統維護者。</p>
 </div></main>
 
-<script src="core.js?v=feedback1"></script>
+<script src="core.js?v=feedback2"></script>
 <script>
 (function () {
   "use strict";
@@ -431,13 +432,14 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     return { subject: $("selSubject").value, year: $("selYear").value, tag: m === "tag" ? $("selTag").value : "", mode: m === "wrong" ? "wrong" : "random", wrongMap: S.wrong };
   }
   function initSetup() {
-    var exams = uniq(BANK.questions.map(function (q) { return q.exam; }));
+    var exams = uniq(BANK.questions.map(function (q) { return q.exam; }).concat(ESSAYS.map(function (e) { return e.exam; })));
     fill($("selExam"), exams.map(function (e) { return [e, e]; }));
     refreshSubjects();
   }
   function refreshSubjects() {
     var ex = $("selExam").value;
-    var subs = uniq(BANK.questions.filter(function (q) { return q.exam === ex; }).map(function (q) { return q.subject; }));
+    var subs = uniq(BANK.questions.filter(function (q) { return q.exam === ex; }).map(function (q) { return q.subject; })
+      .concat(ESSAYS.filter(function (e) { return e.exam === ex; }).map(function (e) { return e.subject; })));
     fill($("selSubject"), subs.map(function (s) { return [s, s]; }));
     refreshFilters();
   }
@@ -451,7 +453,9 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     fill($("selTag"), tags.map(function (t) { return [t, t]; }));
     if (years.map(String).indexOf(keepY) >= 0) $("selYear").value = keepY;
     if (tags.indexOf(keepT) >= 0) $("selTag").value = keepT;
-    $("setupLead").textContent = "目前題庫：" + $("selExam").value + "　" + sub + "，共 " + qs.length + " 題。";
+    var en = ESSAYS.filter(function (e) { return e.exam === $("selExam").value && e.subject === sub; }).length;
+    $("setupLead").textContent = "目前題庫：" + $("selExam").value + "　" + sub + "，" + (qs.length ? "選擇題 " + qs.length + " 題" : "本科目目前只有申論題") + (en ? (qs.length ? "，" : "：") + "申論題 " + en + " 題" : "") + "。";
+    $("mcqPanel").hidden = qs.length === 0; $("advicePanel").hidden = qs.length === 0;
     $("fTag").hidden = curMode() !== "tag";
     updatePool();
   }
@@ -667,6 +671,8 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     var chips = [e.exam, e.categories && e.categories.length ? "類科：" + e.categories.join("、") : "", e.subject, e.area].concat(e.tags || []);
     $("eChips").innerHTML = chips.filter(Boolean).map(function (c) { return '<span class="chip">' + esc(c) + "</span>"; }).join("");
     $("eQ").innerHTML = e.question;
+    var needFig = /繪圖|作圖|圖形|畫出/.test(e.question + e.parts.map(function (p) { return p.question; }).join(""));
+    $("eFig").hidden = !needFig;
     var box = $("eParts"); box.innerHTML = "";
     e.parts.forEach(function (p) { box.appendChild(buildPart(p)); });
     $("eMsg").textContent = "尚未評分的小題以 0 分計。成績只存在你的瀏覽器。";

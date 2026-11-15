@@ -70,4 +70,65 @@ for (let k = 0; k < 200; k++) {
   const t2 = ((nn + 2) * d - (a - c)) / (nn + 1);
   assert.ok(t2 > t);
 }
+
+/* ===== 115 年高考三級其餘三份試卷的申論題 ===== */
+const by = (subj) => data.essays.filter(q => q.year_roc === 115 && q.subject === subj);
+const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
+// 題數與配分：金融保險 50 分（15+15+10+10）、財經廉政 50 分、公共經濟學 100 分（4×25）
+assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
+assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
+assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
+assert.strictEqual(data.essays.length, 12);
+// exam / subject 字串要與選擇題題庫一致（有選擇題的科目），公共經濟學為純申論科目
+data.essays.forEach(q => {
+  const has = bank.questions.some(b => b.exam === q.exam && b.subject === q.subject);
+  assert.strictEqual(has, q.subject !== '公共經濟學', q.id + ' exam/subject 與題庫不一致');
+});
+// 四份試卷的小題結構（對照試題 PDF）
+const shape = (id) => E[id].parts.map(p => p.points).join(',');
+assert.strictEqual(shape('115-g3mb-E1'), '10,5'); assert.strictEqual(shape('115-g3mb-E2'), '4,4,4,3');
+assert.strictEqual(shape('115-g3mb-E3'), '10'); assert.strictEqual(shape('115-g3mb-E4'), '2,8');
+assert.strictEqual(shape('115-g3fin-E1'), '25'); assert.strictEqual(shape('115-g3fin-E2'), '10,15');
+
+// 財經廉政第 2 題（二）：社會福利數值
+{
+  const Ua = Ma => 1000 + Ma, Ub = Mb => 1000 + 2 * Mb;
+  const util = (ma, mb) => Ua(ma) + Ub(mb), rawls = (ma, mb) => Math.min(Ua(ma), Ub(mb));
+  assert.strictEqual(util(50, 50), 2150); assert.strictEqual(util(60, 40), 2140);
+  assert.strictEqual(rawls(50, 50), 1050); assert.strictEqual(rawls(60, 40), 1060);
+  const a = C.stripHtml(E['115-g3fin-E2'].parts[1].model_answer);
+  ['2150', '2140', '1050', '1060'].forEach(x => assert.ok(a.includes(x), '參考答案應含 ' + x));
+  // 只算對功利主義（2150→2140），不應拿到 Rawls 的分數
+  const g = C.gradeEssayPart(E['115-g3fin-E2'].parts[1], '功利主義 W=Ua+Ub，原本 2150，新的 2140，福利減少 10');
+  assert.ok(g.earned > 0 && g.earned < 8, '只答功利主義應只拿部分分數，實得 ' + g.earned);
+}
+// 公共經濟學第 4 題：Lindahl 數值（MBA=120−2G, MBB=80−G, MC=90+αG）
+for (const al of [0.5, 1, 2, 4]) {
+  const G = 110 / (3 + al), tA = 120 - 2 * G, tB = 80 - G, MC = 90 + al * G;
+  assert.ok(Math.abs(tA + tB - MC) < 1e-9, 'tA+tB=MC');
+  assert.ok(Math.abs(tA - (140 + 120 * al) / (3 + al)) < 1e-9); assert.ok(Math.abs(tB - (130 + 80 * al) / (3 + al)) < 1e-9);
+  assert.ok(Math.abs((tA + tB) * G - (90 * G + al * G * G / 2) - al * G * G / 2) < 1e-9, '預算差額為 αG²/2');
+  assert.ok(G < 40 && 120 - 2 * G > 0 && 80 - G > 0);
+}
+{ const a = C.stripHtml(E['115-g3pe-E4'].parts[0].model_answer); ['27.5', '65', '52.5', '117.5'].forEach(x => assert.ok(a.includes(x), '參考答案 α=1 的數值 ' + x)); }
+// 金融保險第 1 題（一）：關稅的福利變化（線性需求供給數值驗算 −(b+d)）
+{
+  const D = P => 100 - P, S = P => P - 10, PW = 40, T = 10;           // 自由貿易 Qd=60, Qs=30
+  const area = (f, p0, p1) => { let s = 0; const n = 20000, h = (p1 - p0) / n; for (let i = 0; i < n; i++) s += f(p0 + (i + 0.5) * h) * h; return s; };
+  const dCS = -area(D, PW, PW + T), dPS = area(S, PW, PW + T), rev = T * (D(PW + T) - S(PW + T));
+  const b = 0.5 * (S(PW + T) - S(PW)) * T, d = 0.5 * (D(PW) - D(PW + T)) * T;
+  assert.ok(Math.abs(dCS + dPS + rev + (b + d)) < 1e-3, '總剩餘變動 = −(b+d)');
+}
+// 較貼近學生寫法的作答：應得部分分數，不是 0 也不是滿分
+{
+  const p = E['115-g3mb-E3'].parts[0];
+  const g = C.gradeEssayPart(p, '贊成央行獨立的人認為，政治人物為了選舉會要求降息，造成通膨偏高，所以要避免政治干預，維持物價穩定與公信力；反對的人認為央行官員沒有民選，缺乏民主課責。');
+  assert.ok(g.earned > 0 && g.earned < p.points, '中央銀行獨立性：部分作答應得部分分數，實得 ' + g.earned);
+}
+// 評分不可被其他科目的參考答案輕易騙過：拿別科的答案作答，得分應低於一半
+data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
+  if (q2.subject === q.subject) return;
+  q2.parts.forEach(p2 => { const g = C.gradeEssayPart(p, C.stripHtml(p2.model_answer)); assert.ok(g.earned <= p.points * 0.5, q.id + '/' + p.id + ' 被 ' + q2.id + '/' + p2.id + ' 的答案拿到 ' + g.earned + '/' + p.points); });
+})));
+
 console.log('申論題測試通過');

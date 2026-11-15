@@ -197,8 +197,6 @@
           rs += r.points || 0;
           if (!Array.isArray(r.patterns) || !r.patterns.length) errs.push(pp + "評分細目 " + r.id + " 缺少 patterns");
           else r.patterns.forEach(function (src) { if (!safeRegex(src)) errs.push(pp + "評分細目 " + r.id + " 的 pattern 不合法：" + src); });
-          if (r.kind != null && ["formula", "concept", "discussion"].indexOf(r.kind) < 0) errs.push(pp + "評分細目 " + r.id + " 的 kind 只能是 formula、concept 或 discussion");
-          if (r.advice != null && !String(r.advice).trim()) errs.push(pp + "評分細目 " + r.id + " 的 advice 不可為空字串");
           if (r.min && (r.min < 1 || r.min > (r.patterns || []).length)) errs.push(pp + "評分細目 " + r.id + " 的 min 超出 patterns 數量");
         });
         if (Math.abs(rs - pt.points) > 1e-9) errs.push(pp + "評分細目配分合計 " + rs + " 不等於小題配分 " + pt.points);
@@ -208,119 +206,265 @@
     return errs;
   }
 
-  /* ================= 申論題：意見與建議 ================= */
+  /* ================= 依作答結果給意見與建議（規則式，不需後端） ================= */
 
-  var KIND_TIPS = {
-    formula: "計算與推導題：依序寫出「假設與符號 → 每一步的式子 → 框出結論 → 用極限或特例檢查」。即使最後結果算錯，清楚的步驟仍可拿到過程分。",
-    concept: "概念說明題：用「定義 → 機制 → 結論」三段式，每個要點至少一句完整的話；只列名詞（例如只寫「Lucas 批判」）通常拿不到分。",
-    discussion: "討論比較題：寫出「機制 ＋ 方向 ＋ 例外或極限」三個要素，最後用一兩句做比較或結論。"
-  };
-  var LEVELS = [
-    { min: 0.85, key: "excellent", title: "表現優良", msg: "核心得分點幾乎都掌握了。接下來把重點放在表達：每一步推導寫清楚，結尾加一句檢驗或比較，避免因為跳步被扣過程分。" },
-    { min: 0.65, key: "good", title: "大致掌握", msg: "主要架構是對的，但仍有幾個得分點遺漏或寫得不完整。優先補強下方列出的項目，再重寫一次同一小題，確認補齊。" },
-    { min: 0.4, key: "fair", title: "基礎待補強", msg: "你已經寫到一部分重點，但關鍵得分點缺漏較多。建議先對照參考答案，把缺的步驟逐項補寫，再整題重寫。" },
-    { min: 0, key: "low", title: "建議先回頭複習", msg: "目前命中的得分點很少。建議先閱讀參考答案與相關教材，理解整體的推導或論述架構，隔天不看答案重寫一次。" }
-  ];
-  function essayLevel(pct) {
-    for (var i = 0; i < LEVELS.length; i++) if (pct >= LEVELS[i].min - 1e-9) return LEVELS[i];
-    return LEVELS[LEVELS.length - 1];
+  var FAST_SEC = 15;   // 低於此秒數答錯，視為「可能看太快」
+  var PACE_SEC = 72;   // 正式考試步調：每題約 72 秒
+  var NEG_RE = /不正確|錯誤|除外|不包括|不包含|不屬於|並非|何者為非|何者不|不是|不得|不能|不會|無關|有誤/;
+  var LETTERS = "ABCDEFGH";
+
+  function pct(x) { return Math.round(x * 100); }
+  function clip(s, n) { s = stripHtml(s).replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n) + "…" : s; }
+  function acceptOf(q) { return (q.accept && q.accept.length) ? q.accept : [q.answer]; }
+  function optLabel(q, L) {
+    var i = LETTERS.indexOf(L);
+    return i >= 0 && q.options && q.options[i] != null ? L + "（" + clip(q.options[i], 26) + "）" : L;
   }
-  function nonSpaceLen(t) { return String(t == null ? "" : t).replace(/\s/g, "").length; }
-  var STRUCT_RE = /(^|\n)\s*([0-9\uff10-\uff19]+[.\u3001)\uff09]|\([0-9\u4e00-\u4e5d]+\)|\uff08[0-9\u4e00-\u4e5d]+\uff09|[\u4e00-\u4e5d]\u3001)|\u9996\u5148|\u5176\u6b21|\u7b2c\u4e00|\u7b2c\u4e8c|\u7b2c\u4e09|\u6700\u5f8c|\u7d9c\u4e0a|\u7e3d\u7d50|\u5c0f\u7d50/;
+  function rateText(o) { return o.ok + "/" + o.n + "，" + pct(o.ok / o.n) + "%"; }
 
-  /**
-   * 單一小題的意見與建議。st = { text, scores, auto }（scores 為學生確認後的各細目分數，auto 為系統初判）。
-   * 全部以規則產生：依得分點的得失、篇幅（相對參考答案）、是否寫出推導、分點結構，以及自評與初判的落差。
-   */
-  function buildPartFeedback(part, st) {
-    st = st || {};
-    var scores = st.scores || {}, auto = st.auto || {};
-    var earned = sumPartScores(part, scores), pct = part.points ? earned / part.points : 0;
-    var strengths = [], gaps = [];
-    (part.rubric || []).forEach(function (r, idx) {
-      var v = Math.min(Math.max(Number(scores[r.id]) || 0, 0), r.points), lost = r.points - v;
-      if (lost <= 1e-9) strengths.push({ id: r.id, label: r.label, topic: r.topic || r.label });
-      else gaps.push({ id: r.id, idx: idx, label: r.label, topic: r.topic || r.label, kind: r.kind || "concept", advice: r.advice || "", lost: lost, points: r.points, status: v <= 0 ? "miss" : "partial" });
-    });
-    gaps.sort(function (a, b) { return b.lost - a.lost || a.idx - b.idx; });
-
-    var form = [], text = String(st.text || ""), chars = nonSpaceLen(text), modelLen = nonSpaceLen(stripHtml(part.model_answer));
-    if (modelLen && chars) {
-      var ratio = chars / modelLen;
-      if (ratio < 0.3) form.push("篇幅偏短（約為參考答案的 " + Math.round(ratio * 100) + "%）。每個得分點至少要有一句完整的說明，只寫結論或關鍵字不容易拿到分。");
-      else if (ratio > 1.8) form.push("篇幅偏長（約為參考答案的 " + Math.round(ratio * 100) + "%）。考場時間有限，建議刪掉重複的敘述，把時間留給還沒寫到的得分點。");
-    }
-    var kinds = (part.rubric || []).map(function (r) { return r.kind || "concept"; });
-    var nFormula = kinds.filter(function (k) { return k === "formula"; }).length;
-    if (nFormula && chars >= 10 && (text.match(/[=\uff1d]/g) || []).length < 2)
-      form.push("這是計算推導題，但你的答案裡幾乎沒有等式。只寫結論很難拿到過程分，請把每一步的式子寫出來。");
-    if (kinds.length - nFormula >= kinds.length / 2 && chars >= 150 && !STRUCT_RE.test(text))
-      form.push("答案是一整段文字。建議用編號或「首先、其次、最後」分點，閱卷者比較容易逐項對照得分點。");
-
-    var autoSum = 0, hasAuto = false;
-    (part.rubric || []).forEach(function (r) { if (auto[r.id] != null) { hasAuto = true; autoSum += Number(auto[r.id]) || 0; } });
-    var calibration = null;
-    if (hasAuto) {
-      var diff = earned - autoSum;
-      if (diff >= 2) calibration = "你自評的分數比系統初判高 " + (Math.round(diff * 2) / 2) + " 分。請再確認那些得分點是否真的寫出機制或推導，而不只是提到名詞；自評偏鬆是練習時最常見的盲點。";
-      else if (diff <= -2) calibration = "你自評的分數比系統初判低 " + (Math.round(-diff * 2) / 2) + " 分。可能是系統誤判（只比對到關鍵字），也可能是你比較嚴格；保守沒有問題，但請確認有沒有低估自己。";
-    }
-    return { earned: earned, possible: part.points, pct: pct, level: essayLevel(pct), strengths: strengths, gaps: gaps, form: form, calibration: calibration, chars: chars };
-  }
-
-  /**
-   * 整題的意見與建議。states = { partId: { graded, text, scores, auto } }，只統計已評分的小題。
-   */
-  function buildEssayFeedback(essay, states) {
-    states = states || {};
-    var parts = [], earned = 0, possible = 0, ungraded = [], allGaps = [], lostByKind = {};
-    essay.parts.forEach(function (p) {
-      var st = states[p.id];
-      if (!st || !st.graded) { ungraded.push(p.label); return; }
-      var fb = buildPartFeedback(p, st);
-      parts.push({ id: p.id, label: p.label, fb: fb });
-      earned += fb.earned; possible += p.points;
-      fb.gaps.forEach(function (g) {
-        allGaps.push({ partId: p.id, partLabel: p.label, id: g.id, label: g.label, topic: g.topic, kind: g.kind, advice: g.advice, lost: g.lost, status: g.status });
-        lostByKind[g.kind] = (lostByKind[g.kind] || 0) + g.lost;
+  /** 依 keyFn 分組統計答對率。records: [{id,status}]；filterFn 可選。 */
+  function groupStats(records, byId, keyFn, filterFn) {
+    var out = {};
+    (records || []).forEach(function (r) {
+      var q = byId[r.id]; if (!q || (filterFn && !filterFn(q, r))) return;
+      var keys = keyFn(q); if (!Array.isArray(keys)) keys = [keys];
+      keys.forEach(function (k) {
+        if (!k) return;
+        var o = out[k] || (out[k] = { ok: 0, n: 0 });
+        o.n++; if (r.status === "ok") o.ok++;
       });
     });
-    allGaps.sort(function (a, b) { return b.lost - a.lost; });
-    var pct = possible ? earned / possible : 0;
-    var kindTips = Object.keys(lostByKind).sort(function (a, b) { return lostByKind[b] - lostByKind[a]; })
-      .filter(function (k) { return KIND_TIPS[k]; }).map(function (k) { return { kind: k, tip: KIND_TIPS[k] }; });
-    var time = essay.parts.map(function (p) { return { label: p.label, points: p.points, minutes: Math.max(1, Math.round(p.points / essay.points * 30)) }; });
-    return { earned: earned, possible: possible, pct: pct, level: possible ? essayLevel(pct) : null, parts: parts, ungraded: ungraded, priorities: allGaps.slice(0, 3), kindTips: kindTips, time: time };
+    return out;
+  }
+  function tagKeys(q) { return q.tags && q.tags.length ? q.tags : []; }
+
+  /**
+   * 單題回饋。q 題目；r 本題結果 {chosen,status,sec,timeout,gift}；
+   * ctx: { prev:{bad,last}|null（本次作答前的錯題紀錄）, tagBefore:{ tag:{ok,n} }（本次作答前的考點統計）, pace }
+   * 回傳 [{kind:"good"|"warn"|"tip", text}]
+   */
+  function feedbackQuestion(q, r, ctx) {
+    ctx = ctx || {};
+    var out = [], pace = ctx.pace || PACE_SEC, sec = typeof r.sec === "number" ? r.sec : null;
+    var prev = ctx.prev || null, prevBad = prev ? (prev.bad || 0) : 0, prevWrong = prev && prev.last !== "ok" && prevBad > 0;
+    var tb = ctx.tagBefore || {};
+    var weakTag = null;
+    (q.tags || []).forEach(function (t) {
+      var o = tb[t];
+      if (o && o.n >= 3 && o.ok / o.n < 0.6 && (!weakTag || o.ok / o.n < tb[weakTag].ok / tb[weakTag].n)) weakTag = t;
+    });
+    var neg = NEG_RE.exec(stripHtml(q.question));
+    function add(kind, text) { out.push({ kind: kind, text: text }); }
+
+    if (r.gift) {
+      add("tip", "本題考選部公告一律給分，不代表你的觀念正確。請讀詳解確認自己是否真的會。");
+      return out;
+    }
+    if (r.status === "ok") {
+      if (prevWrong) add("good", "這題你之前答錯過 " + prevBad + " 次，這次答對，代表這個觀念補起來了，已從錯題本移除。過幾天再做一次，確認是真的記住而不是剛看過。");
+      else if (sec != null && sec <= FAST_SEC) add("good", "只用 " + sec + " 秒就答對，這個觀念你已經很熟。");
+      else add("good", "觀念正確。可以先跳過詳解，把時間留給弱項。");
+      if (sec != null && sec > pace) add("warn", "雖然答對，但花了 " + sec + " 秒，超過正式考試約 " + pace + " 秒一題的步調。這類題目在考場上會壓縮後面題目的時間，建議練到 " + pace + " 秒內。");
+      if (weakTag) add("tip", "考點「" + weakTag + "」累計答對率只有 " + pct(tb[weakTag].ok / tb[weakTag].n) + "%（" + rateText(tb[weakTag]) + "），整體仍是弱項，這題答對不代表已經穩定，建議再多練幾題。");
+      return out;
+    }
+    if (r.status === "bad") {
+      add("warn", "你選 " + optLabel(q, r.chosen) + "，正確答案是 " + acceptOf(q).map(function (L) { return optLabel(q, L); }).join(" 或 ") + "。請先看詳解弄清楚「為什麼自己選的不成立」，再看正確答案為何成立。");
+      if (neg) add("tip", "題幹含有「" + neg[0] + "」這類否定字眼，這是常見的失分原因：請確認自己是在找「不對」的選項，下次先圈出否定詞再作答。");
+      if (sec != null && sec <= FAST_SEC) add("tip", "你只用了 " + sec + " 秒就作答，可能沒有讀完題幹或每個選項。建議每題至少把四個選項都看過一遍。");
+      else if (sec != null && sec > pace) add("tip", "花了 " + sec + " 秒仍然答錯，代表這個觀念本身還不穩，不只是粗心。建議回頭讀對應章節，而不是只背答案。");
+      if (prevBad >= 1) add("warn", "這是你第 " + (prevBad + 1) + " 次答錯這一題，通常表示對這個觀念有固定的誤解。請用自己的話寫出「正確答案為什麼對、我選的為什麼錯」。");
+      if (weakTag) add("tip", "考點「" + weakTag + "」累計答對率 " + pct(tb[weakTag].ok / tb[weakTag].n) + "%（" + rateText(tb[weakTag]) + "），是你目前的弱項。可以到設定畫面選「依考點練習」集中練。");
+      return out;
+    }
+    // skip
+    if (r.timeout) add("warn", "時間到仍未作答。若常發生，表示這類題目讀題或計算太慢，可先跳過難題、最後再回頭。");
+    else add("warn", "這題你選擇略過。本系統答錯不倒扣（正式考試請以當次試題須知為準），不確定時先刪去明顯錯誤的選項再選，通常比空白划算。");
+    add("tip", "正確答案是 " + acceptOf(q).map(function (L) { return optLabel(q, L); }).join(" 或 ") + "。請讀詳解，並把這題加進複習清單（系統已自動放進錯題本）。");
+    if (weakTag) add("tip", "考點「" + weakTag + "」累計答對率 " + pct(tb[weakTag].ok / tb[weakTag].n) + "%，建議集中練習。");
+    return out;
+  }
+
+  function levelOf(acc, n) {
+    var lv, head;
+    if (acc >= 0.85) { lv = "excellent"; head = "表現優秀，這一輪幾乎都掌握了。"; }
+    else if (acc >= 0.7) { lv = "good"; head = "表現良好，再補強幾個弱點就能更穩。"; }
+    else if (acc >= 0.5) { lv = "fair"; head = "及格邊緣，有幾個觀念需要回頭補強。"; }
+    else { lv = "weak"; head = "目前基礎還不穩，建議先讀教材與詳解，再做題目驗證。"; }
+    if (n < 5) head += "（題數少於 5 題，僅供參考。）";
+    return { level: lv, headline: head };
+  }
+  function worstTags(stats, minN, maxRate, limit) {
+    return Object.keys(stats).map(function (t) { return { tag: t, ok: stats[t].ok, n: stats[t].n, rate: stats[t].ok / stats[t].n }; })
+      .filter(function (x) { return x.n >= minN && x.rate < maxRate; })
+      .sort(function (a, b) { return a.rate - b.rate || b.n - a.n; }).slice(0, limit);
+  }
+  function stuckCount(wrongMap, byId, subject) {
+    return Object.keys(wrongMap || {}).filter(function (id) { var q = byId[id]; return q && (!subject || q.subject === subject) && wrongMap[id].last !== "ok"; }).length;
   }
 
   /**
-   * 跨次練習：統計最近 N 次申論題作答中「常漏的得分點」。
-   * attempt.res = { "partId:rubricId": 1（拿滿分）或 0（有失分） }
+   * 一輪練習的整體回饋。info: { byId, queue, results, summary, prior（本輪之前的 records）, wrongMap, subject }
+   * 回傳 { level, headline, points:[{kind,text}], actions:[{type:"tag"|"wrong", tag, label}] } 或 null
    */
-  function aggregateWeak(attempts, essaysById, opts) {
-    opts = opts || {};
-    var recent = (attempts || []).slice(-(opts.recent || 30)), acc = {};
-    recent.forEach(function (a) {
-      var e = essaysById[a.id]; if (!e || !a.res) return;
-      Object.keys(a.res).forEach(function (k) {
-        var key = a.id + "|" + k, x = acc[key] || (acc[key] = { essayId: a.id, key: k, seen: 0, missed: 0 });
-        x.seen++; if (!a.res[k]) x.missed++;
+  function feedbackSession(info) {
+    var sm = info.summary, byId = info.byId, queue = info.queue, results = info.results;
+    if (!sm || !sm.total) return null;
+    var lv = levelOf(sm.accuracy, sm.total), pts = [], actions = [];
+    function add(kind, text) { pts.push({ kind: kind, text: text }); }
+
+    // 進步 / 退步（與同科過去累計比較）
+    var prior = (info.prior || []).filter(function (x) { return byId[x.id] && byId[x.id].subject === info.subject; });
+    if (prior.length >= 10) {
+      var pa = prior.filter(function (x) { return x.status === "ok"; }).length / prior.length, d = sm.accuracy - pa;
+      if (d >= 0.08) add("good", "這一輪答對率 " + pct(sm.accuracy) + "%，比你這個科目過去累計的 " + pct(pa) + "% 進步了 " + pct(d) + " 個百分點，努力有效果。");
+      else if (d <= -0.08) add("tip", "這一輪答對率 " + pct(sm.accuracy) + "%，低於你過去累計的 " + pct(pa) + "%。可能是這輪題目較難或集中在弱項；看下方考點分析找出原因。");
+    }
+    // 之前錯、這次對
+    var rec = queue.filter(function (id) { return results[id] && results[id].recovered; }).length;
+    if (rec) add("good", "有 " + rec + " 題是之前答錯、這次答對的，已從錯題本移除。");
+
+    // 穩定的考點
+    var strong = sm.weak.filter(function (w) { return w.rate === 1 && w.n >= 2 && w.tag !== "未分類"; }).slice(-3).reverse();
+    if (strong.length) add("good", "已經穩定的考點：" + strong.map(function (w) { return w.tag + "（" + w.ok + "/" + w.n + "）"; }).join("、") + "。這些可以降低複習頻率。");
+
+    // 弱項考點
+    var weak = sm.weak.filter(function (w) { return w.rate < 0.5 && w.tag !== "未分類"; }).slice(0, 3);
+    if (weak.length) {
+      add("warn", "需要加強的考點：" + weak.map(function (w) { return w.tag + "（" + w.ok + "/" + w.n + "）"; }).join("、") + "。先讀這些題目的詳解，再用「依考點練習」集中做。");
+      weak.slice(0, 2).forEach(function (w) { actions.push({ type: "tag", tag: w.tag, label: "集中練「" + w.tag + "」" }); });
+    }
+    // 章節層級
+    var ar = worstTags(groupStats(queue.map(function (id) { return { id: id, status: results[id].status }; }), byId, function (q) { return q.area; }), 3, 0.5, 1);
+    if (ar.length) add("warn", "「" + ar[0].tag + "」這個章節整體只答對 " + ar[0].ok + "/" + ar[0].n + "，不只是單一考點的問題，建議回到這個章節系統複習一次。");
+
+    // 未答與逾時
+    var timeouts = queue.filter(function (id) { return results[id].timeout; }).length;
+    if (sm.skip && sm.skip / sm.total >= 0.15) add("warn", "有 " + sm.skip + " 題（" + pct(sm.skip / sm.total) + "%）沒作答" + (timeouts ? "，其中 " + timeouts + " 題是時間到" : "") + "。答錯不倒扣的話，空白一定得 0 分；不確定時先排除明顯錯誤選項再猜。");
+    else if (timeouts) add("tip", "有 " + timeouts + " 題因時間到而未答，可練習先跳過太費時的題目。");
+
+    // 作答速度
+    var secs = queue.filter(function (id) { return results[id].status !== "skip" && typeof results[id].sec === "number"; }).map(function (id) { return results[id].sec; });
+    var bad = queue.filter(function (id) { return results[id].status === "bad"; });
+    var fastWrong = bad.filter(function (id) { return typeof results[id].sec === "number" && results[id].sec <= FAST_SEC; }).length;
+    if (fastWrong >= 2 && fastWrong / bad.length >= 0.4) add("warn", "答錯的題目中有 " + fastWrong + " 題是在 " + FAST_SEC + " 秒內答的，可能讀題太快。放慢一點、把每個選項都看完，常能多拿幾分。");
+    if (secs.length >= 5) {
+      var avg = Math.round(secs.reduce(function (a, b) { return a + b; }, 0) / secs.length);
+      if (avg > PACE_SEC) add("warn", "平均每題 " + avg + " 秒，高於正式考試約 " + PACE_SEC + " 秒的步調。可以用「每題 72 秒」的計時模式練習時間分配。");
+    }
+    // 否定字眼
+    var negMiss = bad.filter(function (id) { return NEG_RE.test(stripHtml(byId[id].question)); }).length;
+    if (negMiss >= 2) add("tip", "答錯的題目中有 " + negMiss + " 題的題幹含「錯誤、除外、不包括」等否定字眼。作答時先圈出否定詞，確認是在找對的還是不對的選項。");
+    // 反覆錯題
+    var rep = queue.filter(function (id) { return results[id].status !== "ok" && info.wrongMap && info.wrongMap[id] && info.wrongMap[id].bad >= 2; }).length;
+    if (rep) add("warn", "有 " + rep + " 題是你累計答錯 2 次以上的題目。反覆錯同一題多半是觀念有誤解，建議逐題用自己的話解釋正確答案，再用「錯題重練」驗證。");
+    // 選項偏好
+    var ans = queue.filter(function (id) { return results[id].chosen; }), cnt = {};
+    ans.forEach(function (id) { cnt[results[id].chosen] = (cnt[results[id].chosen] || 0) + 1; });
+    var top = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; })[0];
+    if (ans.length >= 12 && top && cnt[top] / ans.length >= 0.55) add("tip", "你有 " + pct(cnt[top] / ans.length) + "% 的答案都選 " + top + "。不確定時如果習慣固定選同一個選項，建議改用排除法。");
+
+    // 行動建議
+    var sc = stuckCount(info.wrongMap, byId, info.subject);
+    if (sc) actions.push({ type: "wrong", label: "錯題重練（" + sc + " 題）" });
+    if (!pts.length) add("good", "這一輪沒有明顯的問題，繼續保持，可以拉高題數或縮短每題時間增加難度。");
+    return { level: lv.level, headline: lv.headline, points: pts, actions: actions };
+  }
+
+  /**
+   * 依累計紀錄給某一科目的學習建議。records: [{id,status,ts}]
+   * 回傳 { enough:false, n } 或 { enough:true, n, accuracy, level, headline, points, actions }
+   */
+  function feedbackOverall(records, byId, wrongMap, subject) {
+    var recs = (records || []).filter(function (r) { return byId[r.id] && byId[r.id].subject === subject; });
+    if (recs.length < 5) return { enough: false, n: recs.length };
+    var ok = recs.filter(function (r) { return r.status === "ok"; }).length, acc = ok / recs.length, lv = levelOf(acc, recs.length);
+    var pts = [], actions = [];
+    function add(kind, text) { pts.push({ kind: kind, text: text }); }
+    var tags = groupStats(recs, byId, tagKeys), areas = groupStats(recs, byId, function (q) { return q.area; });
+
+    // 涵蓋率
+    var total = 0, seen = {};
+    Object.keys(byId).forEach(function (id) { if (byId[id].subject === subject) total++; });
+    recs.forEach(function (r) { seen[r.id] = 1; });
+    var cover = Object.keys(seen).length / total;
+    if (total >= 20 && cover < 0.5) add("tip", "這個科目的 " + total + " 題中你只練過 " + Object.keys(seen).length + " 題（" + pct(cover) + "%）。結果還不能代表整體實力，建議把沒做過的題目也練過。");
+    // 趨勢
+    if (recs.length >= 40) {
+      var a = recs.slice(-20), b = recs.slice(-40, -20);
+      var ra = a.filter(function (r) { return r.status === "ok"; }).length / 20, rb = b.filter(function (r) { return r.status === "ok"; }).length / 20;
+      if (ra - rb >= 0.1) add("good", "最近 20 題答對率 " + pct(ra) + "%，比再前 20 題的 " + pct(rb) + "% 進步，目前的複習方式有效。");
+      else if (rb - ra >= 0.1) add("warn", "最近 20 題答對率 " + pct(ra) + "%，比再前 20 題的 " + pct(rb) + "% 下滑。是否太久沒複習，或最近練的是比較弱的考點？");
+    }
+    var strong = Object.keys(tags).map(function (t) { return { tag: t, ok: tags[t].ok, n: tags[t].n, rate: tags[t].ok / tags[t].n }; })
+      .filter(function (x) { return x.n >= 3 && x.rate >= 0.85; }).sort(function (x, y) { return y.n - x.n; }).slice(0, 3);
+    if (strong.length) add("good", "掌握較好的考點：" + strong.map(function (x) { return x.tag + "（" + x.ok + "/" + x.n + "）"; }).join("、") + "。");
+    var weak = worstTags(tags, 3, 0.6, 3);
+    if (weak.length) {
+      add("warn", "最需要加強的考點（至少作答 3 題）：" + weak.map(function (x) { return x.tag + "（" + x.ok + "/" + x.n + "，" + pct(x.rate) + "%）"; }).join("、") + "。");
+      weak.slice(0, 2).forEach(function (x) { actions.push({ type: "tag", tag: x.tag, label: "集中練「" + x.tag + "」" }); });
+    }
+    var wa = worstTags(areas, 5, 0.6, 1);
+    if (wa.length) add("warn", "章節層面較弱的是「" + wa[0].tag + "」（" + wa[0].ok + "/" + wa[0].n + "，" + pct(wa[0].rate) + "%），建議整章重讀而不是只做題。");
+    var sc = stuckCount(wrongMap, byId, subject);
+    if (sc) { add("tip", "錯題本還有 " + sc + " 題最近一次沒答對。錯題重練答對一次就會移除，累積太多會增加壓力，建議每週清一次。"); actions.push({ type: "wrong", label: "錯題重練（" + sc + " 題）" }); }
+    if (!weak.length && !sc) add("good", "目前沒有明顯弱項。可以擴大年度範圍或縮短每題時間，增加練習難度。");
+    return { enough: true, n: recs.length, accuracy: acc, level: lv.level, headline: lv.headline, points: pts, actions: actions };
+  }
+
+  /**
+   * 申論題單一小題的意見。st: { text, auto:{rid:n}, scores:{rid:n} }（scores 為學生確認後的分數）
+   * 回傳 { earned, possible, ratio, points:[{kind,text}] }
+   */
+  function feedbackEssayPart(part, st) {
+    var auto = st.auto || {}, sc = st.scores || {}, pts = [], earned = 0;
+    var items = (part.rubric || []).map(function (r) {
+      var c = Math.min(Math.max(Number(sc[r.id]) || 0, 0), r.points); earned += c;
+      return { r: r, got: c, auto: Math.min(Number(auto[r.id]) || 0, r.points) };
+    });
+    var ratio = part.points ? earned / part.points : 0;
+    function add(kind, text) { pts.push({ kind: kind, text: text }); }
+    var chars = String(st.text || "").replace(/\s/g, "").length;
+    var miss = items.filter(function (x) { return x.got <= 0; }), partial = items.filter(function (x) { return x.got > 0 && x.got < x.r.points; });
+
+    if (ratio >= 0.9) add("good", "這小題得分點幾乎都有寫到，結構完整。");
+    else if (ratio === 0) add("warn", "所有得分點都沒有得分，可能答題方向偏了。請先仔細讀參考答案，弄懂解題架構後，隔天重寫一次。");
+    else if (ratio < 0.5) add("warn", "得分不到一半，主要的得分點還沒寫到，建議先照參考答案的步驟整理出解題架構，再重寫。");
+    if (miss.length && ratio > 0) add("warn", "完全沒得分的得分點：" + miss.slice(0, 4).map(function (x) { return "「" + x.r.label + "」"; }).join("、") + (miss.length > 4 ? " 等 " + miss.length + " 項" : "") + "。");
+    if (partial.length) add("tip", "只拿到部分分數：" + partial.slice(0, 4).map(function (x) { return "「" + x.r.label + "」（" + x.got + "/" + x.r.points + "）"; }).join("、") + "。通常是推導步驟不完整，或只寫結論／名詞沒有說明。閱卷看的是過程，建議把關鍵步驟寫出來。");
+    var hints = miss.concat(partial).filter(function (x) { return x.r.hint; }).slice(0, 2);
+    hints.forEach(function (x) { add("tip", "「" + x.r.label + "」提示：" + x.r.hint); });
+    var raised = items.filter(function (x) { return x.got > x.auto + 0.25 && x.auto <= 0; });
+    if (raised.length) add("tip", "你把 " + raised.slice(0, 3).map(function (x) { return "「" + x.r.label + "」"; }).join("、") + " 的分數調高，但系統沒偵測到對應寫法。請再確認答案裡真的有明確寫出，閱卷看的是紙上有寫的內容，不是心裡想到的。");
+    if (chars < part.points * 12 && ratio < 0.7) add("tip", "你只寫了約 " + chars + " 字，以這小題 " + part.points + " 分來說偏少（僅供參考）。申論題常因為推導省略、說明太簡而失分。");
+    if (part.pitfalls && (miss.length || partial.length)) add("tip", "常見錯誤提醒：" + String(part.pitfalls).replace(/^常見錯誤[：:]\s*/, ""));
+    return { earned: earned, possible: part.points, ratio: ratio, points: pts };
+  }
+
+  /** 整題申論題的總評。partStates: { partId: st }（只含已評分的小題） */
+  function feedbackEssay(essay, partStates) {
+    var done = essay.parts.filter(function (p) { return partStates[p.id]; });
+    if (!done.length) return null;
+    var earned = 0, possible = 0, lost = [], pts = [];
+    done.forEach(function (p) {
+      var f = feedbackEssayPart(p, partStates[p.id]); earned += f.earned; possible += p.points;
+      (p.rubric || []).forEach(function (r) {
+        var c = Math.min(Math.max(Number((partStates[p.id].scores || {})[r.id]) || 0, 0), r.points);
+        if (c < r.points) lost.push({ part: p.label, label: r.label, lost: r.points - c });
       });
     });
-    var out = [];
-    Object.keys(acc).forEach(function (key) {
-      var x = acc[key], e = essaysById[x.essayId], pr = x.key.split(":"), part = null, r = null;
-      e.parts.forEach(function (p) { if (p.id === pr[0]) { part = p; (p.rubric || []).forEach(function (q) { if (q.id === pr[1]) r = q; }); } });
-      if (!r || !x.missed) return;
-      out.push({ essayId: x.essayId, partLabel: part.label, rid: r.id, label: r.label, topic: r.topic || r.label, advice: r.advice || "", missed: x.missed, seen: x.seen });
-    });
-    out.sort(function (a, b) { return b.missed - a.missed || (b.missed / b.seen) - (a.missed / a.seen); });
-    return out.slice(0, opts.limit || 5);
+    var ratio = earned / possible, lv = levelOf(ratio, 99);
+    function add(kind, text) { pts.push({ kind: kind, text: text }); }
+    lost.sort(function (a, b) { return b.lost - a.lost; });
+    if (lost.length) add("warn", "失分最多的得分點：" + lost.slice(0, 3).map(function (x) { return x.part + "「" + x.label + "」（失 " + x.lost + " 分）"; }).join("、") + "。優先補這幾項，投資報酬率最高。");
+    else add("good", "已評的小題全部拿滿分。");
+    if (done.length < essay.parts.length) add("tip", "還有 " + (essay.parts.length - done.length) + " 個小題尚未評分，總分不包含它們。正式考試時整題一起寫完，建議全部練完。");
+    return { earned: earned, possible: possible, level: lv.level, headline: lv.headline.replace("這一輪", "這題"), points: pts };
   }
 
   var api = { shuffle: shuffle, buildPool: buildPool, drawQueue: drawQueue, grade: grade, summarize: summarize, validateBank: validateBank,
     stripHtml: stripHtml, normalizeText: normalizeText, gradeEssayPart: gradeEssayPart, sumPartScores: sumPartScores, summarizeEssay: summarizeEssay, validateEssays: validateEssays,
-    essayLevel: essayLevel, buildPartFeedback: buildPartFeedback, buildEssayFeedback: buildEssayFeedback, aggregateWeak: aggregateWeak };
+    groupStats: groupStats, feedbackQuestion: feedbackQuestion, feedbackSession: feedbackSession, feedbackOverall: feedbackOverall, feedbackEssayPart: feedbackEssayPart, feedbackEssay: feedbackEssay };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.MoexCore = api;
 })(typeof window !== "undefined" ? window : this);

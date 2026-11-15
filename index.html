@@ -132,17 +132,17 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
 .eres { margin-top: 14px; border-top: 1px solid var(--rule); padding-top: 12px; }
 .hint { font-size: 12.5px; color: var(--ink-2); display: block; }
 .hist { margin: 10px 0 0; padding-left: 20px; font-size: 14.5px; }
-/* essay feedback */
-.fb { border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 6px; padding: 12px 14px; margin: 12px 0; }
-.fb.lv-excellent { border-color: var(--ok); background: var(--ok-soft); }
-.fb.lv-low { border-color: var(--bad); background: var(--bad-soft); }
-.fb p { margin: 4px 0; }
-.fb .fbh { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
-.fb h4 { margin: 12px 0 2px; font-size: 14.5px; }
-.fb ul, .fb ol { margin: 4px 0; padding-left: 22px; line-height: 1.7; }
-.fb li { margin: 4px 0; }
-.fb .hint { margin-top: 2px; }
-.panel.err { border-color: var(--bad); }
+/* 意見與建議 */
+.coach { margin-top: 14px; padding: 12px 14px; border: 1px solid var(--rule); border-radius: 8px; background: var(--paper); }
+.coach h3 { font-size: 16px; margin: 0 0 6px; }
+.coach .head { margin: 0 0 8px; font-weight: 700; }
+.coach ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.coach li { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; align-items: baseline; font-size: 15px; }
+.coach .tg { font-size: 12.5px; font-weight: 700; border-radius: 999px; padding: 0 9px; white-space: nowrap; border: 1px solid currentColor; }
+.coach .good .tg { color: var(--ok); } .coach .warn .tg { color: var(--bad); } .coach .tip .tg { color: var(--blue); }
+.coach .acts { margin-top: 12px; }
+.coach .acts .btn { padding: 5px 14px; font-size: 14px; }
+.coach .src { margin: 10px 0 0; }
 @media print {
   .top, .btn, .row, .noprint { display: none !important; }
   body { background: #fff; color: #000; }
@@ -219,6 +219,10 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
         <button type="button" class="btn primary" id="btnEssayStart">開始（或接續）申論題</button>
       </div>
     </div>
+    <div class="panel" id="advicePanel">
+      <h2>學習建議</h2>
+      <div id="adviceBody"></div>
+    </div>
     <div class="panel">
       <h2>我的紀錄</h2>
       <div class="stat" id="allStat"></div>
@@ -250,6 +254,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
         <div class="note" id="fbAnswer"></div>
         <div class="exp"><p id="fbExp"></p></div>
         <p class="note" id="fbNote" hidden></p>
+        <div class="coach" id="fbCoach" aria-label="針對你這題作答的意見"></div>
         <div class="row gap-lg">
           <button type="button" class="btn primary" id="btnNext">下一題</button>
           <button type="button" class="btn" id="btnEnd">結束並檢視紀錄</button>
@@ -268,13 +273,13 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
       <p class="qtext" id="eQ" style="margin-bottom:0"></p>
     </div>
     <div id="eParts"></div>
-    <div class="panel" id="eFeedback" hidden></div>
     <div class="panel noprint">
       <div class="score"><span class="num" id="eTotal">0</span><span class="note" id="eOf"></span></div>
       <div class="row gap-lg">
         <button type="button" class="btn primary" id="btnEssaySave" disabled>儲存本題成績並結束</button>
         <button type="button" class="btn" id="btnEssayDrop">清除本題草稿</button>
       </div>
+      <div class="coach" id="eFb" hidden></div>
       <p class="note" id="eMsg" style="margin-bottom:0">尚未評分的小題以 0 分計。成績只存在你的瀏覽器。</p>
     </div>
   </section>
@@ -284,6 +289,10 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     <div class="panel">
       <div class="score"><span class="num" id="sNum">0</span><span class="note" id="sOf"></span></div>
       <div class="stat" id="sStat" style="margin-top:8px"></div>
+    </div>
+    <div class="panel" id="coachPanel">
+      <h2>意見與建議</h2>
+      <div id="coachBody"></div>
     </div>
     <div class="panel" id="weakPanel">
       <h2>各考點答對率</h2>
@@ -308,7 +317,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
   <p class="foot">題目來源：考選部考畢試題查詢平臺。詳解為教學用途整理，非官方答案；法規與制度請以現行規定為準。若發現與考選部公告不符之處，請回報系統維護者。</p>
 </div></main>
 
-<script src="core.js?v=essay1"></script>
+<script src="core.js?v=feedback1"></script>
 <script>
 (function () {
   "use strict";
@@ -317,12 +326,49 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
   var LET = ["A", "B", "C", "D", "E", "F", "G", "H"];
   var BANK = null, BYID = {}, ESSAYS = [], EBYID = {}, ESSAY_ERR = "", curEssay = null, saveTimer = null;
   var S = { records: [], wrong: {}, session: null, essay: { drafts: {}, attempts: [] } };
-  var view = null, chosen = null, tickId = null, left = 0, armed = {};
+  var view = null, qStart = 0, chosen = null, tickId = null, left = 0, armed = {};
 
   function $(id) { return document.getElementById(id); }
   function esc(t) { var d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
   function load() { try { var s = JSON.parse(localStorage.getItem(LS)); if (s && typeof s === "object") { S.records = Array.isArray(s.records) ? s.records : []; S.wrong = s.wrong && typeof s.wrong === "object" ? s.wrong : {}; S.session = s.session || null; S.essay = s.essay && typeof s.essay === "object" ? s.essay : {}; } } catch (e) {} essayState(); }
   function save() { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} }
+
+  var KIND = { good: "做得好", warn: "要注意", tip: "建議" };
+  /** 把回饋物件畫進容器。fb: {headline, points:[{kind,text}], actions:[...]}；lines 版只傳陣列。 */
+  function renderCoach(el, fb, opt) {
+    opt = opt || {};
+    var pts = Array.isArray(fb) ? fb : fb.points, h = "";
+    if (!Array.isArray(fb) && fb.headline) h += '<p class="head">' + esc(fb.headline) + "</p>";
+    h += "<ul>" + pts.map(function (p) { return '<li class="' + p.kind + '"><span class="tg">' + KIND[p.kind] + "</span><span>" + esc(p.text) + "</span></li>"; }).join("") + "</ul>";
+    if (!Array.isArray(fb) && fb.actions && fb.actions.length && !opt.noActions) {
+      h += '<div class="row acts noprint">' + fb.actions.map(function (a, i) { return '<button type="button" class="btn" data-act="' + i + '">' + esc(a.label) + "</button>"; }).join("") + "</div>";
+    }
+    if (opt.src) h += '<p class="note src">' + esc(opt.src) + "</p>";
+    el.innerHTML = h;
+    if (fb.actions) el.querySelectorAll("[data-act]").forEach(function (b) {
+      b.addEventListener("click", function () { var a = fb.actions[+b.dataset.act]; gotoPractice(opt.subject, a.type, a.tag); });
+    });
+  }
+  var COACH_NOTE = "以上意見由系統依你的作答紀錄以規則自動產生，不是老師的批改；樣本越少越不準，僅供參考。";
+  function gotoPractice(subject, mode, tag) {
+    var q = BANK.questions.filter(function (x) { return x.subject === subject; })[0];
+    if (!q) return;
+    S.session = null; save();
+    $("selExam").value = q.exam; refreshSubjects(); $("selSubject").value = subject; refreshFilters();
+    document.querySelector('input[name="mode"][value="' + mode + '"]').checked = true;
+    $("fTag").hidden = mode !== "tag";
+    if (mode === "tag") $("selTag").value = tag;
+    updatePool(); show("vSetup");
+  }
+  function renderAdvice() {
+    var sub = $("selSubject").value, el = $("adviceBody");
+    var a = C.feedbackOverall(S.records, BYID, S.wrong, sub);
+    if (!a.enough) { el.innerHTML = '<p class="note" style="margin:0">「' + esc(sub) + "」目前累計作答 " + a.n + " 題。累計滿 5 題後，這裡會依你的作答紀錄分析弱項考點、進步趨勢與建議的練習方式。</p>"; return; }
+    var box = document.createElement("div"); box.className = "coach"; box.style.marginTop = "0";
+    el.innerHTML = '<p class="note" style="margin:0 0 4px">依你在「' + esc(sub) + "」的累計 " + a.n + " 題作答（答對率 " + Math.round(a.accuracy * 100) + "%）：</p>";
+    el.appendChild(box);
+    renderCoach(box, a, { src: COACH_NOTE, subject: sub });
+  }
 
   var VIEWS = ["vLoading", "vError", "vCover", "vSetup", "vPractice", "vEssay", "vSummary"];
   function show(v) {
@@ -414,7 +460,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     $("poolCount").textContent = pool.length;
     $("btnStart").disabled = pool.length === 0;
     $("allStat").innerHTML = statHtml();
-    refreshEssayPanel();
+    refreshEssayPanel(); renderAdvice();
     var s = S.session;
     $("btnResume").hidden = !(s && !s.finished && s.queue.every(function (id) { return BYID[id]; }) && s.idx < s.queue.length);
   }
@@ -453,6 +499,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     });
     $("btnSubmit").disabled = true;
     $("pActions").hidden = false; $("pFeedback").hidden = true;
+    qStart = Date.now();
     startTimer(s.timed);
   }
   function startTimer(sec) {
@@ -479,8 +526,14 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     var q = BYID[s.queue[s.idx]];
     var letter = chosen == null ? null : LET[chosen];
     var g = C.grade(q, letter);
-    s.results[q.id] = { chosen: letter, status: g.status, pts: g.pts, gift: g.gift };
-    S.records.push({ id: q.id, ts: Date.now(), chosen: letter, status: g.status });
+    var sec = auto && s.timed ? s.timed : Math.max(0, Math.round((Date.now() - qStart) / 1000));
+    var pw = S.wrong[q.id], prev = pw ? { bad: pw.bad || 0, last: pw.last } : null;
+    var tagBefore = C.groupStats(S.records, BYID, function (x) { return x.tags || []; });
+    var res = { chosen: letter, status: g.status, pts: g.pts, gift: g.gift, sec: sec, timeout: !!auto && g.status === "skip",
+      recovered: g.status === "ok" && !g.gift && !!prev && prev.last !== "ok" && prev.bad > 0 };
+    res.fb = C.feedbackQuestion(q, res, { prev: prev, tagBefore: tagBefore });
+    s.results[q.id] = res;
+    S.records.push({ id: q.id, ts: Date.now(), chosen: letter, status: g.status, sec: sec });
     if (S.records.length > 5000) S.records = S.records.slice(-5000);
     var w = S.wrong[q.id] || { bad: 0, last: "ok" };
     if (g.status === "ok") w.last = "ok"; else { w.last = g.status; w.bad++; }
@@ -505,6 +558,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     $("fbAnswer").textContent = "你的答案：" + (r.chosen || "未作答") + "　正確答案：" + accept.join(" 或 ");
     $("fbExp").innerHTML = q.explanation;
     var n = $("fbNote"); n.hidden = !q.correction_note; n.textContent = q.correction_note || "";
+    renderCoach($("fbCoach"), r.fb || C.feedbackQuestion(q, r, {}), { src: r.sec != null ? "本題作答時間 " + r.sec + " 秒。" : "" });
     $("pActions").hidden = true; $("pFeedback").hidden = false;
     var last = S.session.idx >= S.session.queue.length - 1;
     $("btnNext").textContent = last ? "看本次紀錄" : "下一題";
@@ -538,6 +592,13 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
       return '<details class="wq"><summary>民國 ' + q.year_roc + " 年第 " + q.question_no + " 題　你的答案 " + (r.chosen || "未答") + "，正確答案 " + ((q.accept && q.accept.length) ? q.accept : [q.answer]).join(" 或 ") + '</summary><div class="body"><p>' + q.question + "</p><ol type=\"A\">" + q.options.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + '</ol><div class="exp"><p>' + q.explanation + "</p></div>" + (q.correction_note ? '<p class="note">' + esc(q.correction_note) + "</p>" : "") + "</div></details>";
     }).join("") : (sm.total ? "<p>這一輪全部答對。</p>" : "<p>這一輪尚未送出任何答案。</p>");
     $("copyBox").hidden = true; $("sumMsg").textContent = "";
+    var cf = sessionCoach();
+    $("coachPanel").hidden = !cf;
+    if (cf) renderCoach($("coachBody"), cf, { src: COACH_NOTE, subject: s.subject });
+  }
+  function sessionCoach() {
+    var s = S.session, sm = C.summarize(BYID, s.queue, s.results);
+    return C.feedbackSession({ byId: BYID, queue: s.queue, results: s.results, summary: sm, prior: S.records.filter(function (r) { return r.ts < s.startedAt; }), wrongMap: S.wrong, subject: s.subject });
   }
   function textRecord() {
     var s = S.session, sm = C.summarize(BYID, s.queue, s.results), L = [];
@@ -553,6 +614,11 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
       var q = BYID[id], r = s.results[id];
       L.push("  民國" + q.year_roc + "年第" + q.question_no + "題　" + ({ ok: "答對", bad: "答錯", skip: "未答" })[r.status] + "　你的答案 " + (r.chosen || "—") + "　正確答案 " + q.answer);
     });
+    var cf = sessionCoach();
+    if (cf) {
+      L.push(""); L.push("意見與建議（" + cf.headline + "）：");
+      cf.points.forEach(function (p) { L.push("  【" + KIND[p.kind] + "】" + p.text); });
+    }
     return L.join("\n");
   }
 
@@ -585,10 +651,6 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
       var e = EBYID[a.id];
       return "<li>" + new Date(a.ts).toLocaleDateString("zh-TW") + "　民國 " + e.year_roc + " 年" + esc(e.subject) + "第 " + e.question_no + " 題　<b>" + fs(a.earned) + " / " + a.possible + "</b> 分" + (a.parts < a.of ? "（評 " + a.parts + "/" + a.of + " 小題）" : "") + "</li>";
     }).join("") + "</ul>" : "";
-    var weak = C.aggregateWeak(essayState().attempts, EBYID, { recent: 30, limit: 5 });
-    if (weak.length) $("essayHist").innerHTML += '<p class="note" style="margin:14px 0 0">常漏的得分點（最近 30 次作答）：</p><ol class="hist">' + weak.map(function (w) {
-      return "<li><b>" + esc(w.partLabel + " " + w.label) + "</b>　<span class=\"note\">" + w.seen + " 次中漏 " + w.missed + " 次</span>" + (w.advice ? '<span class="hint">' + esc(w.advice) + "</span>" : "") + "</li>";
-    }).join("") + "</ol>";
   }
 
   function partState(pid) {
@@ -647,35 +709,6 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     if (a > 0) return '<span class="det-part">△ 部分</span>';
     return '<span class="det-miss">✗ 未偵測到</span>';
   }
-  function fbPartHtml(fb) {
-    var h = '<div class="fb lv-' + fb.level.key + '"><p class="fbh">意見與建議：' + esc(fb.level.title) + "（" + fs(fb.earned) + " / " + fb.possible + " 分）</p><p>" + esc(fb.level.msg) + "</p>";
-    if (fb.strengths.length) h += "<h4>做得好的地方</h4><ul>" + fb.strengths.map(function (x) { return "<li>✓ " + esc(x.label) + "</li>"; }).join("") + "</ul>";
-    if (fb.gaps.length) h += "<h4>優先補強（依失分高低排序）</h4><ol>" + fb.gaps.map(function (g) {
-      return "<li><b>" + esc(g.label) + "</b>　<span class=\"note\">" + (g.status === "miss" ? "未寫到" : "寫得不完整") + "，失 " + fs(g.lost) + " 分</span>" + (g.advice ? '<span class="hint">' + esc(g.advice) + "</span>" : "") + "</li>";
-    }).join("") + "</ol>";
-    if (fb.form.length) h += "<h4>作答表現</h4><ul>" + fb.form.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>";
-    if (fb.calibration) h += "<h4>自評校準</h4><p>" + esc(fb.calibration) + "</p>";
-    return h + "</div>";
-  }
-  function renderPartFeedback(div, p) {
-    var st = partState(p.id), box = div.querySelector(".pfb"); if (!box) return;
-    box.innerHTML = st.graded ? fbPartHtml(C.buildPartFeedback(p, st)) : "";
-  }
-  function renderEssayFeedback() {
-    var e = curEssay, box = $("eFeedback"), states = {};
-    e.parts.forEach(function (p) { states[p.id] = partState(p.id); });
-    var fb = C.buildEssayFeedback(e, states);
-    if (!fb.parts.length) { box.hidden = true; box.innerHTML = ""; return; }
-    var h = "<h2>整題意見與建議</h2>" + '<div class="fb lv-' + fb.level.key + '"><p class="fbh">' + esc(fb.level.title) + "（已評小題 " + fs(fb.earned) + " / " + fb.possible + " 分，約 " + Math.round(fb.pct * 100) + "%）</p><p>" + esc(fb.level.msg) + "</p>";
-    if (fb.ungraded.length) h += '<p class="note">尚未評分：' + esc(fb.ungraded.join("、")) + "。以上建議只根據已評分的小題。</p>";
-    if (fb.priorities.length) h += "<h4>下次優先補強</h4><ol>" + fb.priorities.map(function (g) {
-      return "<li><b>" + esc(g.partLabel + " " + g.label) + "</b>　<span class=\"note\">失 " + fs(g.lost) + " 分</span>" + (g.advice ? '<span class="hint">' + esc(g.advice) + "</span>" : "") + "</li>";
-    }).join("") + "</ol>";
-    else h += "<p>每個得分點都拿到了。可以把時間壓縮，並練習用更精簡的方式寫出同樣的推導。</p>";
-    if (fb.kindTips.length) h += "<h4>答題策略</h4><ul>" + fb.kindTips.map(function (t) { return "<li>" + esc(t.tip) + "</li>"; }).join("") + "</ul>";
-    h += "<h4>時間配置（一題以 30 分鐘估）</h4><p>" + fb.time.map(function (t) { return esc(t.label) + " " + t.points + " 分 ≈ " + t.minutes + " 分鐘"; }).join("；") + "。先寫會的得分點，卡關的步驟留空繼續往下寫，最後再回來補。</p>";
-    box.innerHTML = h + "</div>"; box.hidden = false;
-  }
   function showPartResult(div, p) {
     var st = partState(p.id), res = div.querySelector(".eres");
     div.querySelector("textarea").readOnly = true;
@@ -687,8 +720,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     }).join("");
     res.innerHTML = '<p class="verdict pv"></p>' +
       '<table class="weak rub"><thead><tr><th>評分細目</th><th class="c">系統初判</th><th class="c">你確認的分數</th><th class="c">配分</th></tr></thead><tbody>' + rows + "</tbody></table>" +
-      '<p class="note">系統只比對關鍵字與公式寫法：你用不同寫法時可能漏判，只是提到名詞但推導錯誤時也可能誤判。請對照下方參考答案，自行調整「你確認的分數」。</p>' +
-      '<div class="pfb" aria-live="polite"></div>' +
+      '<div class="coach epc"></div>' + '<p class="note">系統只比對關鍵字與公式寫法：你用不同寫法時可能漏判，只是提到名詞但推導錯誤時也可能誤判。請對照下方參考答案，自行調整「你確認的分數」。</p>' +
       '<details class="wq" open><summary>參考答案與常見錯誤</summary><div class="body"><div class="exp"><p>' + p.model_answer + "</p></div>" + (p.pitfalls ? '<p class="note">' + esc(p.pitfalls) + "</p>" : "") + '<p class="note">參考答案為編者整理，非考選部公布；閱卷者可能接受其他合理的解法與寫法。</p></div></details>';
     res.hidden = false;
     res.querySelectorAll("select.sc").forEach(function (sel) {
@@ -704,21 +736,23 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     $("eTotal").textContent = fs(sm.earned);
     $("eOf").textContent = "／ " + e.points + " 分（已評 " + graded + " / " + e.parts.length + " 小題）";
     $("btnEssaySave").disabled = graded === 0;
-    renderEssayFeedback();
     document.querySelectorAll("#eParts .epart").forEach(function (div) {
       var pv = div.querySelector(".pv"); if (!pv) return;
-      var pp = e.parts.filter(function (x) { return x.id === div.dataset.pid; })[0]; if (pp) renderPartFeedback(div, pp);
       var r = sm.parts[div.dataset.pid]; pv.textContent = "本小題得分　" + fs(r.earned) + " / " + r.possible + " 分";
+      var pc = div.querySelector(".epc"), pt = e.parts.filter(function (x) { return x.id === div.dataset.pid; })[0];
+      if (pc && pt) { var f = C.feedbackEssayPart(pt, partState(pt.id)); renderCoach(pc, f.points, {}); var h = document.createElement("p"); h.className = "head"; h.textContent = "針對你這小題答案的意見"; pc.insertBefore(h, pc.firstChild); }
     });
+    var states = {}; e.parts.forEach(function (p) { var st = partState(p.id); if (st.graded) states[p.id] = st; });
+    var ef = C.feedbackEssay(e, states);
+    $("eFb").hidden = !ef;
+    if (ef) renderCoach($("eFb"), ef, { src: COACH_NOTE, noActions: true });
   }
   function saveEssayAttempt() {
     var e = curEssay, ps = {}, graded = 0;
     e.parts.forEach(function (p) { var st = partState(p.id); if (st.graded) { ps[p.id] = st.scores; graded++; } });
     if (!graded) return;
     var sm = C.summarizeEssay(e, ps), es = essayState();
-    var res = {};
-    e.parts.forEach(function (p) { var st = partState(p.id); if (st.graded) p.rubric.forEach(function (r) { res[p.id + ":" + r.id] = (Number(st.scores[r.id]) || 0) >= r.points ? 1 : 0; }); });
-    es.attempts.push({ id: e.id, ts: Date.now(), earned: sm.earned, possible: e.points, parts: graded, of: e.parts.length, res: res });
+    es.attempts.push({ id: e.id, ts: Date.now(), earned: sm.earned, possible: e.points, parts: graded, of: e.parts.length });
     if (es.attempts.length > 200) es.attempts = es.attempts.slice(-200);
     delete es.drafts[e.id]; save(); curEssay = null;
     updatePool(); show("vSetup");

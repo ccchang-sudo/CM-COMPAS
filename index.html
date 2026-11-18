@@ -69,6 +69,12 @@ h2 { font-size: 20px; margin: 0 0 12px; }
 .note { font-size: 13.5px; color: var(--ink-2); }
 
 /* setup */
+.subjlist { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 8px; }
+.subjlist button { width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border: 1px solid var(--rule); background: transparent; border-radius: 6px; padding: 10px 12px; color: inherit; font: inherit; cursor: pointer; }
+.subjlist button:hover { background: var(--blue-soft); }
+.subjlist button[aria-current="true"] { border-color: var(--blue); background: var(--blue-soft); }
+.subjlist .sn { font-weight: 700; }
+.subjlist .sm { color: var(--ink-2); font-size: 13px; }
 .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px 18px; }
 label.f { display: grid; gap: 4px; font-size: 14px; color: var(--ink-2); min-width: 0; }
 select { width: 100%; padding: 8px 10px; border: 1.5px solid var(--ink-2); border-radius: 6px; background: var(--card); }
@@ -183,8 +189,10 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     <div class="panel">
       <div class="grid2">
         <label class="f">考試等別<select id="selExam"></select></label>
+        <label class="f">類科<select id="selCategory"></select></label>
         <label class="f">應試科目<select id="selSubject"></select></label>
       </div>
+      <div id="catSubjects" aria-live="polite"></div>
     </div>
     <div class="panel" id="mcqPanel">
       <h2>練習模式</h2>
@@ -355,7 +363,8 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     var q = BANK.questions.filter(function (x) { return x.subject === subject; })[0];
     if (!q) return;
     S.session = null; save();
-    $("selExam").value = q.exam; refreshSubjects(); $("selSubject").value = subject; refreshFilters();
+    var cat = (q.categories || []).indexOf(curCat()) >= 0 ? curCat() : (q.categories || [])[0];
+    $("selExam").value = q.exam; refreshCategories(); $("selCategory").value = cat; refreshSubjects(); $("selSubject").value = subject; refreshFilters();
     document.querySelector('input[name="mode"][value="' + mode + '"]').checked = true;
     $("fTag").hidden = mode !== "tag";
     if (mode === "tag") $("selTag").value = tag;
@@ -429,23 +438,55 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
   function curMode() { return document.querySelector('input[name="mode"]:checked').value; }
   function filters() {
     var m = curMode();
-    return { subject: $("selSubject").value, year: $("selYear").value, tag: m === "tag" ? $("selTag").value : "", mode: m === "wrong" ? "wrong" : "random", wrongMap: S.wrong };
+    return { subject: $("selSubject").value, category: curCat(), year: $("selYear").value, tag: m === "tag" ? $("selTag").value : "", mode: m === "wrong" ? "wrong" : "random", wrongMap: S.wrong };
   }
+  function inCat(item, cat) { return !cat || (item.categories || []).indexOf(cat) >= 0; }
+  function curCat() { return $("selCategory").value; }
   function initSetup() {
     var exams = uniq(BANK.questions.map(function (q) { return q.exam; }).concat(ESSAYS.map(function (e) { return e.exam; })));
     fill($("selExam"), exams.map(function (e) { return [e, e]; }));
+    refreshCategories();
+  }
+  /* 考試等別 → 類科：只列出該等別題庫實際出現過的類科 */
+  function refreshCategories() {
+    var ex = $("selExam").value, keep = curCat();
+    var items = BANK.questions.filter(function (q) { return q.exam === ex; }).concat(ESSAYS.filter(function (e) { return e.exam === ex; }));
+    var cats = uniq([].concat.apply([], items.map(function (q) { return q.categories || []; }))).sort(function (a, b) { return a.localeCompare(b, "zh-Hant"); });
+    fill($("selCategory"), cats.map(function (c) { return [c, c]; }));
+    if (cats.indexOf(keep) >= 0) $("selCategory").value = keep;
     refreshSubjects();
   }
+  /* 類科 → 科目：只列出該類科在此等別應考、且題庫已收錄的科目 */
+  function subjectsFor(ex, cat) {
+    return uniq(BANK.questions.filter(function (q) { return q.exam === ex && inCat(q, cat); }).map(function (q) { return q.subject; })
+      .concat(ESSAYS.filter(function (e) { return e.exam === ex && inCat(e, cat); }).map(function (e) { return e.subject; })));
+  }
   function refreshSubjects() {
-    var ex = $("selExam").value;
-    var subs = uniq(BANK.questions.filter(function (q) { return q.exam === ex; }).map(function (q) { return q.subject; })
-      .concat(ESSAYS.filter(function (e) { return e.exam === ex; }).map(function (e) { return e.subject; })));
+    var ex = $("selExam").value, cat = curCat(), keep = $("selSubject").value;
+    var subs = subjectsFor(ex, cat);
     fill($("selSubject"), subs.map(function (s) { return [s, s]; }));
+    if (subs.indexOf(keep) >= 0) $("selSubject").value = keep;
     refreshFilters();
+  }
+  function renderCatSubjects() {
+    var ex = $("selExam").value, cat = curCat(), cur = $("selSubject").value, el = $("catSubjects");
+    var subs = subjectsFor(ex, cat);
+    if (!subs.length) { el.innerHTML = ""; return; }
+    var h = '<p class="note" style="margin:14px 0 0">' + esc(ex) + "「" + esc(cat) + "」類科，題庫已收錄的應試科目共 " + subs.length + " 科（點選即可切換）：</p><ul class=\"subjlist\">";
+    subs.forEach(function (sub) {
+      var qs = BANK.questions.filter(function (q) { return q.exam === ex && q.subject === sub && inCat(q, cat); });
+      var es = ESSAYS.filter(function (e) { return e.exam === ex && e.subject === sub && inCat(e, cat); });
+      var ys = uniq(qs.concat(es).map(function (q) { return q.year_roc; })).sort(function (a, b) { return a - b; });
+      var parts = [];
+      if (qs.length) parts.push("選擇題 " + qs.length + " 題");
+      if (es.length) parts.push("申論題 " + es.length + " 題");
+      h += '<li><button type="button" data-subj="' + esc(sub) + '"' + (sub === cur ? ' aria-current="true"' : "") + '><span class="sn">' + esc(sub) + '</span><span class="sm">' + parts.join("、") + (ys.length ? "｜民國 " + ys.join("、") + " 年" : "") + "</span></button></li>";
+    });
+    el.innerHTML = h + "</ul>" + '<p class="note" style="margin:10px 0 0">只列出本題庫已收錄的科目；正式考試的其他科目（如國文、法學知識等）尚未收錄。</p>';
   }
   function refreshFilters() {
     var sub = $("selSubject").value;
-    var qs = BANK.questions.filter(function (q) { return q.subject === sub; });
+    var qs = BANK.questions.filter(function (q) { return q.exam === $("selExam").value && q.subject === sub && inCat(q, curCat()); });
     var years = uniq(qs.map(function (q) { return q.year_roc; })).sort(function (a, b) { return b - a; });
     var keepY = $("selYear").value, keepT = $("selTag").value;
     fill($("selYear"), years.map(function (y) { return [String(y), "民國 " + y + " 年"]; }), "不限年度");
@@ -453,10 +494,11 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     fill($("selTag"), tags.map(function (t) { return [t, t]; }));
     if (years.map(String).indexOf(keepY) >= 0) $("selYear").value = keepY;
     if (tags.indexOf(keepT) >= 0) $("selTag").value = keepT;
-    var en = ESSAYS.filter(function (e) { return e.exam === $("selExam").value && e.subject === sub; }).length;
-    $("setupLead").textContent = "目前題庫：" + $("selExam").value + "　" + sub + "，" + (qs.length ? "選擇題 " + qs.length + " 題" : "本科目目前只有申論題") + (en ? (qs.length ? "，" : "：") + "申論題 " + en + " 題" : "") + "。";
+    var en = ESSAYS.filter(function (e) { return e.exam === $("selExam").value && e.subject === sub && inCat(e, curCat()); }).length;
+    $("setupLead").textContent = "目前題庫：" + $("selExam").value + "　" + curCat() + "　" + sub + "，" + (qs.length ? "選擇題 " + qs.length + " 題" : "本科目目前只有申論題") + (en ? (qs.length ? "，" : "：") + "申論題 " + en + " 題" : "") + "。";
     $("mcqPanel").hidden = qs.length === 0; $("advicePanel").hidden = qs.length === 0;
     $("fTag").hidden = curMode() !== "tag";
+    renderCatSubjects();
     updatePool();
   }
   function updatePool() {
@@ -476,7 +518,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     if (!pool.length) return;
     var n = parseInt($("selN").value, 10) || 0;
     S.session = {
-      subject: f.subject, mode: curMode(), tag: f.tag, year: f.year,
+      subject: f.subject, category: f.category, mode: curMode(), tag: f.tag, year: f.year,
       queue: C.drawQueue(pool, n), idx: 0, results: {}, timed: parseInt($("selTime").value, 10) || 0,
       startedAt: Date.now(), finished: false
     };
@@ -640,7 +682,7 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
 
   function refreshEssayPanel() {
     var ex = $("selExam").value, sub = $("selSubject").value;
-    var list = ESSAYS.filter(function (e) { return e.exam === ex && e.subject === sub; })
+    var list = ESSAYS.filter(function (e) { return e.exam === ex && e.subject === sub && inCat(e, curCat()); })
       .sort(function (a, b) { return b.year_roc - a.year_roc || a.question_no - b.question_no; });
     var keep = $("selEssay").value;
     $("essayPanel").hidden = list.length === 0;
@@ -767,7 +809,9 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
   /* ---------- 事件 ---------- */
   $("btnEnter").addEventListener("click", function () { updatePool(); show("vSetup"); });
   $("btnBackCover").addEventListener("click", function () { renderCoverStat(); show("vCover"); });
-  $("selExam").addEventListener("change", refreshSubjects);
+  $("selExam").addEventListener("change", refreshCategories);
+  $("selCategory").addEventListener("change", refreshSubjects);
+  $("catSubjects").addEventListener("click", function (e) { var b = e.target.closest("[data-subj]"); if (!b) return; $("selSubject").value = b.dataset.subj; refreshFilters(); });
   $("selSubject").addEventListener("change", refreshFilters);
   ["selYear", "selTag"].forEach(function (id) { $(id).addEventListener("change", updatePool); });
   $("modes").addEventListener("change", function () { $("fTag").hidden = curMode() !== "tag"; updatePool(); });

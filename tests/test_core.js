@@ -147,4 +147,19 @@ assert.strictEqual(sm.ok, 1); assert.strictEqual(sm.bad, 1); assert.strictEqual(
 
 assert.ok(C.validateBank({ questions: [{ id: "x", subject: "s", question: "q", answer: "E", explanation: "e", type: "mcq", options: ["a", "b"], points: 2 }] }).length > 0);
 assert.ok(C.validateBank({ questions: [bank.questions[0], bank.questions[0]] }).some(e => e.includes("重複")));
+// 類科篩選：選了類科，只會出該類科應考的試卷
+const G3 = "公務人員高等考試三級考試";
+const bc = (cat, subject, year) => C.buildPool(bank.questions, { category: cat, subject, year });
+assert.strictEqual(bc("經建行政", "經濟學").length, 75);          // 113、114、115 年皆應考
+assert.strictEqual(bc("金融保險", "經濟學").length, 50);           // 115 年金融保險改考「經濟學與貨幣銀行學」
+assert.strictEqual(bc("金融保險", "經濟學", "115").length, 0);
+assert.strictEqual(bc("金融保險", "經濟學與貨幣銀行學").length, 25);
+assert.strictEqual(bc("經建行政", "經濟學與貨幣銀行學").length, 0);
+assert.strictEqual(bc("審計", "財政學").length, 25);               // 僅 115 年含審計
+assert.strictEqual(bc("經建行政", "運輸學大意").length, 0);
+assert.strictEqual(bc("", "經濟學").length, 75);                  // 不指定類科＝不篩選
+// 每個（等別，類科）至少有一個科目，且每題都能被它自己的每個類科選到
+const cats = {}; bank.questions.forEach(q => q.categories.forEach(c => { cats[q.exam + "|" + c] = true; }));
+Object.keys(cats).forEach(k => { const [ex, c] = k.split("|"); assert.ok(C.buildPool(bank.questions, { category: c }).some(q => q.exam === ex), k); });
+
 console.log("core tests passed (" + bank.questions.length + " questions)");

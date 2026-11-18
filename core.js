@@ -21,6 +21,7 @@
   function buildPool(questions, f) {
     return questions.filter(function (q) {
       if (f.subject && q.subject !== f.subject) return false;
+      if (f.category && (q.categories || []).indexOf(f.category) < 0) return false;
       if (f.year && String(q.year_roc) !== String(f.year)) return false;
       if (f.area && q.area !== f.area) return false;
       if (f.tag && (q.tags || []).indexOf(f.tag) < 0) return false;

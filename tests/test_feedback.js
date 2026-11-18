@@ -97,4 +97,45 @@ essays.essays.forEach(e => e.parts.forEach(p => {
   assert.ok(has(C.feedbackEssayPart(p, { text: C.stripHtml(p.model_answer), auto: s, scores: s }), 'good', /結構完整/));
 }));
 
+
+// 計算題（calc）：沒得分的細目會多一則數值與列式的提醒；非計算題不會
+{
+  const calcPart = essays.essays.find(e => e.id === '114-g3eng-E2').parts[0];
+  const none2 = {}; calcPart.rubric.forEach(r => none2[r.id] = 0);
+  assert.ok(has(C.feedbackEssayPart(calcPart, { text: '不知道怎麼算', auto: none2, scores: none2 }), 'tip', /這是計算題.*四捨五入/));
+  const full2 = {}; calcPart.rubric.forEach(r => full2[r.id] = r.points);
+  assert.ok(!has(C.feedbackEssayPart(calcPart, { text: C.stripHtml(calcPart.model_answer), auto: full2, scores: full2 }), 'tip', /這是計算題/));
+  assert.ok(!has(C.feedbackEssayPart(p1, { text: '不知道', auto: none, scores: none }), 'tip', /這是計算題/));
+}
+
+// ---- 114 年申論題：繪圖題與計算題的個人化意見 ----
+{
+  const E114 = {}; essays.essays.filter(x => x.year_roc === 114).forEach(x => { E114[x.id] = x; });
+  const stateOf = (p, text) => { const g = C.gradeEssayPart(p, text), st = { text, auto: {}, scores: {} }; g.items.forEach(i => { st.auto[i.id] = i.earned; st.scores[i.id] = i.earned; }); return st; };
+  // 繪圖題：只寫結論、沒說明軸與曲線 → 提醒要說明圖形
+  const pf = E114['114-g3fin-E1'].parts[0];
+  assert.strictEqual(pf.figure, true);
+  let fb = C.feedbackEssayPart(pf, stateOf(pf, '停滯性通膨是物價上升而且失業增加，產出下降。'));
+  assert.ok(has(fb, 'tip', /要求繪圖.*橫軸/));
+  // 有講到橫軸縱軸與曲線移動 → 不再提醒圖形
+  fb = C.feedbackEssayPart(pf, stateOf(pf, '橫軸是產出，縱軸是物價，供給曲線向左移，物價上升、產出下降，失業增加。'));
+  assert.ok(!has(fb, 'tip', /要求繪圖/));
+  // 計算題：沒有數字 → 提醒寫算式；有數字但錯 → 提醒逐步對照
+  const pc = E114['114-g3econ-E1'].parts[0];
+  assert.strictEqual(pc.numeric, true);
+  fb = C.feedbackEssayPart(pc, stateOf(pc, '兩家廠商成本不同，所以利潤也不同，消費者剩餘就是需求線以下的面積。'));
+  assert.ok(has(fb, 'tip', /幾乎沒有數字/));
+  fb = C.feedbackEssayPart(pc, stateOf(pc, '反應函數 q1=(110-q2)/2，q2=(100-q1)/2，解得 q1=35、q2=35，P=50，利潤 1400 與 1050，CS=2000'));
+  assert.ok(has(fb, 'tip', /有寫出數字，但有些得分點的結果沒對上/));
+  assert.ok(!has(fb, 'tip', /幾乎沒有數字/));
+  // 全對：不出現這兩種提醒
+  fb = C.feedbackEssayPart(pc, stateOf(pc, 'q1=(110-q2)/2，q2=(100-q1)/2，q1=40，q2=30，P=50；π1=1600，π2=900；CS=1/2×70×70=2450'));
+  assert.ok(has(fb, 'good', /幾乎都有寫到/)); assert.ok(!has(fb, 'tip', /要求繪圖|幾乎沒有數字|結果沒對上/));
+  // 整題總評：失分最多的得分點
+  const e = E114['114-g3econ-E1'];
+  const states = { 1: stateOf(e.parts[0], 'q1=40，q2=30，P=50'), 2: stateOf(e.parts[1], '只寫了幾個字不知道怎麼算') };
+  const ef = C.feedbackEssay(e, states);
+  assert.ok(ef && has(ef, 'warn', /失分最多的得分點/) && has(ef, 'tip', /還有 1 個小題尚未評分/));
+}
+
 console.log('feedback tests passed');

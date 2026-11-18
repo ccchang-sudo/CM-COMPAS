@@ -126,6 +126,36 @@
 
   function roundHalf(x) { return Math.round(x * 2) / 2; }
 
+  /**
+   * 從作答文字抽出所有數字（計算題的數值比對用）。
+   * 處理全形數字、千分位逗號（2,876.5）、負號，以及數字後接「萬／億」的寫法
+   * （1,006 萬 會同時產生 1006 與 10060000 兩個候選值，讓不同單位寫法都能比對）。
+   */
+  function extractNumbers(s) {
+    s = String(s == null ? "" : s);
+    try { s = s.normalize("NFKC"); } catch (e) {}
+    s = s.replace(/\u2212|\u2010|\u2011|\u2013|\u2014/g, "-");
+    var prev;
+    do { prev = s; s = s.replace(/(\d),(\d{3})(?!\d)/g, "$1$2"); } while (s !== prev);
+    var out = [], re = /(\d+(?:\.\d+)?)\s*(億|萬)?/g, m;
+    while ((m = re.exec(s))) {
+      var v = parseFloat(m[1]);
+      if (!isFinite(v)) continue;
+      out.push(v);
+      if (m[2] === "萬") out.push(v * 1e4);
+      else if (m[2] === "億") out.push(v * 1e8);
+    }
+    return out;
+  }
+
+  /** 數值規格 { v: 目標值, tol: 相對容許誤差（預設 0.002 = 0.2%）, abs: 絕對容許誤差（選填）}；以絕對值比對，忽略正負號寫法。 */
+  function numMatches(spec, nums) {
+    var target = Math.abs(spec.v), tol = typeof spec.tol === "number" ? spec.tol : 0.002, ab = spec.abs || 0;
+    var lim = Math.max(target * tol, ab);
+    for (var i = 0; i < nums.length; i++) if (Math.abs(Math.abs(nums[i]) - target) <= lim + 1e-12) return true;
+    return false;
+  }
+
   function safeRegex(src) { try { return new RegExp(src); } catch (e) { return null; } }
 
   /**
@@ -135,10 +165,11 @@
    * 這只是初判，最後分數由學生對照參考答案自行確認。
    */
   function gradeEssayPart(part, text) {
-    var t = normalizeText(text);
+    var t = normalizeText(text), nums = extractNumbers(text);
     var items = (part.rubric || []).map(function (r) {
       var need = r.min || 1, matched = 0;
       (r.patterns || []).forEach(function (src) { var re = safeRegex(src); if (re && re.test(t)) matched++; });
+      (r.nums || []).forEach(function (spec) { if (numMatches(spec, nums)) matched++; });
       var ratio = Math.min(1, matched / need);
       var earned = Math.min(r.points, roundHalf(r.points * ratio));
       var status = matched >= need ? "ok" : (matched > 0 ? "part" : "miss");
@@ -196,9 +227,11 @@
           if (!r.label) errs.push(pp + "評分細目 " + r.id + " 缺少 label");
           if (typeof r.points !== "number" || r.points <= 0) errs.push(pp + "評分細目 " + r.id + " points 需為正數");
           rs += r.points || 0;
-          if (!Array.isArray(r.patterns) || !r.patterns.length) errs.push(pp + "評分細目 " + r.id + " 缺少 patterns");
-          else r.patterns.forEach(function (src) { if (!safeRegex(src)) errs.push(pp + "評分細目 " + r.id + " 的 pattern 不合法：" + src); });
-          if (r.min && (r.min < 1 || r.min > (r.patterns || []).length)) errs.push(pp + "評分細目 " + r.id + " 的 min 超出 patterns 數量");
+          var np = (r.patterns || []).length, nn = (r.nums || []).length;
+          if (!np && !nn) errs.push(pp + "評分細目 " + r.id + " 缺少 patterns 或 nums");
+          else (r.patterns || []).forEach(function (src) { if (!safeRegex(src)) errs.push(pp + "評分細目 " + r.id + " 的 pattern 不合法：" + src); });
+          (r.nums || []).forEach(function (sp) { if (!sp || typeof sp.v !== "number" || !isFinite(sp.v)) errs.push(pp + "評分細目 " + r.id + " 的 nums 需為 { v: 數字 }"); });
+          if (r.min && (r.min < 1 || r.min > np + nn)) errs.push(pp + "評分細目 " + r.id + " 的 min 超出 patterns 與 nums 的總數");
         });
         if (Math.abs(rs - pt.points) > 1e-9) errs.push(pp + "評分細目配分合計 " + rs + " 不等於小題配分 " + pt.points);
       });
@@ -437,6 +470,10 @@
     hints.forEach(function (x) { add("tip", "「" + x.r.label + "」提示：" + x.r.hint); });
     var raised = items.filter(function (x) { return x.got > x.auto + 0.25 && x.auto <= 0; });
     if (raised.length) add("tip", "你把 " + raised.slice(0, 3).map(function (x) { return "「" + x.r.label + "」"; }).join("、") + " 的分數調高，但系統沒偵測到對應寫法。請再確認答案裡真的有明確寫出，閱卷看的是紙上有寫的內容，不是心裡想到的。");
+    if (part.calc && (miss.length || partial.length)) add("tip", "這是計算題：系統比對的是關鍵數值與列式。若你的數值只差在四捨五入（例如 24.5 與 24.51），可以手動把該細目調回應得的分數；正式閱卷看列式與過程，列式正確但計算失誤通常仍可得部分分數，所以每一步都要寫出算式，不要只寫答案。");
+    if (part.figure && ratio < 0.9 && !/橫軸|縱軸|x軸|y軸|曲線|左移|右移|向左|向右|移動/i.test(String(st.text || ""))) add("tip", "這小題要求繪圖，但你的文字裡沒有說明橫軸、縱軸、曲線與移動方向。正式考試圖形佔不少分數：請先標明兩軸，畫出各曲線與起始均衡點，再用箭頭標示哪條曲線移動、新均衡在哪裡。");
+    if (part.numeric && ratio < 0.9 && (String(st.text || "").match(/\d+/g) || []).length < 2) add("tip", "這小題是計算題，但你的答案幾乎沒有數字。請寫出每一步的算式與數字結果（如 MR = MC、均衡產量、利潤、消費者剩餘），只寫文字說明會拿不到計算分。");
+    if (part.numeric && ratio > 0 && ratio < 0.9 && miss.length && (String(st.text || "").match(/\d+/g) || []).length >= 2) add("tip", "你有寫出數字，但有些得分點的結果沒對上。請從第一步（反應函數或 MR = MC）開始逐步對照參考答案，找出第一個算錯的地方，後面的錯誤通常都是連鎖影響。");
     if (chars < part.points * 12 && ratio < 0.7) add("tip", "你只寫了約 " + chars + " 字，以這小題 " + part.points + " 分來說偏少（僅供參考）。申論題常因為推導省略、說明太簡而失分。");
     if (part.pitfalls && (miss.length || partial.length)) add("tip", "常見錯誤提醒：" + String(part.pitfalls).replace(/^常見錯誤[：:]\s*/, ""));
     return { earned: earned, possible: part.points, ratio: ratio, points: pts };
@@ -464,7 +501,7 @@
   }
 
   var api = { shuffle: shuffle, buildPool: buildPool, drawQueue: drawQueue, grade: grade, summarize: summarize, validateBank: validateBank,
-    stripHtml: stripHtml, normalizeText: normalizeText, gradeEssayPart: gradeEssayPart, sumPartScores: sumPartScores, summarizeEssay: summarizeEssay, validateEssays: validateEssays,
+    stripHtml: stripHtml, normalizeText: normalizeText, extractNumbers: extractNumbers, numMatches: numMatches, gradeEssayPart: gradeEssayPart, sumPartScores: sumPartScores, summarizeEssay: summarizeEssay, validateEssays: validateEssays,
     groupStats: groupStats, feedbackQuestion: feedbackQuestion, feedbackSession: feedbackSession, feedbackOverall: feedbackOverall, feedbackEssayPart: feedbackEssayPart, feedbackEssay: feedbackEssay };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.MoexCore = api;

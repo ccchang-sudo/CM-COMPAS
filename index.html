@@ -712,8 +712,8 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     $("eTitle").textContent = "民國 " + e.year_roc + " 年第 " + e.question_no + " 題（申論題　" + e.points + " 分）";
     var chips = [e.exam, e.categories && e.categories.length ? "類科：" + e.categories.join("、") : "", e.subject, e.area].concat(e.tags || []);
     $("eChips").innerHTML = chips.filter(Boolean).map(function (c) { return '<span class="chip">' + esc(c) + "</span>"; }).join("");
-    $("eQ").innerHTML = e.question;
-    var needFig = /繪圖|作圖|圖形|畫出/.test(e.question + e.parts.map(function (p) { return p.question; }).join(""));
+    $("eQ").innerHTML = e.question + (e.note ? '<p class="note" style="margin:10px 0 0">' + esc(e.note) + "</p>" : "");
+    var needFig = /繪圖|作圖|圖形|畫出|圖示|展開式/.test(e.question + e.parts.map(function (p) { return p.question; }).join(""));
     $("eFig").hidden = !needFig;
     var box = $("eParts"); box.innerHTML = "";
     e.parts.forEach(function (p) { box.appendChild(buildPart(p)); });

@@ -4,13 +4,20 @@ const root = path.join(__dirname, '..');
 const data = JSON.parse(fs.readFileSync(path.join(root, 'data', 'essays.json'), 'utf8'));
 const SHORT = { '公務人員高等考試三級考試': '高考三級', '公務人員普通考試': '普考', '公務人員初等考試': '初等' };
 
+function tbl(t) {
+  const rows = [...t.matchAll(/<tr>(.*?)<\/tr>/g)].map(m => [...m[1].matchAll(/<t[hd]>(.*?)<\/t[hd]>/g)].map(c => c[1].replace(/<[^>]+>/g, '').replace(/\|/g, '\\|')));
+  if (!rows.length) return '';
+  const w = Math.max(...rows.map(r => r.length)), pad = r => r.concat(Array(w - r.length).fill(''));
+  return '\n\n' + [pad(rows[0]), Array(w).fill('---'), ...rows.slice(1).map(pad)].map(r => '| ' + r.join(' | ') + ' |').join('\n') + '\n\n';
+}
 function md(h) {
   return String(h)
+    .replace(/<table>(.*?)<\/table>/g, (_, t) => tbl(t))
     .replace(/<b>(.*?)<\/b>/g, '**$1**')
     .replace(/<sub>(.*?)<\/sub>/g, '_$1').replace(/<sup>(.*?)<\/sup>/g, '^$1')
     .replace(/<br\s*\/?>\s*<br\s*\/?>/g, '\n\n').replace(/<br\s*\/?>/g, '\n\n')
     .replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-    .replace(/\n{3,}/g, '\n\n').trim();
+    .replace(/\n{3,}/g, '\n\n').replace(/\$/g, '\\$').trim();
 }
 const groups = {};
 data.essays.forEach(e => { (groups[e.year_roc + '|' + e.exam + '|' + e.subject] = groups[e.year_roc + '|' + e.exam + '|' + e.subject] || []).push(e); });
@@ -26,7 +33,7 @@ Object.keys(groups).forEach(k => {
     e.parts.forEach(p => {
       if (e.parts.length > 1 || p.label !== '本題') L.push('### ' + p.label + '（' + p.points + ' 分）', '');
       L.push(md(p.question), '', '**參考答案**', '', md(p.model_answer), '', '**評分細目**', '', '| 得分點 | 配分 |', '|---|---|');
-      p.rubric.forEach(r => L.push('| ' + r.label.replace(/\|/g, '\\|') + ' | ' + r.points + ' |'));
+      p.rubric.forEach(r => L.push('| ' + r.label.replace(/\|/g, '\\|').replace(/\$/g, '\\$') + ' | ' + r.points + ' |'));
       L.push('');
       if (p.pitfalls) L.push(md(p.pitfalls), '');
     });

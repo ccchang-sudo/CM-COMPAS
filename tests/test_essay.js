@@ -78,9 +78,9 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 97);  // 高考三級：113、114、115 年各 24 題（7 科）；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題
+assert.strictEqual(data.essays.length, 105);  // 高考三級：113、114、115 年各 24 題（7 科）；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
-const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要'];
+const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要'];
 data.essays.forEach(q => {
   const has = bank.questions.some(b => b.exam === q.exam && b.subject === q.subject);
   assert.strictEqual(has, !ESSAY_ONLY.includes(q.subject), q.id + ' exam/subject 與題庫不一致');
@@ -826,8 +826,10 @@ const OVERLAP = [
   ['113-pte-E3', '114-g3ie-E2'], ['113-pte-E3', '115-g3io-E3'], ['113-pte-E3', '115-g3io-E4'], ['113-pte-E2', '115-g3io-E4'], ['113-pte-E2', '115-g3econ-E1'],
   ['113-pte-E4', '113-g3fin-E2'], ['113-pte-E4', '113-g3eng-E3'], ['113-pte-E4', '114-g3eng-E1'], ['113-pte-E4', '114-g3eng-E4'], ['113-pte-E1', '114-g3eng-E1'],
   ['113-pte-E1', '115-pagr-E2'], ['113-pte-E1', '114-pagr-E4'],
+  // 115 年交通政策與行政（概要）：與其他科目的主題相近（數位平台與雙邊市場、氣候調適與農業減碳）
+  ['115-g3io-E4', '115-ptp-E1'], ['115-g3io-E4', '115-g3tp-E2'], ['115-g3tp-E4', '114-g3agr-E1'], ['115-pagr-E2', '115-g3tp-E2'],
   ['115-pte-E3', '113-g3pe-E3'], ['115-pte-E3', '113-g3agr-E2'], ['115-pte-E3', '115-g3mb-E2'], ['115-pte-E4', '115-g3io-E4']];
-const fam = (s) => s.replace(/概要$/, '');
+const fam = (s) => { s = s.replace(/概要$/, ''); return /^(運輸經濟學|交通政策與行政)$/.test(s) ? '交通運輸' : s; };  // 運輸經濟學與交通政策與行政同屬交通運輸領域，用語本來就會重疊
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
 data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
   if (fam(q2.subject) === fam(q.subject) || overlap(q.id, q2.id)) return;  // 同領域（含「概要」版）內容本來就會重疊
@@ -877,5 +879,19 @@ data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
   assert.ok(C.gradeEssayPart(part('113-pagr-E4', '2'), 'MR=MC=30，產量2500，利潤=75000-45000=30000。產量超過2500時MR<MC，利潤減少').earned >= 9);
   assert.ok(C.gradeEssayPart(part('113-pagr-E4', '2'), '生產 3000 單位最賺錢').earned <= 2, '產量 3000 不是利潤極大');
   assert.ok(C.gradeEssayPart(part('113-pagr-E4', '1'), '固定成本5000，變動成本2500、7500、15000、25000、40000、60000').earned >= 4);
+}
+
+// 115 年交通政策與行政概要（普考，代號 42450）、交通政策與行政（高考三級，代號 33740）：各 4 題，每題 25 分
+{
+  ['115-ptp-', '115-g3tp-'].forEach(k => { const qs = data.essays.filter(q => q.id.startsWith(k)); assert.strictEqual(qs.length, 4); assert.ok(qs.every(q => q.points === 25 && q.year_roc === 115 && q.categories[0] === '交通行政')); });
+  assert.strictEqual(shape('115-ptp-E1'), '10,15'); assert.strictEqual(shape('115-ptp-E2'), '8,17'); assert.strictEqual(shape('115-g3tp-E1'), '13,12'); assert.strictEqual(shape('115-g3tp-E2'), '15,10');
+  // 航運產業升級方案：四大面向各 1 個評分細目，只答兩項不應滿分
+  const full = C.gradeEssayPart(part('115-g3tp-E2', '1'), C.stripHtml(part('115-g3tp-E2', '1').model_answer));
+  assert.strictEqual(full.earned, 15);
+  const two = C.gradeEssayPart(part('115-g3tp-E2', '1'), '航運產業升級方案有綠色轉型，推動海運淨零與減碳；也推動智慧創新，建置港口社群系統數位化。');
+  assert.ok(two.earned >= 6 && two.earned <= 9, '只答兩個面向應得約 8 分，實得 ' + two.earned);
+  // 只寫概念、沒有具體作法不應高分
+  assert.ok(C.gradeEssayPart(part('115-ptp-E2', '2'), '臺鐵要加強行車安全，提升安全').earned <= 17 * 0.5, '空泛答案不應超過一半');
+  assert.ok(C.gradeEssayPart(part('115-ptp-E3', '2'), '興建停車場、機車停車格、智慧停車資訊、使用者付費、取締違規停車').earned >= 9);
 }
 console.log('申論題測試通過');

@@ -78,9 +78,9 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 72);  // 113 年 24 題（7 科）＋ 114 年 24 題（7 科）＋ 115 年 24 題（7 科）
+assert.strictEqual(data.essays.length, 80);  // 高考三級：113、114、115 年各 24 題（7 科）；115 年普考：農業經濟學概要、運輸經濟學概要各 4 題
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
-const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學'];
+const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要'];
 data.essays.forEach(q => {
   const has = bank.questions.some(b => b.exam === q.exam && b.subject === q.subject);
   assert.strictEqual(has, !ESSAY_ONLY.includes(q.subject), q.id + ' exam/subject 與題庫不一致');
@@ -812,11 +812,29 @@ const OVERLAP = [
   ['113-g3te-E4', '113-g3agr-E3'],  // 邊際成本定價與市場失靈下的政府介入
   ['113-g3econ-E1', '113-g3io-E2'],  // 獨占與 Cournot 下價格高於邊際成本、加價
   ['113-g3econ-E1', '113-g3te-E4'],  // 價格高於邊際成本與邊際成本定價
-  ['113-g3pe-E4', '113-g3agr-E1']];  // 碳稅、碳費與減少溫室氣體排放
+  ['113-g3pe-E4', '113-g3agr-E1'],  // 碳稅、碳費與減少溫室氣體排放
+  // 115 年普考新增題：與高考題主題相近（成本衝擊使供給左移、外部成本與庇古稅、自然獨占與邊際成本定價、補貼與外部效益）
+  ['115-pagr-E2', '113-g3te-E2'], ['115-pagr-E2', '115-pte-E3'], ['115-pagr-E2', '113-g3econ-E2'], ['115-pagr-E2', '114-g3fin-E1'],
+  ['115-pte-E1', '115-g3econ-E1'], ['115-pte-E1', '115-g3mb-E2'],
+  ['115-pte-E2', '115-g3mb-E2'], ['115-pte-E2', '115-g3io-E4'], ['115-pte-E2', '113-g3econ-E1'],
+  ['115-pte-E3', '113-g3pe-E3'], ['115-pte-E3', '113-g3agr-E2'], ['115-pte-E3', '115-g3mb-E2'], ['115-pte-E4', '115-g3io-E4']];
+const fam = (s) => s.replace(/概要$/, '');
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
 data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
-  if (q2.subject === q.subject || overlap(q.id, q2.id)) return;
+  if (fam(q2.subject) === fam(q.subject) || overlap(q.id, q2.id)) return;  // 同領域（含「概要」版）內容本來就會重疊
   q2.parts.forEach(p2 => { const g = C.gradeEssayPart(p, C.stripHtml(p2.model_answer)); assert.ok(g.earned <= p.points * 0.5, q.id + '/' + p.id + ' 被 ' + q2.id + '/' + p2.id + ' 的答案拿到 ' + g.earned + '/' + p.points); });
 })));
 
+// 115 年普考（農業行政：農業經濟學概要；交通行政：運輸經濟學概要）各 4 題，每題 25 分
+['pagr', 'pte'].forEach(k => {
+  const qs = data.essays.filter(q => q.id.startsWith('115-' + k + '-'));
+  assert.strictEqual(qs.length, 4); assert.ok(qs.every(q => q.points === 25 && q.exam === '公務人員普通考試'));
+});
+{ // 農業經濟學概要第 1 題：Qd=50-2P、Qs=20+P，均衡 P=10、Q=30，Ed=2/3、Es=1/3
+  const P = 10, Q = 20 + P; assert.strictEqual(50 - 2 * P, Q);
+  const g1 = C.gradeEssayPart(part('115-pagr-E1', '1'), '50-2P=20+P，P=10，Q=30。Ed=2×10/30=2/3，小於1，缺乏彈性');
+  assert.ok(g1.earned >= 8 && g1.earned < 13);
+  assert.ok(C.gradeEssayPart(part('115-pagr-E1', '1'), '需求彈性等於2').earned <= 4);
+  assert.ok(C.gradeEssayPart(part('115-pagr-E1', '2'), 'Es=1×10/30=1/3，缺乏彈性').earned >= 4);
+}
 console.log('申論題測試通過');

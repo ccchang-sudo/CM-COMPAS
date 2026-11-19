@@ -78,7 +78,7 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 105);  // 高考三級：113、114、115 年各 24 題（7 科）；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題
+assert.strictEqual(data.essays.length, 121);  // 高考三級：113、114、115 年各 24 題（7 科）；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
 const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要'];
 data.essays.forEach(q => {
@@ -327,7 +327,7 @@ assert.deepStrictEqual(by114('經濟學與財政學概論').map(q => q.points), 
 assert.deepStrictEqual(by114('經濟學').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by114('公共經濟學').map(q => q.points), [20, 40, 20, 20]);       // 共 100 分
 assert.deepStrictEqual(by114('產業經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 24);  // 7 科：經濟學、財政學概論、公共、產業、運輸、農業、工程
+assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 28);  // 8 科：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政
 assert.strictEqual(shape('114-g3fin-E2'), '5,5,5,5,5'); assert.strictEqual(shape('114-g3econ-E1'), '10,10,5');
 assert.strictEqual(shape('114-g3econ-E2'), '2,2,21'); assert.strictEqual(shape('114-g3pe-E2'), '20,20');
 assert.strictEqual(shape('114-g3ie-E1'), '10,10,5'); assert.strictEqual(shape('114-g3ie-E2'), '5,10,10');
@@ -539,7 +539,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 /* ===== 113 年高考三級：經濟學、經濟學與財政學概論、公共經濟學的申論題 ===== */
 {
   const by113 = (subj) => data.essays.filter(q => q.year_roc === 113 && q.subject === subj);
-  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試').length, 24);
+  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 24);
   assert.deepStrictEqual(by113('經濟學').map(q => q.points), [25, 25]);
   assert.deepStrictEqual(by113('經濟學與財政學概論').map(q => q.points), [20, 30]);        // 50 分
   assert.deepStrictEqual(by113('公共經濟學').map(q => q.points), [25, 25, 25, 25]);         // 100 分
@@ -647,7 +647,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 }
 
 
-const y113 = data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試');
+const y113 = data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政');  // 交通政策與行政另有測試
 assert.strictEqual(y113.length, 24);
 assert.deepStrictEqual(sub(113, '農業經濟學').map(q => q.points), [15, 30, 30, 25]);          // 共 100 分
 assert.deepStrictEqual(sub(113, '工程經濟學').map(q => q.points), [25, 25, 25, 25]);
@@ -828,7 +828,9 @@ const OVERLAP = [
   ['113-pte-E1', '115-pagr-E2'], ['113-pte-E1', '114-pagr-E4'],
   // 115 年交通政策與行政（概要）：與其他科目的主題相近（數位平台與雙邊市場、氣候調適與農業減碳）
   ['115-g3io-E4', '115-ptp-E1'], ['115-g3io-E4', '115-g3tp-E2'], ['115-g3tp-E4', '114-g3agr-E1'], ['115-pagr-E2', '115-g3tp-E2'],
-  ['115-pte-E3', '113-g3pe-E3'], ['115-pte-E3', '113-g3agr-E2'], ['115-pte-E3', '115-g3mb-E2'], ['115-pte-E4', '115-g3io-E4']];
+  ['115-pte-E3', '113-g3pe-E3'], ['115-pte-E3', '113-g3agr-E2'], ['115-pte-E3', '115-g3mb-E2'], ['115-pte-E4', '115-g3io-E4'],
+  // 113 年交通政策與行政概要：航空減碳與氣候調適，與農業減碳、碳稅與碳費的主題相近
+  ['113-ptp-E2', '113-g3agr-E1'], ['113-ptp-E2', '113-g3pe-E4'], ['113-ptp-E2', '115-g3pe-E1']];
 const fam = (s) => { s = s.replace(/概要$/, ''); return /^(運輸經濟學|交通政策與行政)$/.test(s) ? '交通運輸' : s; };  // 運輸經濟學與交通政策與行政同屬交通運輸領域，用語本來就會重疊
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
 data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
@@ -893,5 +895,40 @@ data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
   // 只寫概念、沒有具體作法不應高分
   assert.ok(C.gradeEssayPart(part('115-ptp-E2', '2'), '臺鐵要加強行車安全，提升安全').earned <= 17 * 0.5, '空泛答案不應超過一半');
   assert.ok(C.gradeEssayPart(part('115-ptp-E3', '2'), '興建停車場、機車停車格、智慧停車資訊、使用者付費、取締違規停車').earned >= 9);
+}
+// 113 年交通政策與行政概要（普考，代號 42650）、交通政策與行政（高考三級，代號 33540）：各 4 題，每題 25 分
+{
+  ['113-ptp-', '113-g3tp-'].forEach(k => { const qs = data.essays.filter(q => q.id.startsWith(k)); assert.strictEqual(qs.length, 4); assert.ok(qs.every(q => q.points === 25 && q.year_roc === 113 && q.categories[0] === '交通行政')); });
+  assert.strictEqual(shape('113-g3tp-E1'), '13,12'); assert.strictEqual(shape('113-g3tp-E2'), '12,13'); assert.strictEqual(shape('113-g3tp-E3'), '13,12'); assert.strictEqual(shape('113-g3tp-E4'), '13,12');
+  assert.strictEqual(shape('113-ptp-E1'), '12,13'); assert.strictEqual(shape('113-ptp-E2'), '13,12'); assert.strictEqual(shape('113-ptp-E3'), '12,13'); assert.strictEqual(shape('113-ptp-E4'), '25');
+  // 汽車運輸業管理規則第 37 條：四項原則，完整答案滿分；漏掉兩項不應超過一半；空泛答案低分
+  const p37 = part('113-ptp-E4', '1');
+  assert.strictEqual(C.gradeEssayPart(p37, C.stripHtml(p37.model_answer)).earned, 25);
+  const two = C.gradeEssayPart(p37, '應與當地政府協議定之，以維護當地交通秩序。市區設站間隔不得少於500公尺。');
+  assert.ok(two.earned >= 10 && two.earned <= 15, '只答兩項應得約 13 分，實得 ' + two.earned);
+  assert.notStrictEqual(C.gradeEssayPart(p37, '市區設站間隔不得少於 100 公尺').items[2].status, 'ok', '間隔數字寫錯，第三款不應拿滿分');
+  assert.ok(C.gradeEssayPart(p37, '公路客運要遵守規定，配合地方').earned <= 5, '空泛答案不應高分');
+  // 其餘題：只提一個名詞、沒有內容的答案不得高分
+  assert.ok(C.gradeEssayPart(part('113-g3tp-E3', '1'), 'TPASS是通勤月票').earned <= 13 * 0.4, 'TPASS 只寫名詞不應高分');
+  assert.ok(C.gradeEssayPart(part('113-g3tp-E4', '1'), 'One ID 就是刷臉').earned <= 13 * 0.5, 'One ID 只寫名詞不應高分');
+  assert.ok(C.gradeEssayPart(part('113-g3tp-E3', '1'), '中央交通部公路局訂定政策並編列預算補助地方；地方政府依生活圈提案規劃方案、訂定票價、與公車捷運業者協議整合路網，並跨縣市協調分攤經費、定期檢討').earned >= 9);
+  assert.ok(C.gradeEssayPart(part('113-ptp-E2', '1'), '推動永續航空燃料SAF並提供補助誘因，配合ICAO的CORSIA與2050淨零目標，汰換節能機隊、優化航路').earned >= 9);
+}
+// 114 年交通政策與行政概要（普考，代號 42150）、交通政策與行政（高考三級，代號 23940）：各 4 題，每題 25 分
+{
+  ['114-ptp-', '114-g3tp-'].forEach(k => { const qs = data.essays.filter(q => q.id.startsWith(k)); assert.strictEqual(qs.length, 4); assert.ok(qs.every(q => q.points === 25 && q.year_roc === 114 && q.categories[0] === '交通行政')); });
+  assert.strictEqual(shape('114-g3tp-E1'), '9,9,7'); assert.strictEqual(shape('114-g3tp-E3'), '5,20'); assert.strictEqual(shape('114-ptp-E1'), '8,17'); assert.strictEqual(shape('114-ptp-E3'), '13,12');
+  // 鐵路法第 56 條之 5：五款內容各自計分，只答事故檢討不應高分
+  const rp = part('114-g3tp-E3', '2');
+  assert.ok(C.gradeEssayPart(rp, '鐵路機構應檢討前一年度事故與異常事件，並提出預防措施。').earned <= 6, '只答事故檢討不應超過 6 分');
+  assert.ok(C.gradeEssayPart(rp, '一、營運之安全理念及目標；二、安全管理之組織架構及實施方式；三、為確保及提升營運安全所採取或擬採取之措施；四、事故與異常事件之檢討及預防措施；五、其他與營運安全有關之重要事項，如教育訓練').earned >= 17);
+  // 韌性：只寫抗災不應高分；三項策略要有
+  assert.ok(C.gradeEssayPart(part('114-g3tp-E2', '2'), '加強防災，災後要盡快搶修').earned <= 4);
+  assert.ok(C.gradeEssayPart(part('114-g3tp-E2', '2'), '預警與監測、備援與替代路線；迴避高風險潛勢地區、修訂設計與養護規範、提升復建效率；建立風險評估方法、資料庫、培育人才與跨域平台').earned >= 12);
+  // 行人專用時相：只寫「為了安全」不應高分
+  assert.ok(C.gradeEssayPart(part('114-ptp-E1', '2'), '為了保護行人安全').earned <= 5);
+  assert.ok(C.gradeEssayPart(part('114-ptp-E1', '1'), '行人專用時相是路口各方向車輛皆為全紅，行人可同時穿越，分離人車衝突').earned >= 6);
+  // 綠運輸：空泛答案不應高分
+  assert.ok(C.gradeEssayPart(part('114-ptp-E4', '2'), '為了環保，讓大家愛護地球').earned <= 3);
 }
 console.log('申論題測試通過');

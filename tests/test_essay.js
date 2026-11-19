@@ -78,7 +78,7 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 89);  // 高考三級：113、114、115 年各 24 題（7 科）；普考：115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題
+assert.strictEqual(data.essays.length, 97);  // 高考三級：113、114、115 年各 24 題（7 科）；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
 const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要'];
 data.essays.forEach(q => {
@@ -539,7 +539,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 /* ===== 113 年高考三級：經濟學、經濟學與財政學概論、公共經濟學的申論題 ===== */
 {
   const by113 = (subj) => data.essays.filter(q => q.year_roc === 113 && q.subject === subj);
-  assert.strictEqual(data.essays.filter(q => q.year_roc === 113).length, 24);
+  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試').length, 24);
   assert.deepStrictEqual(by113('經濟學').map(q => q.points), [25, 25]);
   assert.deepStrictEqual(by113('經濟學與財政學概論').map(q => q.points), [20, 30]);        // 50 分
   assert.deepStrictEqual(by113('公共經濟學').map(q => q.points), [25, 25, 25, 25]);         // 100 分
@@ -647,7 +647,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 }
 
 
-const y113 = data.essays.filter(q => q.year_roc === 113);
+const y113 = data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試');
 assert.strictEqual(y113.length, 24);
 assert.deepStrictEqual(sub(113, '農業經濟學').map(q => q.points), [15, 30, 30, 25]);          // 共 100 分
 assert.deepStrictEqual(sub(113, '工程經濟學').map(q => q.points), [25, 25, 25, 25]);
@@ -822,6 +822,10 @@ const OVERLAP = [
   ['114-pte-E3', '113-g3agr-E3'], ['114-pte-E3', '114-g3pe-E1'], ['114-pte-E3', '115-g3econ-E1'], ['114-pte-E3', '115-g3pe-E1'], ['114-pte-E3', '115-g3mb-E2'], ['114-pte-E3', '115-g3io-E4'],
   ['114-pte-E4', '115-pagr-E4'], ['114-pte-E4', '113-g3pe-E4'], ['114-pagr-E1', '113-g3io-E1'],
   ['114-pagr-E4', '113-g3te-E3'], ['114-pagr-E4', '115-g3econ-E2'], ['114-pagr-E4', '115-g3io-E2'], ['114-pagr-E4', '115-g3io-E4'], ['114-pagr-E4', '115-pte-E4'],
+  // 113 年普考新增題：與高考題主題相近（差別取價與差別訂價、NPV 與 IRR 的計算題、獨占缺點、平台與交叉補貼、需求決定因素與供需移動）
+  ['113-pte-E3', '114-g3ie-E2'], ['113-pte-E3', '115-g3io-E3'], ['113-pte-E3', '115-g3io-E4'], ['113-pte-E2', '115-g3io-E4'], ['113-pte-E2', '115-g3econ-E1'],
+  ['113-pte-E4', '113-g3fin-E2'], ['113-pte-E4', '113-g3eng-E3'], ['113-pte-E4', '114-g3eng-E1'], ['113-pte-E4', '114-g3eng-E4'], ['113-pte-E1', '114-g3eng-E1'],
+  ['113-pte-E1', '115-pagr-E2'], ['113-pte-E1', '114-pagr-E4'],
   ['115-pte-E3', '113-g3pe-E3'], ['115-pte-E3', '113-g3agr-E2'], ['115-pte-E3', '115-g3mb-E2'], ['115-pte-E4', '115-g3io-E4']];
 const fam = (s) => s.replace(/概要$/, '');
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
@@ -849,5 +853,29 @@ data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
   // 比較利益：兩題的機會成本皆為稻米 甲 0.5、乙 0.75 棉花
   assert.strictEqual(50 / 100, 0.5); assert.strictEqual(60 / 80, 0.75); assert.strictEqual(45 / 60, 0.75);
   assert.ok(C.gradeEssayPart(part('114-pagr-E3', '2'), '甲稻米乙棉花，機會成本 0.5 與 0.75').earned >= 5);
+}
+
+// 113 年普考（農業行政：農業經濟學概要；交通行政：運輸經濟學概要）
+{
+  const pa = data.essays.filter(q => q.id.startsWith('113-pagr-')), pt = data.essays.filter(q => q.id.startsWith('113-pte-'));
+  assert.deepStrictEqual(pa.map(q => q.points), [30, 15, 30, 25]);  // 共 100 分
+  assert.deepStrictEqual(pt.map(q => q.points), [25, 25, 25, 25]);
+  assert.ok(pa.concat(pt).every(q => q.exam === '公務人員普通考試' && q.year_roc === 113));
+  assert.strictEqual(shape('113-pte-E1'), '8,8,9'); assert.strictEqual(shape('113-pte-E3'), '8,9,8'); assert.strictEqual(shape('113-pte-E4'), '9,8,8');
+  assert.strictEqual(shape('113-pagr-E1'), '15,15'); assert.strictEqual(shape('113-pagr-E3'), '20,10'); assert.strictEqual(shape('113-pagr-E4'), '15,10');
+  // 運輸經濟學概要第 1 題：D = 3000 − 1.5P + 0.08Y
+  const D = (P, Y) => 3000 - 1.5 * P + 0.08 * Y;
+  assert.strictEqual(D(1000, 30000), 3900); assert.strictEqual(D(1600, 30000), 3000); assert.strictEqual(D(1000, 30000) - D(1600, 30000), 900);
+  assert.strictEqual(D(1000, 40000) - D(1000, 30000), 800); assert.strictEqual(D(0, 40000), 6200);
+  assert.ok(C.gradeEssayPart(part('113-pte-E1', '1'), 'D=5400-1.5P，P=1000時D=3900，P=1600時D=3000').earned >= 4);
+  assert.ok(C.gradeEssayPart(part('113-pte-E1', '1'), '價格上升，需求曲線左移').earned <= 2, '把價格變動寫成曲線移動不應拿高分');
+  // 農業經濟學概要第 4 題：成本與利潤極大化
+  const Q = [0, 500, 1000, 1500, 2000, 2500, 3000], TC = [5000, 7500, 12500, 20000, 30000, 45000, 65000];
+  const MC = Q.slice(1).map((q, i) => (TC[i + 1] - TC[i]) / (q - Q[i])), pi = Q.map((q, i) => 30 * q - TC[i]);
+  assert.deepStrictEqual(MC, [5, 10, 15, 20, 30, 40]);
+  assert.strictEqual(Math.max.apply(null, pi), 30000); assert.deepStrictEqual([pi[4], pi[5]], [30000, 30000]); assert.strictEqual(pi[6], 25000);
+  assert.ok(C.gradeEssayPart(part('113-pagr-E4', '2'), 'MR=MC=30，產量2500，利潤=75000-45000=30000。產量超過2500時MR<MC，利潤減少').earned >= 9);
+  assert.ok(C.gradeEssayPart(part('113-pagr-E4', '2'), '生產 3000 單位最賺錢').earned <= 2, '產量 3000 不是利潤極大');
+  assert.ok(C.gradeEssayPart(part('113-pagr-E4', '1'), '固定成本5000，變動成本2500、7500、15000、25000、40000、60000').earned >= 4);
 }
 console.log('申論題測試通過');

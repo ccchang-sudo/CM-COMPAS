@@ -75,7 +75,7 @@ assert.ok(ov.actions.some(a => a.type === 'tag'));
 assert.strictEqual(C.feedbackOverall(recs, byId, {}, '行政法概要').enough, false);
 
 // ---- 申論題 ----
-const E = essays.essays[0], p1 = E.parts[0];
+const E = essays.essays.find(x => x.id === '114-g3fin-E1'), p1 = E.parts[0];
 const full = {}, none = {}; p1.rubric.forEach(r => { full[r.id] = r.points; none[r.id] = 0; });
 const model = C.stripHtml(p1.model_answer);
 let ef = C.feedbackEssayPart(p1, { text: model, auto: full, scores: full });
@@ -139,3 +139,24 @@ essays.essays.forEach(e => e.parts.forEach(p => {
 }
 
 console.log('feedback tests passed');
+
+// 113 年高考三級（農業經濟學、工程經濟學）：依學生作答的回饋
+{
+  const get = (id, pid) => essays.essays.find(e => e.id === id).parts.find(p => p.id === pid);
+  const zero = (p) => { const s = {}; p.rubric.forEach(r => s[r.id] = 0); return s; };
+  // 工程經濟學計算題：忽略利息的錯誤答案 → 數值與列式提醒、常見錯誤提醒（含「忽略利息」）
+  const eng1 = get('113-g3eng-E1', '1'), z1 = zero(eng1);
+  const fb1 = C.feedbackEssayPart(eng1, { text: '450000/5=90000，每年成本約 262000', auto: z1, scores: z1 });
+  assert.ok(has(fb1, 'tip', /這是計算題/) && has(fb1, 'tip', /忽略利息/) && has(fb1, 'warn', /答題方向偏了/));
+  // 農業經濟學第 2 題（一）要求繪圖：沒說明橫縱軸與曲線 → 繪圖提醒；有說明 → 不再提醒
+  const agr2 = get('113-g3agr-E2', '1'), z2 = zero(agr2);
+  assert.ok(has(C.feedbackEssayPart(agr2, { text: '最低工資可以保障勞工，工資變高。', auto: z2, scores: z2 }), 'tip', /要求繪圖/));
+  assert.ok(!has(C.feedbackEssayPart(agr2, { text: '橫軸為僱用量，縱軸為工資，勞動供給與需求曲線交於均衡點。', auto: z2, scores: z2 }), 'tip', /要求繪圖/));
+  // 整題總評：農業經濟學第 4 題只評（一）時，提醒（二）尚未評分
+  const e4 = essays.essays.find(e => e.id === '113-g3agr-E4'), p41 = e4.parts[0], z41 = zero(p41);
+  const tot4 = C.feedbackEssay(e4, { [p41.id]: { text: '不知道', auto: z41, scores: z41 } });
+  assert.ok(has(tot4, 'tip', /尚未評分/) && has(tot4, 'warn', /失分最多/));
+  // 全對時：農業經濟學、工程經濟學 8 題都是「結構完整」（上方迴圈已涵蓋全部題目；此處再確認 113 年有被涵蓋）
+  assert.strictEqual(essays.essays.filter(e => e.year_roc === 113).length, 24);
+}
+console.log('113 年申論題回饋測試通過');

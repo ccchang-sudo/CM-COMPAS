@@ -78,7 +78,7 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 121);  // 高考三級：113、114、115 年各 24 題（7 科）；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題
+assert.strictEqual(data.essays.length, 133);  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
 const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要'];
 data.essays.forEach(q => {
@@ -327,7 +327,7 @@ assert.deepStrictEqual(by114('經濟學與財政學概論').map(q => q.points), 
 assert.deepStrictEqual(by114('經濟學').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by114('公共經濟學').map(q => q.points), [20, 40, 20, 20]);       // 共 100 分
 assert.deepStrictEqual(by114('產業經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 28);  // 8 科：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政
+assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 32);  // 9 科（含財政學 財稅行政、會計共 4 題）：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政
 assert.strictEqual(shape('114-g3fin-E2'), '5,5,5,5,5'); assert.strictEqual(shape('114-g3econ-E1'), '10,10,5');
 assert.strictEqual(shape('114-g3econ-E2'), '2,2,21'); assert.strictEqual(shape('114-g3pe-E2'), '20,20');
 assert.strictEqual(shape('114-g3ie-E1'), '10,10,5'); assert.strictEqual(shape('114-g3ie-E2'), '5,10,10');
@@ -539,7 +539,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 /* ===== 113 年高考三級：經濟學、經濟學與財政學概論、公共經濟學的申論題 ===== */
 {
   const by113 = (subj) => data.essays.filter(q => q.year_roc === 113 && q.subject === subj);
-  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 24);
+  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 28);
   assert.deepStrictEqual(by113('經濟學').map(q => q.points), [25, 25]);
   assert.deepStrictEqual(by113('經濟學與財政學概論').map(q => q.points), [20, 30]);        // 50 分
   assert.deepStrictEqual(by113('公共經濟學').map(q => q.points), [25, 25, 25, 25]);         // 100 分
@@ -648,7 +648,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 
 
 const y113 = data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政');  // 交通政策與行政另有測試
-assert.strictEqual(y113.length, 24);
+assert.strictEqual(y113.length, 28);
 assert.deepStrictEqual(sub(113, '農業經濟學').map(q => q.points), [15, 30, 30, 25]);          // 共 100 分
 assert.deepStrictEqual(sub(113, '工程經濟學').map(q => q.points), [25, 25, 25, 25]);
 sub(113, '農業經濟學').forEach(q => assert.deepStrictEqual(q.categories, ['農業行政']));
@@ -830,7 +830,17 @@ const OVERLAP = [
   ['115-g3io-E4', '115-ptp-E1'], ['115-g3io-E4', '115-g3tp-E2'], ['115-g3tp-E4', '114-g3agr-E1'], ['115-pagr-E2', '115-g3tp-E2'],
   ['115-pte-E3', '113-g3pe-E3'], ['115-pte-E3', '113-g3agr-E2'], ['115-pte-E3', '115-g3mb-E2'], ['115-pte-E4', '115-g3io-E4'],
   // 113 年交通政策與行政概要：航空減碳與氣候調適，與農業減碳、碳稅與碳費的主題相近
-  ['113-ptp-E2', '113-g3agr-E1'], ['113-ptp-E2', '113-g3pe-E4'], ['113-ptp-E2', '115-g3pe-E1']];
+  ['113-ptp-E2', '113-g3agr-E1'], ['113-ptp-E2', '113-g3pe-E4'], ['113-ptp-E2', '115-g3pe-E1'],
+  // 113 年財政學（財稅行政、會計）：退休金制度、資訊不對稱與市場失靈、外部成本內部化（庇古稅、碳稅與碳費）
+  ['113-g3pft-E2', '113-g3pe-E2'], ['113-g3pft-E2', '113-g3agr-E3'], ['113-g3pft-E2', '114-g3fin-E2'],
+  ['113-g3pfa-E1', '113-g3te-E2'], ['113-g3pfa-E1', '114-g3pe-E1'], ['113-g3pfa-E1', '115-g3pe-E1'],
+  // 114 年財政學（財稅行政、會計）：雙重紅利與碳稅／碳交易、福利函數、超額負擔與租稅歸宿，與其他科目的租稅效率、公平、圖形用語相近
+  ['114-g3pf-E2', '113-g3agr-E1'], ['114-g3pf-E2', '113-g3pe-E4'], ['114-g3pf-E2', '115-g3pe-E1'], ['114-g3pf-E2', '115-g3mb-E1'], ['114-g3pf-E1', '115-g3fin-E2'],
+  ['114-g3acc-E1', '113-g3econ-E1'], ['114-g3acc-E1', '115-g3fin-E1'], ['114-g3acc-E1', '115-pte-E3'], ['114-g3acc-E1', '115-pte-E4'],
+  ['114-g3acc-E2', '113-g3pe-E3'], ['114-g3acc-E2', '115-g3mb-E2'], ['114-g3acc-E2', '115-pte-E2'], ['114-g3acc-E2', '114-g3pe-E4'], ['114-g3acc-E2', '115-g3fin-E1'],
+  // 115 年高考三級財政學（財稅行政、會計審計）：與其他科目主題相同（貨物稅與薪資稅的超額負擔、無異曲線與效用、外部成本與減量政策、公共財的 Samuelson 條件、Lindahl 與多數決）
+  ['115-g3pf-E1', '115-g3fin-E1'], ['115-g3pf-E1', '115-g3fin-E2'], ['115-g3pf-E2', '115-pte-E1'],
+  ['115-g3pfa-E1', '113-g3pe-E1'], ['115-g3pfa-E1', '114-g3pe-E2'], ['115-g3pfa-E1', '115-g3pe-E4']];
 const fam = (s) => { s = s.replace(/概要$/, ''); return /^(運輸經濟學|交通政策與行政)$/.test(s) ? '交通運輸' : s; };  // 運輸經濟學與交通政策與行政同屬交通運輸領域，用語本來就會重疊
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
 data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
@@ -931,4 +941,166 @@ data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
   // 綠運輸：空泛答案不應高分
   assert.ok(C.gradeEssayPart(part('114-ptp-E4', '2'), '為了環保，讓大家愛護地球').earned <= 3);
 }
+
+// 115 年高考三級財政學（財稅行政，代號 31950；會計、審計，代號 32250、32350）申論題
+{
+  const near = (x, y, m) => assert.ok(Math.abs(x - y) < 1e-6, m + '：' + x + ' ≠ ' + y);
+  const tax = ['115-g3pf-E1', '115-g3pf-E2'].map(id => E[id]), acc = ['115-g3pfa-E1', '115-g3pfa-E2'].map(id => E[id]);
+  assert.ok(tax.every(q => q.points === 25 && q.year_roc === 115 && q.subject === '財政學' && q.categories.join() === '財稅行政'));
+  assert.ok(acc.every(q => q.points === 25 && q.year_roc === 115 && q.subject === '財政學' && q.categories.join() === '會計,審計'));
+  assert.strictEqual(shape('115-g3pf-E1'), '25'); assert.strictEqual(shape('115-g3pf-E2'), '25');
+  assert.strictEqual(shape('115-g3pfa-E1'), '5,10,10'); assert.strictEqual(shape('115-g3pfa-E2'), '5,10,10');
+  // 要求繪圖與計算題旗標（意見與建議會依旗標給提醒）
+  assert.ok(part('115-g3pf-E1', '1').figure && part('115-g3pf-E2', '1').figure && part('115-g3pfa-E2', '1').figure);
+  ['1', '2', '3'].forEach(k => { assert.ok(part('115-g3pfa-E1', k).numeric && part('115-g3pfa-E1', k).calc); });
+
+  // 會計審計第 1 題：以數值方法驗算
+  const bis = (f, lo, hi) => { for (let i = 0; i < 200; i++) { const m = (lo + hi) / 2; if (f(lo) * f(m) <= 0) hi = m; else lo = m; } return (lo + hi) / 2; };
+  const MBf = { A: G => 20 - G + 0.01 * 1000, B: G => 40 - 2 * G + 0.01 * 1000, C: G => 40 - G + 0.02 * 500 };
+  const ideal = {}; ['A', 'B', 'C'].forEach(k => { ideal[k] = bis(G => MBf[k](G) - 60 / 3, 0, 100); });
+  near(ideal.A, 10, 'A 理想量'); near(ideal.B, 15, 'B 理想量'); near(ideal.C, 30, 'C 理想量');
+  const med = Object.values(ideal).sort((a, b) => a - b)[1]; near(med, 15, '中位數');
+  const Gs = bis(G => MBf.A(G) + MBf.B(G) + MBf.C(G) - 60, 0, 100); near(Gs, 17.5, 'Samuelson 最適量');
+  near(MBf.A(Gs) + MBf.B(Gs) + MBf.C(Gs), 60, 'Lindahl 價格之和'); near(MBf.A(Gs), 12.5, 'A 的 Lindahl 價格'); near(MBf.B(Gs), 15, 'B'); near(MBf.C(Gs), 32.5, 'C');
+  assert.ok(med < Gs, '票決結果低於效率量');
+  // 評分：只有結論、錯誤與完整答案
+  assert.ok(C.gradeEssayPart(part('115-g3pfa-E1', '1'), 'A偏好10單位，B偏好15單位，C偏好30單位').earned >= 3);
+  assert.ok(C.gradeEssayPart(part('115-g3pfa-E1', '1'), '三個人都偏好 20 單位').earned <= 2);
+  assert.ok(C.gradeEssayPart(part('115-g3pfa-E1', '2'), '三人平均 (10+15+30)/3 = 18.33').earned <= 2, '取平均不是中位數');
+  assert.strictEqual(C.gradeEssayPart(part('115-g3pfa-E1', '3'), '30-G+50-2G+50-G=60，G*=17.5').earned, 6, '只有算式與答案、沒提 Samuelson 條件：r2 滿分、r1 半分');
+  assert.strictEqual(C.gradeEssayPart(part('115-g3pfa-E1', '3'), 'Samuelson條件：ΣMB=MC=60，30-G+50-2G+50-G=60，G*=17.5').earned, 8);
+  assert.ok(C.gradeEssayPart(part('115-g3pfa-E1', '3'), '所以均衡數量 G = 15').items.find(i => i.id === 'r2').earned === 0, '15 不是 Samuelson 條件的答案');
+
+  // 會計審計第 2 題：由偏好表重算
+  const prefs = { A: 'KMNL', B: 'NLMK', C: 'MLNK', D: 'MNLK' }, axis = 'KLMN';
+  const util = (v, x) => 4 - prefs[v].indexOf(x);   // 第 1 名 = 4
+  const peaks = (v) => { let n = 0; for (let i = 0; i < 4; i++) { const l = i > 0 ? util(v, axis[i - 1]) : -1, r = i < 3 ? util(v, axis[i + 1]) : -1; if (util(v, axis[i]) > l && util(v, axis[i]) > r) n++; } return n; };
+  assert.deepStrictEqual(['A', 'B', 'C', 'D'].map(peaks), [2, 2, 1, 1]);   // A、B 雙峰；C、D 單峰
+  const beat = (x, y) => { let c = 0; for (const v of 'ABCD') if (prefs[v].indexOf(x) < prefs[v].indexOf(y)) c++; return c; };
+  const wins = {}; for (const x of 'KLMN') { wins[x] = 0; for (const y of 'KLMN') if (x !== y) { assert.notStrictEqual(beat(x, y), 2, '無平手'); if (beat(x, y) > beat(y, x)) wins[x]++; } }
+  assert.deepStrictEqual(wins, { K: 0, L: 1, M: 3, N: 2 });   // M 為孔多瑟贏家，沒有循環
+  assert.strictEqual(beat('L', 'K'), 3); assert.strictEqual(beat('M', 'K'), 3); assert.strictEqual(beat('N', 'K'), 3);
+  assert.strictEqual(beat('M', 'L'), 3); assert.strictEqual(beat('N', 'L'), 3); assert.strictEqual(beat('M', 'N'), 3);
+  assert.ok(C.gradeEssayPart(part('115-g3pfa-E2', '3'), '兩兩對決結果：K對L，L勝；K對M，M勝；K對N，N勝；L對M，M勝；L對N，N勝；M對N，M勝。M贏過所有計畫，是孔多瑟贏家。').earned >= 9);
+  assert.ok(C.gradeEssayPart(part('115-g3pfa-E2', '3'), 'M 是第一名票數最多的計畫（2 票），所以 M 勝出').earned <= 4, '只數第一名票數不是兩兩對決');
+  assert.ok(C.gradeEssayPart(part('115-g3pfa-E2', '2'), '會有投票矛盾，因為 A、B 是雙峰偏好，一定會循環').earned <= 3, '雙峰偏好不等於一定循環');
+  assert.ok(C.gradeEssayPart(part('115-g3pfa-E2', '1'), 'A董與B董是雙峰偏好，C董與D董是單峰偏好').earned >= 3);
+
+  // 財稅行政第 1 題：Cobb-Douglas U = ln C + ln ℓ 的勞動供給為垂直線（ℓ 固定為一半），仍有超額負擔
+  { const w = 10, t = 0.2, Tm = 1;
+    const best = (wage, lump) => { const l = bis(x => (-wage / (wage * (Tm - x) - lump)) + 1 / x, 0.01, Tm - lump / wage - 1e-6); return { l, C: wage * (Tm - l) - lump, U: Math.log(wage * (Tm - l) - lump) + Math.log(l) }; };
+    const e0 = best(w, 0), e1 = best(w * (1 - t), 0);
+    near(e0.l, 0.5, '稅前休閒'); near(e1.l, 0.5, '課稅後休閒不變（勞動供給垂直）');
+    const rev = t * w * (Tm - e1.l); near(rev, 1, '稅收');
+    const e2 = best(w, rev);   // 同額稅收的定額稅
+    assert.ok(e2.U > e1.U + 1e-4, '定額稅下效用較高，代表薪資稅有超額負擔');
+    // 等價的定額稅額 X：使定額稅後效用等於薪資稅後效用，超額負擔 = X − 稅收
+    const X = bis(x => best(w, x).U - e1.U, 0, 3); near(X, 10 - Math.sqrt(80), 'EV 定額稅額'); assert.ok(X - rev > 0.05, '超額負擔為正');
+  }
+  assert.ok(C.gradeEssayPart(part('115-g3pf-E1', '1'), '勞動供給垂直表示工時不變，所以課稅不會造成超額負擔').earned <= 9, '結論寫反不應高分');
+  assert.strictEqual(C.gradeEssayPart(part('115-g3pf-E1', '1'), '勞動供給垂直表示工時不變，所以課稅不會造成超額負擔').items.find(i => i.id === 'r1').earned, 0);
+
+  // 財稅行政第 2 題：MSB = 100 − bQ，真實 MSC = 20 + Q，政府以 MSC′ = Q 決策（低估 20）
+  const dwl = (b) => { const Qs = 80 / (b + 1), Qg = 100 / (b + 1); let a = 0; const n = 100000, h = (Qg - Qs) / n; for (let i = 0; i < n; i++) { const q = Qs + (i + 0.5) * h; a += ((20 + q) - (100 - b * q)) * h; } return { Qs, Qg, a }; };
+  [[4, 16, 20, 40], [1, 40, 50, 100], [0.25, 64, 80, 160]].forEach(([b, Qs, Qg, A]) => { const r = dwl(b); near(r.Qs, Qs, 'Q*'); near(r.Qg, Qg, 'Qg'); assert.ok(Math.abs(r.a - A) < 0.01, 'b=' + b + ' DWL 應為 ' + A + '，實得 ' + r.a); near(200 / (b + 1), A, '公式 Δ^2/[2(b+d)]'); });
+  assert.ok(dwl(4).a < dwl(1).a && dwl(1).a < dwl(0.25).a, 'MSB 愈陡（缺乏彈性），無謂損失愈小');
+  // Weitzman：以價格工具（稅）處理同一低估時，損失 = Δ^2 b^2 /[2 d^2 (b + d)]（d = 1）；MSB 愈陡，稅的損失愈大
+  const taxDwl = (b) => 0.5 * 400 * b * b / (b + 1);
+  near(taxDwl(1), dwl(1).a, '斜率相等時兩工具損失相同'); assert.ok(taxDwl(0.25) < dwl(0.25).a && taxDwl(4) > dwl(4).a);
+  const q2 = part('115-g3pf-E2', '1');
+  assert.strictEqual(C.gradeEssayPart(q2, '政府低估成本，MSB 愈平坦，無謂損失愈小').items.find(i => i.id === 'r5').earned, 0, '方向寫反不得分');
+  assert.ok(C.gradeEssayPart(q2, '政府低估成本使目標減量Qg大於最適Q*。MSB愈缺乏彈性（愈陡），無謂損失愈小；MSB愈富有彈性（愈平坦），無謂損失愈大').items.find(i => i.id === 'r5').earned === 7);
+  assert.ok(C.gradeEssayPart(q2, 'cap-and-trade 會有無謂損失').earned <= 6, '空泛答案不應高分');
+}
+
 console.log('申論題測試通過');
+
+// ===== 113 年高考三級 財政學（財稅行政、會計）申論題 =====
+{
+  const g = (id, pid, t) => C.gradeEssayPart(part(id, pid), t);
+  ['113-g3pft-E1', '113-g3pft-E2'].forEach(id => assert.deepStrictEqual(E[id].categories, ['財稅行政']));
+  ['113-g3pfa-E1', '113-g3pfa-E2'].forEach(id => assert.deepStrictEqual(E[id].categories, ['會計']));
+  ['113-g3pft-E1', '113-g3pft-E2', '113-g3pfa-E1', '113-g3pfa-E2'].forEach(id => { assert.strictEqual(E[id].points, 25); assert.strictEqual(E[id].subject, '財政學'); assert.strictEqual(E[id].exam, '公務人員高等考試三級考試'); });
+  assert.strictEqual(shape('113-g3pft-E1'), '10,15'); assert.strictEqual(shape('113-g3pft-E2'), '10,15');
+  assert.strictEqual(shape('113-g3pfa-E1'), '13,12'); assert.strictEqual(shape('113-g3pfa-E2'), '15,10');
+  assert.ok(part('113-g3pft-E1', '1').figure && part('113-g3pft-E1', '2').figure, '生命週期模型兩小題皆要求繪圖');
+  // 題庫已有同科目的選擇題，exam／subject 需一致（上方 ESSAY_ONLY 檢查已涵蓋）；類科在題庫為 [財稅行政, 會計]
+  assert.ok(bank.questions.some(q => q.year_roc === 113 && q.subject === '財政學' && q.categories.includes('財稅行政') && q.categories.includes('會計')));
+
+  // 生命週期模型：借款者的替代效果與所得效果同方向；非邊際影響要講出轉折點與兩個切點
+  assert.ok(g('113-g3pft-E1', '1', '借款者的稅後利率 r(1-t) 下降，預算線變平坦。替代效果使現在消費增加，所得效果也使現在消費增加，所以借款增加。').earned >= 6);
+  assert.ok(g('113-g3pft-E1', '1', '課稅使儲蓄減少').earned <= 2);
+  const w1 = g('113-g3pft-E1', '2', '利息所得免稅，儲蓄端預算線不變；利息費用可扣除，借款端利率變成 r(1-t)，預算線在稟賦點轉折，左陡右平，成為非凸。原本儲蓄者在 A 點，新的借款段有 B 點，若 UB>UA，儲蓄者跳到 B 變成借款者，是非邊際的離散跳躍。');
+  assert.ok(w1.earned >= 12, '完整的非邊際影響說明應得高分，實得 ' + w1.earned);
+  assert.ok(g('113-g3pft-E1', '2', '課稅會使儲蓄者減少儲蓄，因為替代效果與所得效果').earned <= 4);
+
+  // 社會保障金：條列 5 項理論依據，只寫一項只拿一部分
+  const s5 = g('113-g3pft-E2', '1', '1.短視；2.逆選擇；3.道德風險與搭便車；4.所得重分配；5.市場不完全與規模經濟');
+  assert.strictEqual(s5.earned, 10);
+  assert.ok(g('113-g3pft-E2', '1', '個人會短視，儲蓄不足，所以政府要強制').earned <= 4);
+  // 勞保與勞退新制：把兩制說反或只寫一邊，不能拿滿分
+  assert.ok(g('113-g3pft-E2', '2', '勞保是確定給付制，隨收隨付，年金為平均月投保薪資乘年資乘 1.55%，少子高齡化使基金耗盡，政府要撥補。').earned >= 6);
+  assert.ok(g('113-g3pft-E2', '2', '勞保是確定給付制，隨收隨付').earned <= 6);
+  assert.ok(g('113-g3pft-E2', '2', '勞退新制是個人專戶確定提撥制，雇主提繳 6%，按專戶本金與收益除以平均餘命，沒有基金缺口但有投資風險').earned >= 6);
+
+  // 外部性政策工具
+  assert.ok(g('113-g3pfa-E1', '1', '皮古稅的稅額等於邊際外部成本，使外部成本內部化，達到社會最適產量。').earned >= 3);
+  assert.ok(g('113-g3pfa-E1', '1', '排放費是對每單位排放量收費，先訂排放標準，廠商比較邊際減量成本與費率。').earned >= 3);
+  assert.ok(g('113-g3pfa-E1', '1', '政府要管制污染').earned <= 2);
+  const c2 = g('113-g3pfa-E1', '2', '皮古稅與排放費都是價格工具，使外部成本內部化；差別在皮古稅追求社會最適、稅率等於邊際外部成本，排放費為達成既定標準。排放費與總量管制與交易都是市場誘因，成本有效；差別是排放費是價格工具，總量管制是數量工具，排放總量確定、價格不確定。');
+  assert.strictEqual(c2.earned, 12);
+  // 預算：追加預算與特別預算的條件不能互換
+  assert.ok(g('113-g3pfa-E2', '1', '特別預算是國防緊急設施或戰爭、國家經濟重大變故、重大災變，在年度總預算之外另行編列。').earned >= 5);
+  assert.ok(g('113-g3pfa-E2', '1', '追加預算是依法律增加業務、增設新機關，或重大事故經費超過法定預算，是總預算通過後的補充，準用總預算程序。').earned >= 6);
+  assert.ok(g('113-g3pfa-E2', '1', '兩種預算都是政府的預算').earned <= 2);
+  assert.strictEqual(g('113-g3pfa-E2', '2', '預算法第 23 條公債收入不得充經常支出；公共債務法債限為前三年度名目 GDP 平均數的 40.6%，每年舉債額度不得超過歲出總額 15%；舉債須編入預算並經立法院審議。').earned, 10);
+  assert.ok(g('113-g3pfa-E2', '2', '可以發行公債來籌措財源').earned <= 2);
+  // 數字內容在參考答案中
+  has2('113-g3pfa-E2', '2', ['40.6%', '15%', '第 23 條']);
+  has2('113-g3pft-E2', '2', ['1.55%', '0.775%', '3,000', '6%']);
+  has2('113-g3pfa-E2', '1', ['第 79', '第 83', '國防緊急設施', '重大災變']);
+}
+console.log('113 年財政學（財稅行政、會計）申論題測試通過');
+
+/* ===== 114 年高考三級財政學（財稅行政 22250、會計 22550）申論題 ===== */
+(function () {
+  const pf1 = part('114-g3pf-E1', '1'), pf2 = part('114-g3pf-E1', '2');
+  assert.deepStrictEqual(['114-g3pf-E1', '114-g3pf-E2', '114-g3acc-E1', '114-g3acc-E2'].map(i => E[i].points), [25, 25, 25, 25]);
+  assert.deepStrictEqual(E['114-g3pf-E1'].categories, ['財稅行政']);
+  assert.deepStrictEqual(E['114-g3acc-E2'].categories, ['會計']);
+  // 數學驗算：W = 2Ma + Mb → 角解；W = min{2Ma, Mb} → Ma = M/3
+  for (let M = 1; M <= 300; M += 7) {
+    let b1 = -1, a1 = 0, b2 = -1, a2 = 0;
+    for (let k = 0; k <= 3000; k++) {
+      const ma = M * k / 3000, mb = M - ma;
+      if (2 * ma + mb > b1) { b1 = 2 * ma + mb; a1 = ma; }
+      if (Math.min(2 * ma, mb) > b2 + 1e-12) { b2 = Math.min(2 * ma, mb); a2 = ma; }
+    }
+    assert.ok(Math.abs(a1 - M) < 1e-9 && Math.abs(b1 - 2 * M) < 1e-9);
+    assert.ok(Math.abs(a2 - M / 3) < M / 3000 + 1e-9 && Math.abs(b2 - 2 * M / 3) < 2e-3 * M);
+  }
+  // 評分初判：正確寫法得分；常見錯誤（平均分配、權重寫反）不得高分
+  assert.strictEqual(C.gradeEssayPart(pf1, 'W=2Ma+Mb，Mb=M-Ma，W=M+Ma，Ma=M，Mb=0，W=2M；效用線性，a 權重較大，全給 a').earned, 10);
+  assert.ok(C.gradeEssayPart(pf1, '應該平均分配，Ma=Mb=M/2，這樣最公平').items.find(i => i.id === 'r2').earned <= 1, '(一)平均分配不應拿到角解分數');
+  assert.strictEqual(C.gradeEssayPart(pf2, 'Leontief 型，頂點 2Ma=Mb，Ma=M/3，Mb=2M/3，W=2M/3').items.find(i => i.id === 'r3').earned, 5);
+  assert.strictEqual(C.gradeEssayPart(pf2, '2Ma=Mb，所以 Ma=2M/3，Mb=M/3').items.find(i => i.id === 'r3').earned, 0, '權重寫反不得分');
+  // 會計：EV 與 EB 的區別
+  const ae = part('114-g3acc-E1', '2');
+  assert.strictEqual(C.gradeEssayPart(ae, '均等變量 EV 是在原價格下使效用降到 U1 需拿走的所得。EB = EV - T。').items.find(i => i.id === 'r3').earned >= 2, true);
+  assert.strictEqual(C.gradeEssayPart(part('114-g3acc-E1', '1'), '今天天氣很好').earned, 0);
+  // 歸宿與超額負擔：分類寫反不得該細目分數
+  const cl = part('114-g3acc-E2', '1');
+  assert.strictEqual(C.gradeEssayPart(cl, '租稅歸宿屬租稅公平；超額負擔屬租稅效率').items.find(i => i.id === 'r3').earned, 3);
+  assert.ok(C.gradeEssayPart(cl, '租稅歸宿屬租稅效率；超額負擔屬租稅公平').items.find(i => i.id === 'r3').earned <= 1.5);
+  // 公式驗算：EB ≈ ½ t² (Q/P) εs|εd|/(εs+|εd|) 與線性供需的三角形面積一致
+  for (const [a, b, c, d, t] of [[100, 2, 10, 1, 6], [200, 1, 20, 3, 8], [80, 0.5, 5, 0.5, 3]]) {
+    // D: P = a - bQ ; S: P = c + dQ
+    const Q0 = (a - c) / (b + d), P0 = a - b * Q0, Q1 = (a - c - t) / (b + d);
+    const eb = 0.5 * t * (Q0 - Q1);
+    const ed = P0 / (b * Q0), es = P0 / (d * Q0);
+    const f = 0.5 * t * t * (Q0 / P0) * es * ed / (es + ed);
+    assert.ok(Math.abs(eb - f) / eb < 1e-9, '超額負擔公式');
+    assert.ok(Math.abs(es / (es + ed) - b / (b + d)) < 1e-9, '消費者負擔比例 = εs/(εs+|εd|) = b/(b+d)');
+  }
+  console.log('114 年財政學（財稅行政、會計）申論題測試通過');
+})();

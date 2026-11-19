@@ -78,7 +78,7 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 80);  // 高考三級：113、114、115 年各 24 題（7 科）；115 年普考：農業經濟學概要、運輸經濟學概要各 4 題
+assert.strictEqual(data.essays.length, 89);  // 高考三級：113、114、115 年各 24 題（7 科）；普考：115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
 const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要'];
 data.essays.forEach(q => {
@@ -327,7 +327,7 @@ assert.deepStrictEqual(by114('經濟學與財政學概論').map(q => q.points), 
 assert.deepStrictEqual(by114('經濟學').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by114('公共經濟學').map(q => q.points), [20, 40, 20, 20]);       // 共 100 分
 assert.deepStrictEqual(by114('產業經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.filter(q => q.year_roc === 114).length, 24);  // 7 科：經濟學、財政學概論、公共、產業、運輸、農業、工程
+assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 24);  // 7 科：經濟學、財政學概論、公共、產業、運輸、農業、工程
 assert.strictEqual(shape('114-g3fin-E2'), '5,5,5,5,5'); assert.strictEqual(shape('114-g3econ-E1'), '10,10,5');
 assert.strictEqual(shape('114-g3econ-E2'), '2,2,21'); assert.strictEqual(shape('114-g3pe-E2'), '20,20');
 assert.strictEqual(shape('114-g3ie-E1'), '10,10,5'); assert.strictEqual(shape('114-g3ie-E2'), '5,10,10');
@@ -817,6 +817,11 @@ const OVERLAP = [
   ['115-pagr-E2', '113-g3te-E2'], ['115-pagr-E2', '115-pte-E3'], ['115-pagr-E2', '113-g3econ-E2'], ['115-pagr-E2', '114-g3fin-E1'],
   ['115-pte-E1', '115-g3econ-E1'], ['115-pte-E1', '115-g3mb-E2'],
   ['115-pte-E2', '115-g3mb-E2'], ['115-pte-E2', '115-g3io-E4'], ['115-pte-E2', '113-g3econ-E1'],
+  // 114 年普考新增題：與高考題主題相近（生產函數與技術、邊際成本定價、環境外部性、廣告與市場力、資料與模型）
+  ['114-pte-E1', '115-g3io-E1'], ['114-pte-E2', '114-g3ie-E1'], ['114-pte-E2', '114-pagr-E1'],
+  ['114-pte-E3', '113-g3agr-E3'], ['114-pte-E3', '114-g3pe-E1'], ['114-pte-E3', '115-g3econ-E1'], ['114-pte-E3', '115-g3pe-E1'], ['114-pte-E3', '115-g3mb-E2'], ['114-pte-E3', '115-g3io-E4'],
+  ['114-pte-E4', '115-pagr-E4'], ['114-pte-E4', '113-g3pe-E4'], ['114-pagr-E1', '113-g3io-E1'],
+  ['114-pagr-E4', '113-g3te-E3'], ['114-pagr-E4', '115-g3econ-E2'], ['114-pagr-E4', '115-g3io-E2'], ['114-pagr-E4', '115-g3io-E4'], ['114-pagr-E4', '115-pte-E4'],
   ['115-pte-E3', '113-g3pe-E3'], ['115-pte-E3', '113-g3agr-E2'], ['115-pte-E3', '115-g3mb-E2'], ['115-pte-E4', '115-g3io-E4']];
 const fam = (s) => s.replace(/概要$/, '');
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
@@ -836,5 +841,13 @@ data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
   assert.ok(g1.earned >= 8 && g1.earned < 13);
   assert.ok(C.gradeEssayPart(part('115-pagr-E1', '1'), '需求彈性等於2').earned <= 4);
   assert.ok(C.gradeEssayPart(part('115-pagr-E1', '2'), 'Es=1×10/30=1/3，缺乏彈性').earned >= 4);
+}
+{ // 114 年普考：農業經濟學概要 5 題（20 分）、運輸經濟學概要 4 題（25 分）
+  const a = data.essays.filter(q => q.id.startsWith('114-pagr-')), t = data.essays.filter(q => q.id.startsWith('114-pte-'));
+  assert.strictEqual(a.length, 5); assert.ok(a.every(q => q.points === 20)); assert.strictEqual(t.length, 4); assert.ok(t.every(q => q.points === 25));
+  assert.strictEqual(shape('114-pagr-E3'), '10,10'); assert.strictEqual(shape('114-pagr-E4'), '8,12');
+  // 比較利益：兩題的機會成本皆為稻米 甲 0.5、乙 0.75 棉花
+  assert.strictEqual(50 / 100, 0.5); assert.strictEqual(60 / 80, 0.75); assert.strictEqual(45 / 60, 0.75);
+  assert.ok(C.gradeEssayPart(part('114-pagr-E3', '2'), '甲稻米乙棉花，機會成本 0.5 與 0.75').earned >= 5);
 }
 console.log('申論題測試通過');

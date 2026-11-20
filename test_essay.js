@@ -846,7 +846,6 @@ const OVERLAP = [
   // 115 年智慧財產行政與法制（民法、民事訴訟法）：同為民法概念重疊（繼承 §1148、侵權 §184／§196、給付不能 §225／§226、不完全給付 §227、所有物返還 §767、善意取得 §948 與 §107）
   ['115-g3hr-E4', '115-g3law-E1'], ['115-g3ftc-E1', '115-g3law-E2'], ['115-g3land-E1', '115-g3ip-E1'], ['115-g3land-E1', '115-g3law-E3'],
   ['115-g3ip-E1', '115-g3law-E2'], ['115-g3ip-E1', '115-g3hr-E3'], ['115-g3ip-E2', '115-g3law-E2'], ['115-g3law-E1', '115-g3land-E2'], ['115-g3law-E1', '115-g3land-E1'], ['115-g3law-E1', '115-g3ftc-E2']];
-
 const fam = (s) => { s = s.replace(/概要$/, ''); if (/^民法/.test(s)) return '民法'; return /^(運輸經濟學|交通政策與行政)$/.test(s) ? '交通運輸' : s; };  // 運輸經濟學與交通政策與行政同屬交通運輸領域，用語本來就會重疊
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
 data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {

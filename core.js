@@ -475,6 +475,14 @@
     if (part.numeric && ratio < 0.9 && (String(st.text || "").match(/\d+/g) || []).length < 2) add("tip", "這小題是計算題，但你的答案幾乎沒有數字。請寫出每一步的算式與數字結果（如 MR = MC、均衡產量、利潤、消費者剩餘），只寫文字說明會拿不到計算分。");
     if (part.numeric && ratio > 0 && ratio < 0.9 && miss.length && (String(st.text || "").match(/\d+/g) || []).length >= 2) add("tip", "你有寫出數字，但有些得分點的結果沒對上。請從第一步（反應函數或 MR = MC）開始逐步對照參考答案，找出第一個算錯的地方，後面的錯誤通常都是連鎖影響。");
     if (chars < part.points * 12 && ratio < 0.7) add("tip", "你只寫了約 " + chars + " 字，以這小題 " + part.points + " 分來說偏少（僅供參考）。申論題常因為推導省略、說明太簡而失分。");
+    if (part.law && ratio < 0.9) {
+      var nt = normalizeText(st.text || "");
+      var cited = function (n) { var m = String(n).split("-"); return (m[1] ? new RegExp(m[0] + "(\u689d\u4e4b|\u4e4b|-)" + m[1]) : new RegExp("(\u7b2c|\u00a7)" + m[0] + "(?!\\d)|" + m[0] + "\u689d")).test(nt); };
+      var noCite = (part.statutes || []).filter(function (n) { if (n && typeof n === "object") { var re = safeRegex(n.pattern); return !(re && re.test(nt)); } return !cited(n); });
+      if (noCite.length) add("tip", "法律題要照「條文 → 要件 → 涵攝（套入題目事實）→ 結論」寫。你的答案沒有明確引用：" + noCite.slice(0, 5).map(function (n) { if (n && typeof n === "object") return n.label; return "民法第 " + String(n).replace("-", " 條之 ") + (String(n).indexOf("-") < 0 ? " 條" : ""); }).join("、") + "。閱卷時條文是基本得分點，請寫出條號與關鍵要件。");
+      if (!/\u6709\u7406\u7531|\u7121\u7406\u7531|\u5f97\u8acb\u6c42|\u4e0d\u5f97\u8acb\u6c42|\u7121\u6548|\u6709\u6548|\u4e0d\u6210\u7acb|\u6210\u7acb|\u4e0d\u5f97\u4e3b\u5f35|\u5f97\u4e3b\u5f35|\u4e0d\u751f\u6548\u529b|\u61c9\u8ca0|\u4e0d\u8ca0|\u6709\u4f9d\u64da|\u7121\u4f9d\u64da|\u6709\u6b0a|\u7121\u6b0a/.test(nt)) add("tip", "沒有看到明確結論。法律題最後一定要回答題目問的問題（例如「有理由／無理由」「得請求／不得請求」「有效／無效」），並說明是依哪個條文與事實得出。");
+      if (items.some(function (x) { return x.got <= 0; }) && chars >= part.points * 12 && !/\u6d89\u651b|\u56e0\u6b64|\u6545|\u672c\u984c|\u984c\u610f|\u7532|\u4e59|\u4e19|\u4e01/.test(String(st.text || ""))) add("tip", "你的答案偏向背誦法條，較少套用題目事實（人名與情節）。法律題的涵攝（把事實套進要件）通常是得分關鍵。");
+    }
     if (part.pitfalls && (miss.length || partial.length)) add("tip", "常見錯誤提醒：" + String(part.pitfalls).replace(/^常見錯誤[：:]\s*/, ""));
     return { earned: earned, possible: part.points, ratio: ratio, points: pts };
   }

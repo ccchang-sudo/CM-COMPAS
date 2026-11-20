@@ -78,9 +78,9 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 133);  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題
+assert.strictEqual(data.essays.length, 160);  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
-const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要'];
+const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要', '民法總則、親屬與繼承編', '民法（包括總則、物權、親屬與繼承編）', '民法與民事訴訟法', '民法物權編概要', '民法總則、親屬與繼承編概要'];
 data.essays.forEach(q => {
   const has = bank.questions.some(b => b.exam === q.exam && b.subject === q.subject);
   assert.strictEqual(has, !ESSAY_ONLY.includes(q.subject), q.id + ' exam/subject 與題庫不一致');
@@ -840,8 +840,13 @@ const OVERLAP = [
   ['114-g3acc-E2', '113-g3pe-E3'], ['114-g3acc-E2', '115-g3mb-E2'], ['114-g3acc-E2', '115-pte-E2'], ['114-g3acc-E2', '114-g3pe-E4'], ['114-g3acc-E2', '115-g3fin-E1'],
   // 115 年高考三級財政學（財稅行政、會計審計）：與其他科目主題相同（貨物稅與薪資稅的超額負擔、無異曲線與效用、外部成本與減量政策、公共財的 Samuelson 條件、Lindahl 與多數決）
   ['115-g3pf-E1', '115-g3fin-E1'], ['115-g3pf-E1', '115-g3fin-E2'], ['115-g3pf-E2', '115-pte-E1'],
-  ['115-g3pfa-E1', '113-g3pe-E1'], ['115-g3pfa-E1', '114-g3pe-E2'], ['115-g3pfa-E1', '115-g3pe-E4']];
-const fam = (s) => { s = s.replace(/概要$/, ''); return /^(運輸經濟學|交通政策與行政)$/.test(s) ? '交通運輸' : s; };  // 運輸經濟學與交通政策與行政同屬交通運輸領域，用語本來就會重疊
+  ['115-g3pfa-E1', '113-g3pe-E1'], ['115-g3pfa-E1', '114-g3pe-E2'], ['115-g3pfa-E1', '115-g3pe-E4'],
+  // 115 年民法申論題（戶政、公平交易管理、地政）：不同類科的同一民法概念（特有財產與 §1088、善意第三人與 §107）
+  ['115-g3hr-E1', '115-g3land-E3'], ['115-g3hr-E3', '115-g3land-E1'],
+  // 115 年智慧財產行政與法制（民法、民事訴訟法）：同為民法概念重疊（繼承 §1148、侵權 §184／§196、給付不能 §225／§226、不完全給付 §227、所有物返還 §767、善意取得 §948 與 §107）
+  ['115-g3hr-E4', '115-g3law-E1'], ['115-g3ftc-E1', '115-g3law-E2'], ['115-g3land-E1', '115-g3ip-E1'], ['115-g3land-E1', '115-g3law-E3'],
+  ['115-g3ip-E1', '115-g3law-E2'], ['115-g3ip-E1', '115-g3hr-E3'], ['115-g3ip-E2', '115-g3law-E2'], ['115-g3law-E1', '115-g3land-E2'], ['115-g3law-E1', '115-g3land-E1'], ['115-g3law-E1', '115-g3ftc-E2']];
+const fam = (s) => { s = s.replace(/概要$/, ''); if (/^民法/.test(s)) return '民法'; return /^(運輸經濟學|交通政策與行政)$/.test(s) ? '交通運輸' : s; };  // 運輸經濟學與交通政策與行政同屬交通運輸領域，用語本來就會重疊
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
 data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
   if (fam(q2.subject) === fam(q.subject) || overlap(q.id, q2.id)) return;  // 同領域（含「概要」版）內容本來就會重疊
@@ -1103,4 +1108,163 @@ console.log('113 年財政學（財稅行政、會計）申論題測試通過');
     assert.ok(Math.abs(es / (es + ed) - b / (b + d)) < 1e-9, '消費者負擔比例 = εs/(εs+|εd|) = b/(b+d)');
   }
   console.log('114 年財政學（財稅行政、會計）申論題測試通過');
+})();
+
+/* ===== 115 年民法申論題（戶政 4 題、公平交易管理 2 題、地政 3 題）：配分、評分、法律題回饋 ===== */
+{
+  const civ = data.essays.filter(q => /^115-g3(hr|ftc|land)-E/.test(q.id));
+  assert.strictEqual(civ.length, 9);
+  assert.deepStrictEqual(civ.filter(q => q.id.startsWith('115-g3hr')).map(q => q.points), [25, 25, 25, 25]);
+  assert.deepStrictEqual(civ.filter(q => q.id.startsWith('115-g3ftc')).map(q => q.points), [30, 20]);
+  assert.deepStrictEqual(civ.filter(q => q.id.startsWith('115-g3land')).map(q => q.points), [33, 33, 34]);
+  civ.forEach(q => q.parts.forEach(p => {
+    assert.ok(p.law, q.id + '/' + p.id + ' 應標 law');
+    assert.strictEqual(C.gradeEssayPart(p, C.stripHtml(p.model_answer)).earned, p.points, q.id + '/' + p.id + ' 參考答案應拿滿分');
+    assert.strictEqual(C.gradeEssayPart(p, '').earned, 0);
+  }));
+  // 戶政第 4 題：只寫 §1173 歸扣（常見錯誤）不應拿到 §1148-1 的分數
+  const p41 = part('115-g3hr-E4', '1');
+  assert.ok(C.gradeEssayPart(p41, '依民法第1173條，乙應將贈與歸扣。').earned < 4);
+  assert.ok(C.gradeEssayPart(p41, '依第1148條之1，繼承人在繼承開始前二年內受贈與，視為所得遺產，乙為配偶，贈與在一年前。').earned >= 7);
+  // 回饋：沒引用條文、沒有結論時要提醒；引用條文並有結論則不提醒
+  const weak = '甲未成年，所以不能自己決定，要父母同意。';
+  const fb = C.feedbackEssayPart(part('115-g3hr-E1', '1'), { text: weak, auto: {}, scores: {} });
+  assert.ok(fb.points.some(x => /沒有明確引用/.test(x.text) && /1087/.test(x.text)), '應提醒未引用條文');
+  assert.ok(fb.points.some(x => /沒有看到明確結論/.test(x.text)), '應提醒缺少結論');
+  const ok = '依民法第1087條，A屋為特有財產；依第1088條父母共同管理，依第77條限制行為能力人須法定代理人允許，所以甲無權單獨決定，主張無依據。';
+  const g = C.gradeEssayPart(part('115-g3hr-E1', '1'), ok), sc = {}; g.items.forEach(i => { sc[i.id] = i.earned; });
+  const fb2 = C.feedbackEssayPart(part('115-g3hr-E1', '1'), { text: ok, auto: sc, scores: sc });
+  assert.ok(!fb2.points.some(x => /沒有明確引用|沒有看到明確結論/.test(x.text)));
+  // 「第1148條之1」「§1148-1」兩種寫法都算有引用
+  const p4 = part('115-g3hr-E4', '1');
+  [ '依第1148條之1，贈與視為遺產', '依§1148-1，贈與視為遺產' ].forEach(t => {
+    const f = C.feedbackEssayPart(p4, { text: t, auto: {}, scores: {} });
+    assert.ok(!f.points.some(x => /沒有明確引用/.test(x.text) && /1148 條之 1/.test(x.text)), t);
+  });
+  console.log('115 年民法申論題測試通過');
+}
+
+// ===== 115 年智慧財產行政民法（2 題）與法制民法與民事訴訟法（4 題）=====
+{
+  const ids = ['115-g3ip-E1', '115-g3ip-E2', '115-g3law-E1', '115-g3law-E2', '115-g3law-E3', '115-g3law-E4'];
+  const ess = ids.map(id => data.essays.find(q => q.id === id));
+  assert.ok(ess.every(Boolean), '新增申論題缺漏');
+  assert.deepStrictEqual(ess.map(q => q.points), [25, 25, 25, 25, 25, 25]);
+  assert.deepStrictEqual(ess.slice(0, 2).map(q => q.categories[0]), ['智慧財產行政', '智慧財產行政']);
+  assert.ok(ess.slice(2).every(q => q.categories[0] === '法制' && q.subject === '民法與民事訴訟法'));
+  assert.deepStrictEqual(ess.map(q => q.parts.map(p => p.points).join(',')), ['8,10,7', '10,10,5', '6,9,10', '10,10,5', '10,15', '12,13']);
+  // 智慧財產行政的民法選擇題已在題庫（類科含智慧財產行政），exam／subject 需一致
+  assert.ok(bank.questions.some(b => b.subject === '民法' && b.categories.includes('智慧財產行政') && b.year_roc === 115));
+  ess.forEach(q => q.parts.forEach(p => {
+    assert.strictEqual(C.gradeEssayPart(p, '').earned, 0, q.id + '/' + p.id + ' 空白答案應為 0 分');
+    assert.strictEqual(C.gradeEssayPart(p, C.stripHtml(p.model_answer)).earned, p.points, q.id + '/' + p.id + ' 參考答案應拿滿分');
+    assert.ok(p.law === true && Array.isArray(p.statutes) && p.statutes.length, q.id + '/' + p.id + ' 法律題需有 law 與 statutes');
+  }));
+  // 重點關鍵字：沒寫到核心概念不應拿滿分
+  const part = (id, n) => data.essays.find(q => q.id === id).parts.find(p => p.id === n);
+  assert.ok(C.gradeEssayPart(part('115-g3law-E1', '3'), '丁善意取得，所以取得所有權').earned <= 2, '漏掉繼承與 §118 Ⅱ 不應高分');
+  assert.ok(C.gradeEssayPart(part('115-g3law-E3', '2'), '丁法院可以直接再移送丙高等行政法院').earned <= 2, '直接再移送不應高分');
+  assert.ok(C.gradeEssayPart(part('115-g3law-E4', '2'), '乙上訴有利益，依民事訴訟法第56條第1項第1款，效力及於丙，丙視為上訴人，須合一確定。').earned >= 9, '正確要點應得高分');
+  // 回饋：物件式條文（非民法）要能顯示完整條名，且寫到時不再提醒
+  const weak = C.feedbackEssayPart(part('115-g3law-E3', '2'), { text: '丁法院沒有審判權，應該移送行政法院，所以可以再移送。', auto: {}, scores: {} });
+  assert.ok(weak.points.some(x => /法院組織法第 7 條之 4/.test(x.text)), '應提醒引用法院組織法第 7 條之 4');
+  const full = C.stripHtml(part('115-g3law-E3', '2').model_answer);
+  const g = C.gradeEssayPart(part('115-g3law-E3', '2'), full), sc = {}; g.items.forEach(i => { sc[i.id] = i.earned; });
+  const ok = C.feedbackEssayPart(part('115-g3law-E3', '2'), { text: full, auto: sc, scores: sc });
+  assert.ok(!ok.points.some(x => /沒有明確引用/.test(x.text)), '已引用條文不應再提醒');
+  const old = C.feedbackEssayPart(part('115-g3law-E1', '3'), { text: '丁善意取得', auto: {}, scores: {} });
+  assert.ok(old.points.some(x => /民法第 118 條/.test(x.text)), '民法條號仍以「民法第 N 條」顯示');
+  // 取得時點題：必須同時有繼承、§118 Ⅱ、時點
+  assert.ok(/自始有效/.test(C.stripHtml(part('115-g3law-E1', '3').model_answer)) && /6 月 1 日/.test(C.stripHtml(part('115-g3law-E1', '3').model_answer)));
+  console.log('115 年智慧財產行政、法制民法申論題測試通過');
+}
+
+// ===== 115 年普考：地政（民法物權編概要）、戶政（民法總則、親屬與繼承編概要）、財稅行政（民法概要）申論題 =====
+(() => {
+  const sub = (s) => data.essays.filter(q => q.year_roc === 115 && q.exam === '公務人員普通考試' && q.subject === s);
+  const shapeOf = (s) => sub(s).map(q => q.parts.map(p => p.points).join(','));
+  assert.deepStrictEqual(sub('民法物權編概要').map(q => q.points), [25, 25, 25, 25]);
+  assert.deepStrictEqual(shapeOf('民法物權編概要'), ['10,7,8', '8,8,9', '8,7,10', '12,13']);        // 對照試題 PDF（代號 42650）
+  assert.deepStrictEqual(sub('民法總則、親屬與繼承編概要').map(q => q.points), [25, 25, 25, 25]);
+  assert.deepStrictEqual(sub('民法概要').map(q => q.points), [50]);
+  sub('民法物權編概要').forEach(q => assert.deepStrictEqual(q.categories, ['地政']));
+  sub('民法總則、親屬與繼承編概要').forEach(q => assert.deepStrictEqual(q.categories, ['戶政']));
+  sub('民法概要').forEach(q => assert.deepStrictEqual(q.categories, ['財稅行政']));  // 與題庫 115 年民法概要選擇題的類科一致
+  const g = (id, pid, text) => C.gradeEssayPart(part(id, pid), text);
+  const item = (r, rid) => r.items.find(i => i.id === rid).earned;
+
+  // 容易混淆的答法：不應拿滿分
+  // 地政第 4 題（一）：只引用 875-1「債務人所有先受償」而沒有處理「同時拍賣」，不應拿到 r2 滿分
+  assert.ok(item(g('115-pland-E4', '1', '丙有理由，因為 A 屋是債務人甲所有，應先拍賣 A 屋'), 'r2') < 5);
+  // 地政第 3 題（三）：只寫按應有部分比例，沒有抽籤，r1 不應滿分
+  assert.ok(item(g('115-pland-E3', '3', '應按應有部分比例承買，法院不准'), 'r1') < 5);
+  // 地政第 2 題（二）：把乙當相對人，不應拿到 r1 滿分
+  assert.ok(item(g('115-pland-E2', '2', '相對人是乙，因為乙是原建造人，甲依所有物返還請求權請求乙拆屋還地'), 'r1') < 4);
+  // 地政第 1 題（一）：只寫成立，沒有 345 與 166-1，只得部分分數
+  assert.ok(g('115-pland-E1', '1', '買賣契約有效成立，因為雙方已就價金合意').earned < 10);
+  // 戶政第 3 題（二）：主張可請求返還不當得利，不應拿到 r1 的滿分
+  assert.ok(item(g('115-phh-E3', '2', '甲不知時效完成而還款，成立非債清償，可依不當得利請求返還'), 'r1') < 6);
+  // 戶政第 2 題（二）：只寫繼承回復請求權，沒有算期間，不應拿滿分
+  assert.ok(g('115-phh-E2', '2', '丁可以主張繼承回復請求權請求丙返還遺產').earned < 12);
+  // 財稅行政：只寫第 184 條，不應拿滿分
+  assert.ok(g('115-pcivil-E1', '1', '乙過失侵害甲的所有權，依第 184 條應負損害賠償責任').earned < 20);
+
+  // 學生式作答：部分得分（不是 0 也不是滿分）
+  const stu = g('115-pcivil-E1', '2', '甲的計程車維修 5 天無法營業，這是所失利益，依民法第 216 條可請求，但要舉證每日平均營業收入。');
+  assert.ok(stu.earned > 0 && stu.earned < 15, '營業損失學生答案應得部分分數，實得 ' + stu.earned);
+  const stu2 = g('115-phh-E4', '2', '丙丁有理由，殯葬費用應由遺產支付。');
+  assert.ok(stu2.earned > 0 && stu2.earned < 13, '殯葬費用學生答案應得部分分數，實得 ' + stu2.earned);
+
+  // 回饋：漏掉的得分點會被指出
+  const f = C.feedbackEssayPart(part('115-pland-E4', '2'), { text: '丁有先訴抗辯權。', auto: {}, scores: { r1: 3 } });
+  assert.ok(f.points.length > 0 && f.ratio < 0.5);
+  console.log('115 年普考地政、戶政、財稅行政申論題測試通過');
+})();
+
+// ===== 115 年高考三級民法：財稅行政／財稅法務（1 題 50 分）、司法行政（2 題各 25 分） =====
+(() => {
+  const sub = (cat) => data.essays.filter(q => q.year_roc === 115 && q.exam === '公務人員高等考試三級考試' && q.subject === '民法' && q.categories.includes(cat));
+  assert.deepStrictEqual(sub('財稅行政').map(q => q.points), [50]);
+  assert.deepStrictEqual(sub('財稅法務').map(q => q.id), ['115-g3civ-E1']);
+  assert.deepStrictEqual(sub('司法行政').map(q => q.points), [25, 25]);
+  assert.deepStrictEqual(E['115-g3civ-E1'].parts.map(p => p.points), [30, 20]);
+  assert.deepStrictEqual(E['115-g3civj-E1'].parts.map(p => p.points), [8, 9, 8]);
+  assert.deepStrictEqual(E['115-g3civj-E2'].parts.map(p => p.points), [15, 10]);  // 對照試題 PDF（代號 32520）：（一）15 分、（二）10 分
+  // 類科要在題庫的民法選擇題類科之內（選單才會把申論題與選擇題放在同一科目）
+  const bankCats = new Set(bank.questions.filter(b => b.exam === '公務人員高等考試三級考試' && b.subject === '民法' && b.year_roc === 115).flatMap(b => b.categories));
+  ['115-g3civ-E1', '115-g3civj-E1', '115-g3civj-E2'].forEach(id => E[id].categories.forEach(c => assert.ok(bankCats.has(c), id + ' 類科 ' + c + ' 不在題庫民法類科內')));
+  const g = (id, pid, text) => C.gradeEssayPart(part(id, pid), text);
+  const item = (r, rid) => r.items.find(i => i.id === rid).earned;
+
+  // 財稅行政第 1 題（一）：容易混淆的答法不應拿滿分
+  // 只寫「乙是債權人、受清償合法」，沒有討論有償行為、代物清償與主觀要件
+  assert.ok(g('115-g3civ-E1', '1', '乙是債權人，甲清償債務是天經地義，丙丁不能撤銷。').earned < 10);
+  // 當成無償行為（第 244 條第 1 項），沒有主觀要件
+  assert.ok(g('115-g3civ-E1', '1', '甲把 A 屋移轉給乙是無償行為，依第 244 條第 1 項丙丁可以撤銷。').earned < 20);
+  // 有討論有償行為與主觀要件，但漏了債權人適格與除斥期間，應得部分分數而非滿分
+  const stu1 = g('115-g3civ-E1', '1', '甲已無資力，A 屋是唯一財產，移轉後有害及債權。甲以 A 屋抵償債務是代物清償，屬有償行為，依第 244 條第 2 項，甲明知有害債權且乙受益時亦知情，丙丁可以撤銷。');
+  assert.ok(stu1.earned >= 15 && stu1.earned < 30, '財稅行政（一）學生答案應得部分分數，實得 ' + stu1.earned);
+  // （二）：只說得撤銷，沒有回復原狀（塗銷登記）
+  assert.ok(g('115-g3civ-E1', '2', '丙丁得聲請法院撤銷甲乙間的行為。').earned < 10);
+  assert.ok(item(g('115-g3civ-E1', '2', '依第 244 條第 4 項，丙丁得請求乙塗銷登記，回復為甲所有。'), 'r2') >= 5);
+
+  // 司法行政第 1 題
+  assert.ok(g('115-g3civj-E1', '1', '買賣契約無效。').earned < 5);                              // 沒引第 87 條、沒說明通謀
+  assert.ok(item(g('115-g3civj-E1', '1', '甲乙通謀虛偽，依第 87 條第 1 項買賣契約無效。'), 'r1') >= 4);
+  assert.ok(g('115-g3civj-E1', '2', '買賣無效，所以整個行為無效，乙沒有取得任何權利。').earned < 4);  // 漏掉隱藏贈與
+  assert.ok(g('115-g3civj-E1', '3', '乙沒有取得所有權，因為買賣無效。').earned < 4);            // 錯誤結論不應得分
+  // 司法行政第 2 題（一）：配偶互相繼承的錯誤答案、把丙算成丁的繼承人，都不應拿滿分
+  assert.ok(g('115-g3civj-E2', '1', '乙的遺產由丁、丙、戊平均繼承，丁的遺產由乙、丙、戊平均繼承。').earned < 8);
+  const stu2 = g('115-g3civj-E2', '1', '二人不能證明死亡先後，推定同時死亡（第 11 條），互不繼承。乙的遺產由第一順位的丙、戊各 1/2。');
+  assert.ok(stu2.earned > 5 && stu2.earned < 15, '司法行政 2（一）學生答案應得部分分數，實得 ' + stu2.earned);
+  // 司法行政第 2 題（二）：只引第 194 條，沒套進人物，不應拿滿分
+  assert.ok(g('115-g3civj-E2', '2', '依民法第 194 條，父母、子女、配偶得請求慰撫金。').earned < 7);
+
+  // 回饋：漏掉的得分點會被指出，且會帶出常見錯誤提醒
+  const f = C.feedbackEssayPart(part('115-g3civ-E1', '1'), { text: '乙是債權人，清償合法。', auto: {}, scores: { r1: 2 } });
+  assert.ok(f.points.length > 0 && f.ratio < 0.5);
+  assert.ok(f.points.some(x => /常見錯誤/.test(x.text)));
+  const fe = C.feedbackEssay(E['115-g3civj-E2'], { '1': { text: '丁乙推定同時死亡。', auto: {}, scores: { r1: 5 } } });
+  assert.ok(fe && fe.earned === 5 && fe.points.some(x => /尚未評分/.test(x.text)));
+  console.log('115 年高考三級民法（財稅行政、財稅法務、司法行政）申論題測試通過');
 })();

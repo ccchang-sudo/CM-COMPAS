@@ -160,3 +160,98 @@ console.log('feedback tests passed');
   assert.strictEqual(essays.essays.filter(e => e.year_roc === 113 && e.exam === '公務人員高等考試三級考試' && e.subject !== '交通政策與行政').length, 42);  // 113 年高考三級原 7 科 24 題＋財政學 4 題；另含民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）；交通政策與行政 4 題另計
 }
 console.log('113 年申論題回饋測試通過');
+
+/* ===== 115 年高考三級觀光行政（觀光學、觀光英語、觀光日語）：評分、字數上限、語言檢查與回饋 ===== */
+{
+  const tour = essays.essays.filter(e => /^115-g3t(our|en|ja)-/.test(e.id));
+  assert.strictEqual(tour.length, 11);  // 觀光學 4 題、觀光英語 4 題、觀光日語 3 題
+  assert.strictEqual(tour.filter(e => e.subject === '觀光學').length, 4);
+  assert.strictEqual(tour.filter(e => e.subject === '觀光英語').length, 4);
+  assert.strictEqual(tour.filter(e => e.subject === '觀光日語').length, 3);
+  // 觀光學兩個類科都要看得到；觀光英語、觀光日語各自只屬於選試語言的類科
+  tour.filter(e => e.subject === '觀光學').forEach(e => assert.deepStrictEqual(e.categories, ['觀光行政（選試觀光英語）', '觀光行政（選試觀光日語）']));
+  tour.filter(e => e.subject === '觀光英語').forEach(e => assert.deepStrictEqual(e.categories, ['觀光行政（選試觀光英語）']));
+  tour.filter(e => e.subject === '觀光日語').forEach(e => assert.deepStrictEqual(e.categories, ['觀光行政（選試觀光日語）']));
+  // 原卷配分：觀光學 4×25；觀光英語 20、20、20、40；觀光日語 40、30、30
+  assert.deepStrictEqual(tour.filter(e => e.subject === '觀光學').map(e => e.points), [25, 25, 25, 25]);
+  assert.deepStrictEqual(tour.filter(e => e.subject === '觀光英語').map(e => e.points), [20, 20, 20, 40]);
+  assert.deepStrictEqual(tour.filter(e => e.subject === '觀光日語').map(e => e.points), [40, 30, 30]);
+
+  // 字數與語言工具
+  assert.deepStrictEqual(C.countUnits("It's a well-known fact, isn't it?", 'word'), { n: 6, unit: 'word' });
+  assert.strictEqual(C.countUnits('国内旅行を 活性化\nする', 'char').n, 10);
+  assert.strictEqual(C.countUnits('Tourism is growing fast.').unit, 'word');
+  assert.strictEqual(C.countUnits('国内旅行を活性化する方法').unit, 'char');
+  assert.ok(C.langWarning('en', '這是一段完全用中文寫成的答案，但是題目要求用英文作答，請注意。'));
+  assert.strictEqual(C.langWarning('en', 'This is a complete answer written in English as the question requires.'), null);
+  assert.ok(C.langWarning('ja', '這是一段完全用中文寫成的答案但是題目要求用日文作答所以應該被提醒到才對。'));
+  assert.strictEqual(C.langWarning('ja', '国内旅行を活性化するには、交通と宿泊の利便性を高めることが大切だと考える。'), null);
+  assert.ok(C.langWarning('zh', 'Tourism is growing fast and the government should promote it carefully every year.'));
+  assert.strictEqual(C.langWarning('zh', '觀光客應尊重在地文化與居民，並遵守當地法規。'), null);
+  assert.strictEqual(C.langWarning('en', 'Hello'), null);  // 太短不判斷
+
+  const grade = (p, text) => { const g = C.gradeEssayPart(p, text), a = {}; g.items.forEach(i => { a[i.id] = i.earned; }); return { text, auto: a, scores: a }; };
+  const full = p => grade(p, C.stripHtml(p.model_answer));
+
+  // 參考答案：結構完整、沒有警告
+  tour.forEach(e => e.parts.forEach(p => {
+    const f = C.feedbackEssayPart(p, full(p));
+    assert.strictEqual(f.earned, p.points, e.id + '/' + p.id);
+    assert.ok(has(f, 'good', /結構完整/), e.id + '/' + p.id + ' 參考答案應為結構完整');
+    assert.ok(!has(f, 'warn', /超過上限|要用(英文|日文|中文)/), e.id + '/' + p.id + ' 參考答案不應有字數或語言警告');
+  }));
+
+  // 英文作文：250～300 字的範圍判斷
+  const en4 = essays.essays.find(e => e.id === '115-g3ten-E4').parts[0];
+  assert.deepStrictEqual(en4.limit, { unit: 'word', min: 250, max: 300 });
+  assert.ok(has(C.feedbackEssayPart(en4, full(en4)), 'good', /字數 \d+ 個單字，在要求範圍內/));
+  const short = 'Wars hurt tourism because travelers feel unsafe and airlines cancel flights. The 2026 conflict closed airspace in the Middle East and raised fuel prices. The industry should diversify markets and offer flexible booking.';
+  assert.ok(has(C.feedbackEssayPart(en4, grade(en4, short)), 'warn', /低於建議的 250 個單字/));
+  // 字數不到下限一半：初判分數按字數比例調降（約 34 個單字／125 = 0.27）
+  const sg = C.gradeEssayPart(en4, short);
+  assert.ok(sg.scale < 0.3 && sg.earned <= 40 * 0.3, '過短的英文作文初判分數應被調降，實得 ' + sg.earned);
+  assert.strictEqual(C.gradeEssayPart(en4, full(en4).text).scale, 1);
+  const longTxt = full(en4).text + ' ' + full(en4).text;
+  assert.ok(has(C.feedbackEssayPart(en4, grade(en4, longTxt)), 'warn', /超過上限 300 個單字/));
+  // 用中文回答英文題 → 語言警告
+  const zhOnEn = '戰爭會讓旅客覺得不安全，航空公司取消航班並關閉空域，二〇二六年的衝突使中東空域關閉、航油價格上漲，業界應分散市場並提供彈性訂位與退費政策，加強危機溝通。';
+  assert.ok(has(C.feedbackEssayPart(en4, grade(en4, zhOnEn)), 'warn', /要用英文作答/));
+
+  // 日文作文：400 字上限（不含空白與換行）
+  const ja3 = essays.essays.find(e => e.id === '115-g3tja-E3').parts[0];
+  assert.deepStrictEqual(ja3.limit, { unit: 'char', min: 300, max: 400 });
+  assert.ok(has(C.feedbackEssayPart(ja3, full(ja3)), 'good', /字數 \d+ 字，在要求範圍內/));
+  const over = full(ja3).text + '地方の魅力を発信することも大切である。'.repeat(6);
+  assert.ok(has(C.feedbackEssayPart(ja3, grade(ja3, over)), 'warn', /超過上限 400 字/));
+  const zhOnJa = '要讓國內旅遊更熱絡，政府可以提供交通優惠與住宿折扣，並且推廣在地特色與使用社群媒體宣傳，這樣就能吸引更多旅客，帶動地方經濟的成長與發展。';
+  assert.ok(has(C.feedbackEssayPart(ja3, grade(ja3, zhOnJa)), 'warn', /要用日文作答/));
+
+  // 部分答對：日譯中第（一）小題只翻前半，後半得分點要被指出
+  const j1 = essays.essays.find(e => e.id === '115-g3tja-E1').parts[0];
+  const half = '結合休閒與醫療，成為旅行的新趨勢。臺灣擁有豐富的自然與文化，醫療界也累積了豐富的醫療經驗。臺灣的醫療機構具備先進的醫療技術與醫療設備，擁有世界頂尖水準的肝臟移植與生殖醫療等技術。';
+  const hg = C.gradeEssayPart(j1, half);
+  assert.ok(hg.earned > 0 && hg.earned < j1.points * 0.7, '只翻前半應只得部分分數，實得 ' + hg.earned);
+  const hf = C.feedbackEssayPart(j1, { text: half, auto: grade(j1, half).auto, scores: grade(j1, half).scores });
+  assert.ok(has(hf, 'warn', /完全沒得分的得分點/) || has(hf, 'tip', /只拿到部分分數/));
+  assert.ok(has(hf, 'tip', /常見錯誤提醒/));
+
+  // 英譯中：漏掉「僅適用泰國公民、與現行觀光稅分開」會被點名
+  const t2 = essays.essays.find(e => e.id === '115-g3ten-E2').parts[0];
+  const t2txt = '根據《亞洲旅遊週刊》2026 年報導，泰國旅行社強烈反對政府向泰國旅客徵收約 30 美元出境稅。政府估計稅收可觀，可支持國內旅遊計畫。業界認為這會增加旅遊成本，加重觀光業壓力，在經濟不確定與中東衝突之際尤其如此。泰國旅行社協會也質疑收入如何管理與分配。';
+  const t2f = C.feedbackEssayPart(t2, grade(t2, t2txt));
+  assert.ok(t2f.earned >= 14 && t2f.earned < 20, '英譯中漏譯最後一句，應扣掉該得分點，實得 ' + t2f.earned);
+  assert.ok(has(t2f, 'warn', /僅適用泰國公民/));
+  // 英文定義題：只寫「a tour for a group」只得部分分數
+  const d1 = essays.essays.find(e => e.id === '115-g3ten-E1').parts[0];
+  const d1f = C.gradeEssayPart(d1, 'A Group Inclusive Tour is a tour for a group of people.');
+  assert.ok(d1f.earned > 0 && d1f.earned <= 5, 'GIT 定義過於簡略，實得 ' + d1f.earned);
+
+  // 觀光學：離島題要點名離島；只寫「離島」泛稱，該細目不得分
+  const i2 = essays.essays.find(e => e.id === '115-g3tour-E3').parts[1];
+  const gen = '離島觀光發展會造成環境負荷與垃圾問題，旺季人潮超過承載量，物價與房價上漲，利益外流，居民生活受到干擾。';
+  const ig = C.gradeEssayPart(i2, gen);
+  assert.strictEqual(ig.items.find(i => i.id === 'r3').earned, 0);
+  assert.ok(has(C.feedbackEssayPart(i2, grade(i2, gen)), 'warn', /以具體離島為例/) || has(C.feedbackEssayPart(i2, grade(i2, gen)), 'tip', /點名離島/));
+  assert.ok(C.gradeEssayPart(i2, gen + '以澎湖為例。').items.find(i => i.id === 'r3').earned === 2);
+}
+console.log('115 年觀光行政（觀光學、觀光英語、觀光日語）回饋測試通過');

@@ -159,6 +159,27 @@
   function safeRegex(src) { try { return new RegExp(src); } catch (e) { return null; } }
 
   /**
+   * 字數計算。unit 為 "word"（英文單字數）或 "char"（不含空白與換行的字元數，中日文用）。
+   * 沒指定時依內容判斷：拉丁字母多於 CJK 字元就算單字，否則算字元。
+   */
+  function countUnits(text, unit) {
+    var t = String(text == null ? "" : text);
+    if (!unit) unit = ((t.match(/[A-Za-z]/g) || []).length > (t.match(/[\u3040-\u30ff\u3400-\u9fff]/g) || []).length) ? "word" : "char";
+    if (unit === "word") return { n: (t.match(/[A-Za-z0-9]+(?:['\u2019-][A-Za-z0-9]+)*/g) || []).length, unit: "word" };
+    return { n: t.replace(/\s/g, "").length, unit: "char" };
+  }
+
+  /** 作答語言是否符合小題要求（lang: "zh"／"ja"／"en"）。符合或無法判斷回傳 null，否則回傳提醒文字。 */
+  function langWarning(lang, text) {
+    var t = String(text == null ? "" : text), han = (t.match(/[\u3400-\u9fff]/g) || []).length, kana = (t.match(/[\u3040-\u30ff]/g) || []).length, lat = (t.match(/[A-Za-z]/g) || []).length;
+    if (han + kana + lat < 20) return null;
+    if (lang === "en" && lat < (han + kana) * 2) return "這小題要用英文作答，但你的答案中文字偏多。請確認是否依題目要求使用英文。";
+    if (lang === "ja" && kana < Math.max(5, han * 0.15)) return "這小題要用日文作答，但答案中的假名很少，可能寫成中文或只有漢字。請確認是否依題目要求使用日文（助詞、動詞語尾要用假名）。";
+    if (lang === "zh" && (kana > han * 0.2 || lat > han)) return "這小題要用中文（本國文字）作答，但你的答案中日文假名或英文偏多。專門名詞可保留原文，其餘請用中文。";
+    return null;
+  }
+
+  /**
    * 對單一小題做「評分細目」關鍵字初判。
    * 每個細目有 patterns（正規表示式字串，對正規化後的文字比對）與 min（至少需符合幾條，預設 1）。
    * 符合條數 >= min 得滿分；有符合但不足 min 則按比例給分（每 0.5 分進位到最近的 0.5）。
@@ -175,9 +196,13 @@
       var status = matched >= need ? "ok" : (matched > 0 ? "part" : "miss");
       return { id: r.id, points: r.points, earned: earned, matched: matched, need: need, status: status };
     });
+    // 有字數下限的題目（作文）：字數不到建議下限的一半時，初判分數按字數比例調降，避免幾個關鍵字就拿高分
+    var scale = 1;
+    if (part.limit && part.limit.min) { var cu = countUnits(text, part.limit.unit).n, halfMin = part.limit.min * 0.5; if (cu < halfMin) scale = cu / halfMin; }
+    if (scale < 1) items.forEach(function (x) { x.earned = roundHalf(x.earned * scale); });
     var earned = items.reduce(function (a, x) { return a + x.earned; }, 0);
     var possible = items.reduce(function (a, x) { return a + x.points; }, 0);
-    return { items: items, earned: earned, possible: possible, chars: String(text || "").replace(/\s/g, "").length };
+    return { items: items, earned: earned, possible: possible, scale: scale, chars: String(text || "").replace(/\s/g, "").length };
   }
 
   /** 把學生確認後的各細目分數加總（會限制在 0 ~ 該細目配分）。scores: { rubricId: number } */
@@ -474,7 +499,15 @@
     if (part.figure && ratio < 0.9 && !/橫軸|縱軸|x軸|y軸|曲線|左移|右移|向左|向右|移動/i.test(String(st.text || ""))) add("tip", "這小題要求繪圖，但你的文字裡沒有說明橫軸、縱軸、曲線與移動方向。正式考試圖形佔不少分數：請先標明兩軸，畫出各曲線與起始均衡點，再用箭頭標示哪條曲線移動、新均衡在哪裡。");
     if (part.numeric && ratio < 0.9 && (String(st.text || "").match(/\d+/g) || []).length < 2) add("tip", "這小題是計算題，但你的答案幾乎沒有數字。請寫出每一步的算式與數字結果（如 MR = MC、均衡產量、利潤、消費者剩餘），只寫文字說明會拿不到計算分。");
     if (part.numeric && ratio > 0 && ratio < 0.9 && miss.length && (String(st.text || "").match(/\d+/g) || []).length >= 2) add("tip", "你有寫出數字，但有些得分點的結果沒對上。請從第一步（反應函數或 MR = MC）開始逐步對照參考答案，找出第一個算錯的地方，後面的錯誤通常都是連鎖影響。");
-    if (chars < part.points * 12 && ratio < 0.7) add("tip", "你只寫了約 " + chars + " 字，以這小題 " + part.points + " 分來說偏少（僅供參考）。申論題常因為推導省略、說明太簡而失分。");
+    var minChars = typeof part.minChars === "number" ? part.minChars : part.points * 12;
+    if (chars < minChars && ratio < 0.7 && !part.limit) add("tip", "你只寫了約 " + chars + " 字，以這小題 " + part.points + " 分來說偏少（僅供參考）。申論題常因為推導省略、說明太簡而失分。");
+    if (part.lang) { var lw = langWarning(part.lang, st.text); if (lw) add("warn", lw); }
+    if (part.limit && String(st.text || "").trim()) {
+      var lc = countUnits(st.text, part.limit.unit), un = lc.unit === "word" ? "個單字" : "字", lim = part.limit;
+      if (lim.max && lc.n > lim.max) add("warn", "字數 " + lc.n + " " + un + "，超過上限 " + lim.max + " " + un + "。正式考試超過字數限制可能被扣分，請刪減次要的句子，保留論點與例子。");
+      else if (lim.min && lc.n < lim.min) add(lc.n < lim.min * 0.5 ? "warn" : "tip", "字數 " + lc.n + " " + un + "，低於建議的 " + lim.min + " " + un + "。內容較少時，容易缺論點、例子或結論，可再補充具體例子與建議。" + (lc.n < lim.min * 0.5 ? "（字數不到建議下限的一半，系統初判分數已按字數比例調降。）" : ""));
+      else if (lim.max) add("good", "字數 " + lc.n + " " + un + "，在要求範圍內（" + (lim.min ? lim.min + "～" : "") + lim.max + " " + un + "）。");
+    }
     if (part.law && ratio < 0.9) {
       var nt = normalizeText(st.text || "");
       var cited = function (n) { var m = String(n).split("-"); return (m[1] ? new RegExp(m[0] + "(\u689d\u4e4b|\u4e4b|-)" + m[1]) : new RegExp("(\u7b2c|\u00a7)" + m[0] + "(?!\\d)|" + m[0] + "\u689d")).test(nt); };
@@ -509,7 +542,7 @@
   }
 
   var api = { shuffle: shuffle, buildPool: buildPool, drawQueue: drawQueue, grade: grade, summarize: summarize, validateBank: validateBank,
-    stripHtml: stripHtml, normalizeText: normalizeText, extractNumbers: extractNumbers, numMatches: numMatches, gradeEssayPart: gradeEssayPart, sumPartScores: sumPartScores, summarizeEssay: summarizeEssay, validateEssays: validateEssays,
+    stripHtml: stripHtml, countUnits: countUnits, langWarning: langWarning, normalizeText: normalizeText, extractNumbers: extractNumbers, numMatches: numMatches, gradeEssayPart: gradeEssayPart, sumPartScores: sumPartScores, summarizeEssay: summarizeEssay, validateEssays: validateEssays,
     groupStats: groupStats, feedbackQuestion: feedbackQuestion, feedbackSession: feedbackSession, feedbackOverall: feedbackOverall, feedbackEssayPart: feedbackEssayPart, feedbackEssay: feedbackEssay };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.MoexCore = api;

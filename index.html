@@ -720,17 +720,28 @@ select.sc { width: auto; min-width: 64px; padding: 4px 6px; }
     $("eMsg").textContent = "尚未評分的小題以 0 分計。成績只存在你的瀏覽器。";
     updateEssayTotal();
   }
+  var PH = {
+    def: "在這裡寫下你的答案。公式可用文字寫，例如 Q* = (a-c-d)/b、d^2/(2b)。寫出推導過程比只寫結論容易得分。",
+    zh: "在這裡用中文（本國文字）寫下你的答案。條列要點時，每點寫出「概念＋說明＋例子」比只列名詞容易得分。",
+    ja: "ここに日本語で答えを書いてください。翻訳は原文の要点（数字・固有名詞・因果関係）を落とさないことが大切です。",
+    en: "Write your answer in English here. For translation, keep every key point (numbers, names, cause and effect); for essays, use an introduction, body paragraphs and a conclusion."
+  };
   function buildPart(p) {
     var st = partState(p.id), div = document.createElement("div");
     div.className = "panel epart"; div.dataset.pid = p.id;
     div.innerHTML = "<h2>" + esc(p.label) + ' <span class="note">' + p.points + ' 分</span></h2><p class="qtext">' + p.question + "</p>" +
-      '<textarea class="essay" rows="10" aria-label="' + esc(p.label) + '作答區" placeholder="在這裡寫下你的答案。公式可用文字寫，例如 Q* = (a-c-d)/b、d^2/(2b)。寫出推導過程比只寫結論容易得分。"></textarea>' +
+      '<textarea class="essay" rows="' + (p.limit || p.lang ? 14 : 10) + '"' + (p.lang === "ja" ? ' lang="ja"' : p.lang === "en" ? ' lang="en" spellcheck="true"' : "") + ' aria-label="' + esc(p.label) + '作答區" placeholder="' + esc(PH[p.lang] || PH.def) + '"></textarea>' +
       '<div class="row" style="margin-top:8px"><button type="button" class="btn primary bGrade">送出本小題並評分</button><button type="button" class="btn bRedo" hidden>重寫本小題</button><span class="note cc"></span></div>' +
       '<p class="note msg" aria-live="polite" style="margin-bottom:0"></p><div class="eres" hidden></div>';
     var ta = div.querySelector("textarea"), cc = div.querySelector(".cc"), msg = div.querySelector(".msg");
     div.querySelector(".bRedo").id = "redo-" + p.id;
     ta.value = st.text || "";
-    function count() { cc.textContent = ta.value.replace(/\s/g, "").length + " 字"; }
+    function count() {
+      if (!p.limit && p.lang !== "en") { cc.textContent = ta.value.replace(/\s/g, "").length + " 字"; return; }
+      var u = p.limit ? p.limit.unit : (p.lang === "en" ? "word" : "char"), c = C.countUnits(ta.value, u), lm = p.limit || {}, un = u === "word" ? " 個單字" : " 字";
+      cc.textContent = c.n + un + (lm.max ? "（要求 " + (lm.min ? lm.min + "～" : "") + lm.max + un + "）" : "");
+      cc.style.color = lm.max && c.n > lm.max ? "#b3261e" : "";
+    }
     count();
     ta.addEventListener("input", function () { st.text = ta.value; count(); msg.textContent = ""; saveSoon(); });
     div.querySelector(".bGrade").addEventListener("click", function () {

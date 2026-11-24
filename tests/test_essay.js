@@ -78,9 +78,9 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 314);  // 含 114 年高考三級貨幣銀行學 4 題與普考貨幣銀行學概要 5 題、115 年高考三級貨幣銀行學與普考貨幣銀行學概要各 4 題（見檔尾）；含 113 年貨幣銀行學（高考三級）與貨幣銀行學概要（普考）各 4 題（見檔尾）；以下為合併前的說明：  // 含 113、115 年普通考試旅運經營學概要各 4 題（見檔尾）；含 113、115 年高考三級旅運經營學各 4 題（見檔尾）；含 113 年普考觀光學概要 4 題、113 年高考三級觀光英語／觀光學／觀光日語 11 題（見檔尾）；含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
+assert.strictEqual(data.essays.length, 326);  // 含 113 年高考三級（金融保險）財務管理與投資學 4 題（見檔尾）；含 114、115 年高考三級（金融保險）財務管理與投資學各 4 題（見檔尾）；含 114 年高考三級貨幣銀行學 4 題與普考貨幣銀行學概要 5 題、115 年高考三級貨幣銀行學與普考貨幣銀行學概要各 4 題（見檔尾）；含 113 年貨幣銀行學（高考三級）與貨幣銀行學概要（普考）各 4 題（見檔尾）；以下為合併前的說明：  // 含 113、115 年普通考試旅運經營學概要各 4 題（見檔尾）；含 113、115 年高考三級旅運經營學各 4 題（見檔尾）；含 113 年普考觀光學概要 4 題、113 年高考三級觀光英語／觀光學／觀光日語 11 題（見檔尾）；含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
-const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要', '民法總則、親屬與繼承編', '民法（包括總則、物權、親屬與繼承編）', '民法與民事訴訟法', '民法物權編概要', '民法總則、親屬與繼承編概要', '觀光學', '觀光英語', '觀光日語', '觀光學概要', '觀光行銷學概要', '觀光資源規劃', '旅運經營學', '旅運經營學概要', '貨幣銀行學', '貨幣銀行學概要'];
+const ESSAY_ONLY = ['財務管理與投資學', '公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要', '民法總則、親屬與繼承編', '民法（包括總則、物權、親屬與繼承編）', '民法與民事訴訟法', '民法物權編概要', '民法總則、親屬與繼承編概要', '觀光學', '觀光英語', '觀光日語', '觀光學概要', '觀光行銷學概要', '觀光資源規劃', '旅運經營學', '旅運經營學概要', '貨幣銀行學', '貨幣銀行學概要'];
 data.essays.forEach(q => {
   const has = bank.questions.some(b => b.exam === q.exam && b.subject === q.subject);
   assert.strictEqual(has, !ESSAY_ONLY.includes(q.subject), q.id + ' exam/subject 與題庫不一致');
@@ -327,7 +327,7 @@ assert.deepStrictEqual(by114('經濟學與財政學概論').map(q => q.points), 
 assert.deepStrictEqual(by114('經濟學').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by114('公共經濟學').map(q => q.points), [20, 40, 20, 20]);       // 共 100 分
 assert.deepStrictEqual(by114('產業經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 69);  // 含 114 年貨幣銀行學 4 題、114 年旅運經營學 4 題、114 年觀光學 4 題、觀光資源規劃 4 題、觀光日語 3 題、觀光英語 3 題；9 科（含財政學 財稅行政、會計共 4 題）：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政；另加民法 財稅行政／財稅法務、公平交易管理各 2 題、地政 3 題、司法行政 2 題、法制與智慧財產行政 2 題、戶政 4 題
+assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 73);  // 含 114 年財務管理與投資學 4 題、114 年貨幣銀行學 4 題、114 年旅運經營學 4 題、114 年觀光學 4 題、觀光資源規劃 4 題、觀光日語 3 題、觀光英語 3 題；9 科（含財政學 財稅行政、會計共 4 題）：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政；另加民法 財稅行政／財稅法務、公平交易管理各 2 題、地政 3 題、司法行政 2 題、法制與智慧財產行政 2 題、戶政 4 題
 assert.strictEqual(shape('114-g3fin-E2'), '5,5,5,5,5'); assert.strictEqual(shape('114-g3econ-E1'), '10,10,5');
 assert.strictEqual(shape('114-g3econ-E2'), '2,2,21'); assert.strictEqual(shape('114-g3pe-E2'), '20,20');
 assert.strictEqual(shape('114-g3ie-E1'), '10,10,5'); assert.strictEqual(shape('114-g3ie-E2'), '5,10,10');
@@ -539,7 +539,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 /* ===== 113 年高考三級：經濟學、經濟學與財政學概論、公共經濟學的申論題 ===== */
 {
   const by113 = (subj) => data.essays.filter(q => q.year_roc === 113 && q.subject === subj);
-  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 65);  // 含 113 年貨幣銀行學 4 題；  // 含 113 年觀光資源規劃 4 題、觀光英語 4 題、觀光學 4 題、觀光日語 3 題；含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）
+  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 69);  // 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 含 113 年觀光資源規劃 4 題、觀光英語 4 題、觀光學 4 題、觀光日語 3 題；含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）
   assert.deepStrictEqual(by113('經濟學').map(q => q.points), [25, 25]);
   assert.deepStrictEqual(by113('經濟學與財政學概論').map(q => q.points), [20, 30]);        // 50 分
   assert.deepStrictEqual(by113('公共經濟學').map(q => q.points), [25, 25, 25, 25]);         // 100 分
@@ -648,7 +648,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 
 
 const y113 = data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政');  // 交通政策與行政另有測試
-assert.strictEqual(y113.length, 65);  // 含 113 年貨幣銀行學 4 題；  // 28 題經濟財政類 + 113 年高考三級民法 14 題 + 113 年觀光資源規劃 4 題
+assert.strictEqual(y113.length, 69);  // 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 28 題經濟財政類 + 113 年高考三級民法 14 題 + 113 年觀光資源規劃 4 題
 assert.deepStrictEqual(sub(113, '農業經濟學').map(q => q.points), [15, 30, 30, 25]);          // 共 100 分
 assert.deepStrictEqual(sub(113, '工程經濟學').map(q => q.points), [25, 25, 25, 25]);
 sub(113, '農業經濟學').forEach(q => assert.deepStrictEqual(q.categories, ['農業行政']));
@@ -878,8 +878,13 @@ OVERLAP.push(['115-ptp-E1', '113-g3trv-E2'], ['115-g3tp-E2', '115-g3trv-E3'], ['
   ['114-g3agr-E1', '114-g3trv-E3'], ['115-g3pe-E4', '114-g3trv-E3'], ['114-g3tp-E4', '114-g3trv-E3'], ['113-g3io-E4', '114-g3trv-E4'], ['114-pagr-E2', '114-g3trv-E4']);
 
 OVERLAP.push(['113-pmbk-E3', '115-g3mb-E4']);  // 貨幣需求利率彈性、LM 曲線斜率與貨幣政策有效性（IS-LM）
+// 114 年財務管理與投資學第 2 題（一）費雪方程式：名目利率、實質利率與通膨的關係，與貨幣銀行學、金融相關題目本來就重疊
+OVERLAP.push(['114-pmon-E4', '114-g3fmi-E2'], ['113-g3fin-E2', '114-g3fmi-E2'], ['115-ptmbk-E3', '114-g3fmi-E2']);
 // 114 年貨幣銀行學：總合供需（失業率誤判、日本寬鬆）、通膨目標、央行獨立性、債券供需圖，與經濟學各題概念本來就重疊
 OVERLAP.push(['113-g3econ-E2', '114-g3mon-E4'], ['114-g3fin-E1', '114-g3mon-E4'], ['114-g3mon-E1', '115-g3econ-E2'], ['114-g3mon-E4', '115-pagr-E2'], ['114-pagr-E1', '114-pmon-E1'], ['114-g3mon-E1', '115-g3mb-E3'], ['113-g3econ-E2', '114-g3mon-E1'], ['114-g3fin-E1', '114-g3mon-E1'], ['114-g3econ-E2', '114-g3mon-E4'], ['113-g3econ-E2', '114-pmon-E4'], ['114-g3fin-E1', '114-pmon-E4'], ['114-pmon-E5', '115-g3mb-E3']);
+
+// 財務管理與投資學第 4 題（IFRS 9）含 sppi、model 等字母，會被運輸經濟學、民法既有的鬆散樣式（sp、od）誤中；非概念重疊，列為例外
+OVERLAP.push(['114-pte-E1', '113-g3fmi-E4'], ['114-g3civl-E2', '113-g3fmi-E4']);
 
 const fam = (s) => { s = s.replace(/概要$/, ''); if (/^民法/.test(s)) return '民法'; if (/^(觀光|旅運)/.test(s)) return '觀光'; return /^(運輸經濟學|交通政策與行政)$/.test(s) ? '交通運輸' : s; };  // 運輸經濟學與交通政策與行政同屬交通運輸領域，用語本來就會重疊
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
@@ -2205,4 +2210,155 @@ console.log('113 年貨幣銀行學申論題測試通過');
   const full = C.feedbackEssay(E['115-g3mbk-E1'], st); assert.strictEqual(full.earned, full.possible);
   const half = C.feedbackEssay(E['115-g3mbk-E1'], { 1: st['1'] }); assert.ok(half.points.some(x => /尚未評分/.test(x.text)));
   console.log('115 年貨幣銀行學申論題測試通過');
+}
+
+/* ===== 114、115 年高考三級財務管理與投資學（金融保險，代號 22370、32050）：純申論，各 4 題 ===== */
+{
+  const q14 = data.essays.filter(q => q.id.startsWith('114-g3fmi-')), q15 = data.essays.filter(q => q.id.startsWith('115-g3fmi-'));
+  assert.strictEqual(q14.length, 4); assert.strictEqual(q15.length, 4);
+  assert.ok(q14.concat(q15).every(q => q.points === 25 && q.exam === '公務人員高等考試三級考試' && q.subject === '財務管理與投資學'));
+  q14.concat(q15).forEach(q => assert.deepStrictEqual(q.categories, ['金融保險']));
+  assert.ok(q14.every(q => q.year_roc === 114) && q15.every(q => q.year_roc === 115));
+  assert.ok(!bank.questions.some(q => q.subject === '財務管理與投資學'), '純申論科目，題庫沒有選擇題（已列入 ESSAY_ONLY）');
+  // 小題結構（對照試題 PDF）：114 年每題 5 個小題各 5 分；115 年 10＋15、10＋15、5＋10＋10、15＋10
+  ['114-g3fmi-E1', '114-g3fmi-E2', '114-g3fmi-E3', '114-g3fmi-E4'].forEach(id => assert.strictEqual(shape(id), '5,5,5,5,5'));
+  assert.strictEqual(shape('115-g3fmi-E1'), '10,15'); assert.strictEqual(shape('115-g3fmi-E2'), '10,15');
+  assert.strictEqual(shape('115-g3fmi-E3'), '5,10,10'); assert.strictEqual(shape('115-g3fmi-E4'), '15,10');
+  const gr = (id, pid, tx) => C.gradeEssayPart(part(id, pid), tx).earned;
+  const mid = (id, pid, tx, lo, hi) => { const e = gr(id, pid, tx); assert.ok(e >= lo && e <= hi, id + '/' + pid + ' 預期 ' + lo + '~' + hi + '，實得 ' + e + '：' + tx.slice(0, 24)); };
+  const ans = (id, pid) => C.stripHtml(part(id, pid).model_answer);
+
+  // ---- 數值驗算：參考答案的數字要和獨立計算一致 ----
+  {
+    const ebitda = 1000000 - 450000 - 400000, ebit = ebitda - 100000, nopat = ebit * (1 - 0.2), ocf = nopat + 100000, nwc = 30000 + 20000, fcf = ocf - nwc - 70000;
+    assert.deepStrictEqual([ebitda, ebit, nopat, ocf, fcf], [150000, 50000, 40000, 140000, 20000]);
+    assert.ok(ans('114-g3fmi-E1', '1').includes('40,000') && ans('114-g3fmi-E1', '2').includes('150,000') && ans('114-g3fmi-E1', '3').includes('140,000') && ans('114-g3fmi-E1', '5').includes('20,000'));
+    // CAPM：16.5%、Sharpe 0.4、Treynor 0.08、α −1.5%、費雪 1.98%
+    const er = 0.03 + 1.5 * (0.12 - 0.03), sharpe = (0.15 - 0.03) / 0.30, treynor = (0.15 - 0.03) / 1.5, alpha = 0.15 - er, pi = 1.03 / 1.01 - 1;
+    assert.ok(Math.abs(er - 0.165) < 1e-12 && Math.abs(sharpe - 0.4) < 1e-12 && Math.abs(treynor - 0.08) < 1e-12 && Math.abs(alpha + 0.015) < 1e-12 && Math.abs(pi - 0.0198) < 1e-4);
+    assert.ok(alpha < 0, 'α 為負 → 高估');
+    // 併購：股數、市值、負債與 EPS
+    const sh = 16e8 / 16, shB = 6e8 / 16, debtB = 6e8 * 2 / 5, V = 16e8 + 6e8 + 2e8, N = 8e8 / 16;
+    assert.deepStrictEqual([sh, shB, debtB, V, N], [1e8, 3.75e7, 2.4e8, 24e8, 5e7]);
+    assert.ok(Math.abs(sh / (sh + N) * V - 16e8) < 1e-6, '發行 5,000 萬股時鳳林原股東剛好不吃虧');
+    assert.ok(Math.abs((1.2e8 + 0.6e8) / (sh + N) - 1.2) < 1e-12 && Math.abs(1.2e8 / sh - 1.2) < 1e-12, '併購前後 EPS 皆 1.2 元');
+    assert.ok(Math.abs(16e8 / 1.2e8 - 8e8 / 0.6e8) < 1e-9, '本益比相同（13.33 倍）所以 EPS 不變');
+    // 遠期外匯：−700 萬，半年折現因子 1.04，現值 −6,730,769
+    assert.strictEqual(Math.round((29.8 - 30.5) * 1e7), -7e6); assert.ok(Math.abs(Math.pow(1.0816, 0.5) - 1.04) < 1e-12);
+    assert.strictEqual(Math.round(-7e6 / 1.04), -6730769);
+    // Black-Scholes：可轉換特別股 ≈ 100 + 13.11
+    const Nf = x => { const t = 1 / (1 + 0.2316419 * Math.abs(x)), d = 0.3989422804 * Math.exp(-x * x / 2), p = d * t * (0.31938153 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429)))); return x >= 0 ? 1 - p : p; };
+    const S = 85, K = 100, r = 0.04, sg = 0.25, T = 3, d1 = (Math.log(S / K) + (r + sg * sg / 2) * T) / (sg * Math.sqrt(T)), d2 = d1 - sg * Math.sqrt(T), call = S * Nf(d1) - K * Math.exp(-r * T) * Nf(d2);
+    assert.ok(Math.abs(d1 - 0.1183) < 1e-3 && Math.abs(d2 + 0.3147) < 1e-3 && Math.abs(call - 13.11) < 0.02 && Math.abs(100 + call - 113.11) < 0.02, 'BS 數值 ' + call);
+    assert.ok(Math.abs(7 / 0.07 - 100) < 1e-9);
+    // 甲公司：rf＝10%−0.5×8%＝6%，風險中立機率 0.4517，權益 213.05、債券 136.95，兩者相加為 350
+    const rf = 0.10 - 0.5 * 0.08, q = (350 * (1 + rf) - 100) / 600, E = q * 500 / (1 + rf), B = (q * 200 + (1 - q) * 100) / (1 + rf);
+    assert.ok(Math.abs(rf - 0.06) < 1e-12 && Math.abs(q - 0.4517) < 1e-4 && Math.abs(E - 213.05) < 0.01 && Math.abs(B - 136.95) < 0.01 && Math.abs(E + B - 350) < 1e-9);
+    // A 軟體併購：淨利 2,000 萬＋500 萬，新股 250 萬，EPS 2，市值 4.5 億，P/E 18
+    const niA = 3e8 / 15, niB = 1.5e8 / 30, newSh = 5e6 / 2, tot = 1e7 + newSh;
+    assert.ok(niA === 2e7 && niB === 5e6 && (niA + niB) / tot === 2 && (3e8 + 1.5e8) / (niA + niB) === 18 && (3e8 + 1.5e8) / tot === 36);
+  }
+
+  // ---- 學生式作答：對的拿分、常見錯誤不拿分 ----
+  mid('114-g3fmi-E1', '1', '稅前營業利益 EBIT = 1,000,000-450,000-400,000-100,000 = 50,000；NOPAT = 50,000×(1-20%) = 40,000 千元。', 5, 5);
+  mid('114-g3fmi-E1', '1', 'NOPAT 要先扣利息 30,000，所以 (50,000-30,000)×0.8 = 16,000。', 0, 3);   // 把利息算進去：只有名詞與 EBIT 數字有分，NOPAT 數字沒對
+  mid('114-g3fmi-E1', '3', 'OCF = NOPAT + 折舊 = 40,000 + 100,000 = 140,000。', 5, 5);
+  mid('114-g3fmi-E1', '4', '流動資產增加是資金被存貨和應收帳款占用，現金流出，FCF 減少；流動負債減少是還錢給供應商，也是現金流出，FCF 減少。合計淨營運資金增加 50,000。', 5, 5);
+  mid('114-g3fmi-E1', '4', '流動資產增加對 FCF 沒有影響。', 0, 1);
+  mid('114-g3fmi-E1', '5', 'FCF = 140,000 - 50,000 - 70,000 = 20,000 千元。', 5, 5);
+  mid('114-g3fmi-E1', '5', 'FCF = 140,000 - 70,000 = 70,000（沒有扣營運資金）。', 0, 2);   // 漏扣淨營運資金
+  mid('114-g3fmi-E2', '3', '夏普比率 = (15%-3%)/30% = 0.4；崔納比率 = (15%-3%)/1.5 = 8%。', 5, 5);
+  mid('114-g3fmi-E2', '3', '夏普比率 = (15%-3%)/1.5 = 8%；崔納比率 = (15%-3%)/30% = 0.4。', 0, 3);   // 分母互換：只有數字巧合
+  mid('114-g3fmi-E2', '4', 'Jensen α = 15% - 16.5% = -1.5%。', 5, 5);
+  mid('114-g3fmi-E2', '5', 'α 為負，實際報酬 15% 低於 CAPM 要求的 16.5%，落在證券市場線下方，被高估。', 5, 5);
+  mid('114-g3fmi-E2', '5', '乙公司報酬 15% 很高，被低估，值得買進。', 0, 1);
+  mid('114-g3fmi-E3', '1', '不同意。吸收合併由存續公司概括承受龍潭的權利義務，包括負債 2.4 億，所以負債對權益比不為零。', 4.5, 5);
+  mid('114-g3fmi-E3', '1', '同意，企業併購法規定可以不承擔負債。', 0, 1);
+  mid('114-g3fmi-E3', '3', '鳳林最多願付 6 億市值加 2 億綜效 = 8 億，以每股 16 元換算，最多發行 5,000 萬股。', 5, 5);
+  mid('114-g3fmi-E3', '4', '併購後總股數 1.5 億股，合併淨利 1.8 億，EPS = 1.8 億/1.5 億 = 1.2 元，與併購前相同，差距為 0。', 5, 5);
+  mid('114-g3fmi-E3', '5', '併購後 EPS 低於併購前。因為鳳林本益比低於新股本益比，要發行較多股數去換較少的盈餘，股數增加比例大於盈餘增加比例，EPS 被稀釋。', 5, 5);
+  mid('114-g3fmi-E3', '5', '併購後 EPS 會增加，因為有綜效。', 0, 2);   // 方向寫反
+  mid('114-g3fmi-E4', '1', '彰化公司有美元應收款，可以出售遠期美元，符合實需原則；沒有美元支出需求，不能購買遠期美元，否則是投機。', 5, 5);
+  mid('114-g3fmi-E4', '2', '適用銀行遠期買進價 29.8，因為銀行向公司買進美元。', 5, 5);
+  mid('114-g3fmi-E4', '2', '適用 29.97。', 0, 0);
+  mid('114-g3fmi-E4', '4', '遠期損益 = (29.8-30.5)×1,000 萬 = -700 萬元，損失；但現貨多收與遠期損失抵銷，有效鎖定 2.98 億元，避險有效。', 5, 5);
+  mid('114-g3fmi-E4', '5', '半年折現因子 (1+8.16%)^0.5 = 1.04，現值 = -7,000,000/1.04 = -6,730,769 元。', 5, 5);
+  mid('114-g3fmi-E4', '5', '現值 = -7,000,000/1.0816 = -6,471,893 元。', 0, 1);   // 用整年折現
+  mid('115-g3fmi-E1', '1', '純特別股是永續年金，P = D/r = 7/7% = 100 元，折現率用資金成本 7%。', 10, 10);
+  mid('115-g3fmi-E1', '1', '永續年金 P = D/r = 7/4% = 175 元。', 3, 4);   // 用無風險利率折現：公式分有，數字與折現率沒有
+  mid('115-g3fmi-E1', '2', '可轉換特別股 = 純特別股 + 歐式買權。S=85、K=100、T=3、r=4%、σ=25%，d1=0.118，d2=-0.315，買權 13.1 元，合計 113.1 元。', 15, 15);
+  mid('115-g3fmi-E1', '2', '買權價值約 13.1 元。', 2, 5);   // 只答買權，沒有加上純特別股 100 元
+  mid('115-g3fmi-E2', '1', '合併淨利 2,000 萬+500 萬 = 2,500 萬，新股 250 萬股，總股數 1,250 萬股，EPS = 2,500 萬/1,250 萬 = 2 元；合併後市值 4.5 億，P/E = 4.5 億/2,500 萬 = 18 倍。', 10, 10);
+  mid('115-g3fmi-E2', '1', '併購後 EPS 為 1.25 元，本益比 15 倍。', 0, 2);
+  mid('115-g3fmi-E3', '1', '展望理論以參考點定義利得與損失，有損失趨避，價值函數為 S 型：獲利區凹、損失區凸，並有機率加權函數。', 5, 5);
+  mid('115-g3fmi-E3', '2', '財務困難時處於損失區，價值函數為凸，風險追求，願意賭一把投資高風險專案，風險轉移給債權人，因有限責任。損失趨避使公司不願認賠。', 9, 10);
+  mid('115-g3fmi-E3', '3', '第二種方式較佳：先給現金後有稟賦效果，收回是損失，損失趨避使損失的痛苦大於同額獲得；第一種是獲得框架，第二種是損失框架。', 9, 10);
+  mid('115-g3fmi-E3', '3', '第一種比較好，因為完成才給比較公平。', 0, 2);
+  mid('115-g3fmi-E4', '1', '權益是買權，標的為公司資產價值，履約價為債務面額；債券等於無風險債券減賣權，債權人賣出賣權；買賣權平價 V = E + B；V < D 時違約，有限責任。', 14, 15);
+  mid('115-g3fmi-E4', '2', '由 CAPM 求 rf：10% = rf + 0.5×8%，rf = 6%。風險中立機率 q = (350×1.06-100)/600 = 0.4517。權益 = 0.4517×500/1.06 = 213.05 萬，債券 = 136.95 萬，合計 350。', 10, 10);
+  mid('115-g3fmi-E4', '2', '權益 = 700-200 = 500，債券 = 200。', 0, 2);   // 沒有折現與機率，也沒處理失敗情況
+
+  // ---- 參考答案作答、整題回饋為滿分 ----
+  q14.concat(q15).forEach(q => q.parts.forEach(p => assert.strictEqual(C.gradeEssayPart(p, C.stripHtml(p.model_answer)).earned, p.points, q.id + '/' + p.id + ' 參考答案應拿滿分')));
+  // 計算題旗標：114 年第 1、2、4 題計算小題與 115 年第 1 題、第 4 題（二）標記為 calc
+  assert.ok(part('114-g3fmi-E1', '5').calc && part('114-g3fmi-E4', '5').calc && part('115-g3fmi-E1', '2').calc && part('115-g3fmi-E4', '2').calc);
+  assert.ok(!part('115-g3fmi-E3', '1').numeric && !part('114-g3fmi-E3', '5').numeric);
+}
+console.log('114、115 年高考三級財務管理與投資學申論題測試通過');
+
+/* ===== 113 年高考三級金融保險：財務管理與投資學（純申論科目，4 題，各 25 分） ===== */
+{
+  const qs = data.essays.filter(q => /^113-g3fmi-E\d$/.test(q.id));
+  assert.strictEqual(qs.length, 4);
+  assert.ok(qs.every(q => q.points === 25 && q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject === '財務管理與投資學' && q.categories.join() === '金融保險'));
+  assert.deepStrictEqual(qs.map(q => q.parts.map(p => p.points).join(',')), ['15,10', '10,15', '8,8,9', '10,8,7']);
+  assert.ok(ESSAY_ONLY.includes('財務管理與投資學') && !bank.questions.some(b => b.subject === '財務管理與投資學'));
+  const pp = (qid, pid, text) => C.gradeEssayPart(part(qid, pid), text);
+  // 第 2 題數值驗算：成長型永續年金、期望現值與合作機會價值
+  {
+    const pv = (c, r, g) => c / (r - g);
+    const v = [0.03, 0, -0.03].map(g => pv(100, 0.05, g));
+    assert.deepStrictEqual(v.map(x => Math.round(x)), [5000, 2000, 1250]);
+    const ePV = v.reduce((a, b) => a + b, 0) / 3, npv = ePV - 2200;
+    assert.ok(Math.abs(ePV - 2750) < 1e-9 && Math.abs(npv - 550) < 1e-9);
+    assert.ok(pv(100, 0.05, 0) - 2200 < 0, '以期望增長率 0% 代入會誤判為 NPV < 0（Jensen 不等式）');
+    assert.ok(Math.abs(0.6 * npv / 0.05 - 6600) < 1e-9 && Math.abs(0.6 * npv / 0.05 + 0.6 * npv - 6930) < 1e-9);
+    const npvKnown = v.map(x => Math.max(x - 2200, 0)).reduce((a, b) => a + b, 0) / 3;   // 已知 g、只做 NPV > 0 的專案
+    assert.ok(Math.abs(npvKnown - 933.3333) < 1e-3 && Math.abs(0.6 * npvKnown / 0.05 - 11200) < 1e-6);
+    const a = C.stripHtml(E['113-g3fmi-E2'].parts[1].model_answer); ['6,600', '6,930', '11,200', '330'].forEach(x => assert.ok(a.includes(x), '參考答案應含 ' + x));
+  }
+  // 第 1 題
+  assert.ok(pp('113-g3fmi-E1', '1', '正alpha指實際報酬高於CAPM要求的報酬，α = Rp − [Rf+β(Rm−Rf)]，代表證券被低估、落在SML上方。策略是買進被低估證券、放空被高估證券。').earned >= 6);
+  assert.ok(pp('113-g3fmi-E1', '1', '正alpha指實際報酬高於CAPM要求的報酬，α = Rp − [Rf+β(Rm−Rf)]，代表證券被低估、落在SML上方。策略是買進被低估證券、放空被高估證券。').earned < 15, '沒有提到效率市場理論不應滿分');
+  assert.strictEqual(pp('113-g3fmi-E1', '1', 'alpha 就是報酬很高的股票，買進就會賺錢。').items.find(i => i.id === 'r5').earned, 0);
+  assert.ok(pp('113-g3fmi-E1', '2', 'S&P 500 只包含美國大型股票，沒有債券、不動產和人力資本，不是真正的市場組合；Roll 批判指出我們檢定的只是代理指數是否效率。').earned >= 5);
+  assert.ok(pp('113-g3fmi-E1', '2', 'S&P 500 只有 500 檔股票，所以不夠。').earned < 4);
+  // 第 2 題：兩種做法
+  const right = 'g=3%：PV=100/(5%-3%)=5000；g=0%：PV=100/5%=2000；g=-3%：PV=100/(5%+3%)=1250。期望PV=(5000+2000+1250)/3=2750，NPV=2750-2200=550>0，應接受。';
+  const wrong = '期望成長率=(3%+0%-3%)/3=0%，PV=100/5%=2000，NPV=2000-2200=-200，拒絕。';
+  assert.ok(pp('113-g3fmi-E2', '1', right).earned >= 9);
+  assert.ok(pp('113-g3fmi-E2', '1', wrong).earned < 5, '用期望增長率 0% 代入的錯誤做法不應拿到高分');
+  assert.strictEqual(pp('113-g3fmi-E2', '1', wrong).items.find(i => i.id === 'r4').earned, 0);
+  assert.ok(pp('113-g3fmi-E2', '2', '每年期望NPV=0.6×550=330億元，永續年金330/5%=6600億元，應建立合作關係。').earned >= 12);
+  assert.ok(pp('113-g3fmi-E2', '2', '已知增長率只做g=3%：每年期望NPV=0.6×933.33=560億元，560/0.05=11200億元（假設第1年底起提案）。').earned >= 9, '已知增長率的解讀也應接受');
+  assert.ok(pp('113-g3fmi-E2', '2', '合作機會的價值是 550 億元。').earned < 5);
+  // 第 3 題
+  assert.ok(pp('113-g3fmi-E3', '1', 'WACC = E/V×rE + D/V×rD×(1-Tc)，用WACC折現自由現金流量得到公司價值。').earned >= 4);
+  assert.ok(pp('113-g3fmi-E3', '1', 'WACC = E/V×rE + D/V×rD×(1-Tc)，用WACC折現自由現金流量得到公司價值。').earned < 8);
+  assert.ok(pp('113-g3fmi-E3', '2', 'APV = 無負債公司價值 + 融資副作用的現值，包括利息稅盾、財務危機成本，無負債資金成本ru折現FCF。').earned >= 4);
+  assert.ok(pp('113-g3fmi-E3', '3', 'WACC簡單普遍，適合資本結構穩定的公司，但負債比率改變就要重算；APV彈性高，可處理資本結構變動，例如LBO，但ru與財務危機成本難以估計。').earned >= 5);
+  assert.ok(pp('113-g3fmi-E3', '3', 'WACC是加權平均資金成本，APV是調整現值。').earned < 3);
+  // 第 4 題：新舊準則分類
+  assert.ok(pp('113-g3fmi-E4', '1', 'IFRS 9 依經營模式與合約現金流量特性（SPPI）分類：持有以收取合約現金流量按攤銷後成本；收取及出售按FVOCI；其他按FVTPL。').earned >= 7);
+  assert.ok(pp('113-g3fmi-E4', '1', '分為持有至到期、備供出售、交易目的與放款及應收款四類。').earned < 4, '舊準則（IAS 39）的分類不應拿到高分');
+  assert.ok(pp('113-g3fmi-E4', '2', 'AC利息入損益；FVOCI價格變動入OCI，除列時重分類至損益；FVTPL變動入當期損益；AC與FVOCI適用預期信用損失ECL，分三階段。').earned >= 5);
+  assert.ok(pp('113-g3fmi-E4', '3', 'SPPI是指現金流量只有本金與利息，利息包括貨幣時間價值與信用風險。可轉換債券未通過SPPI，按FVTPL。').earned >= 4);
+  assert.strictEqual(pp('113-g3fmi-E4', '3', '一般公債與公司債都可以通過這個測試。').earned, 0);
+  // 整題回饋：參考答案滿分，只評一小題時提醒尚未評分
+  qs.forEach(q => {
+    const st = {}; q.parts.forEach(p => { const g = C.gradeEssayPart(p, C.stripHtml(p.model_answer)), sc = {}; g.items.forEach(i => { sc[i.id] = i.earned; }); st[p.id] = { text: C.stripHtml(p.model_answer), auto: sc, scores: sc }; });
+    const f = C.feedbackEssay(q, st); assert.strictEqual(f.earned, f.possible, q.id);
+    const h = C.feedbackEssay(q, { [q.parts[0].id]: st[q.parts[0].id] }); assert.ok(h.points.some(x => /尚未評分/.test(x.text)));
+  });
+  console.log('113 年財務管理與投資學申論題測試通過');
 }

@@ -157,7 +157,7 @@ console.log('feedback tests passed');
   const tot4 = C.feedbackEssay(e4, { [p41.id]: { text: '不知道', auto: z41, scores: z41 } });
   assert.ok(has(tot4, 'tip', /尚未評分/) && has(tot4, 'warn', /失分最多/));
   // 全對時：農業經濟學、工程經濟學 8 題都是「結構完整」（上方迴圈已涵蓋全部題目；此處再確認 113 年有被涵蓋）
-  assert.strictEqual(essays.essays.filter(e => e.year_roc === 113 && e.exam === '公務人員高等考試三級考試' && e.subject !== '交通政策與行政').length, 65);  // 含 113 年觀光行政三科 11 題（觀光英語 4、觀光學 4、觀光日語 3）與觀光資源規劃 4 題；113 年高考三級原 7 科 24 題＋財政學 4 題；另含民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）；交通政策與行政 4 題另計
+  assert.strictEqual(essays.essays.filter(e => e.year_roc === 113 && e.exam === '公務人員高等考試三級考試' && e.subject !== '交通政策與行政').length, 69);  // 含 113 年觀光行政三科 11 題（觀光英語 4、觀光學 4、觀光日語 3）與觀光資源規劃 4 題；113 年高考三級原 7 科 24 題＋財政學 4 題；另含民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）；交通政策與行政 4 題另計
 }
 console.log('113 年申論題回饋測試通過');
 
@@ -318,3 +318,68 @@ console.log('113 年觀光行政（觀光英語、觀光學、觀光日語）回
   });
 }
 console.log('113 年貨幣銀行學申論題回饋測試通過');
+
+/* ===== 114、115 年高考三級財務管理與投資學：依作答的意見與建議 ===== */
+{
+  const qs = essays.essays.filter(e => /^11[45]-g3fmi-/.test(e.id));
+  assert.strictEqual(qs.length, 8);
+  const zero = (p) => { const s = {}; p.rubric.forEach(r => s[r.id] = 0); return s; };
+  const E = (id) => qs.find(e => e.id === id);
+  // 計算題寫錯：列出沒得分的細目、常見錯誤，並提醒要寫出數字與算式
+  const p5 = E('114-g3fmi-E1').parts[4], z5 = zero(p5);
+  const fb = C.feedbackEssayPart(p5, { text: 'FCF 是營運產生的自由現金，越多越好。', auto: z5, scores: z5 });
+  assert.ok(has(fb, null, /常見錯誤/) && has(fb, null, /計算題|數字/), '應提醒常見錯誤與計算題要寫數字');
+  // 只寫一半（算了 NOPAT 卻沒算 OCF 與 FCF）：整題總評提醒其餘小題尚未評分
+  const p1 = E('114-g3fmi-E1').parts[0], z1 = zero(p1);
+  const tot = C.feedbackEssay(E('114-g3fmi-E1'), { [p1.id]: { text: 'NOPAT = 50,000×(1-20%) = 40,000', auto: z1, scores: z1 } });
+  assert.ok(has(tot, 'tip', /尚未評分/) && has(tot, 'warn', /失分最多/));
+  // 論述題（行為財務學）：缺漏的得分點會被列出
+  const p3 = E('115-g3fmi-E3').parts[2], z3 = zero(p3);
+  const fb3 = C.feedbackEssayPart(p3, { text: '我覺得第一種比較公平。', auto: z3, scores: z3 });
+  assert.ok(has(fb3, null, /沒有得分|都沒有得分|完全沒得分|部分/), '論述題應列出失分細目');
+  // 參考答案作答、自評滿分時，整題為滿分（8 題皆然）
+  qs.forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const gr = C.gradeEssayPart(p, C.stripHtml(p.model_answer)), sc = {}; gr.items.forEach(i => { sc[i.id] = i.earned; }); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: sc, scores: sc }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+  });
+}
+console.log('114、115 年財務管理與投資學申論題回饋測試通過');
+
+/* ===== 113 年財務管理與投資學（高考三級金融保險）：依作答的意見與建議 ===== */
+{
+  const qs = essays.essays.filter(e => /^113-g3fmi-/.test(e.id));
+  assert.strictEqual(qs.length, 4);
+  const zero = (p) => { const s = {}; p.rubric.forEach(r => s[r.id] = 0); return s; };
+  const sc = (p, text) => { const g = C.gradeEssayPart(p, text), s = {}; g.items.forEach(i => { s[i.id] = i.earned; }); return s; };
+  // 計算題：答案沒有數字 → 提醒要寫算式與數字
+  const p21 = qs[1].parts[0];
+  const fb0 = C.feedbackEssayPart(p21, { text: '這個專案可以賺錢，所以應該接受。', auto: zero(p21), scores: zero(p21) });
+  assert.ok(has(fb0, 'tip', /幾乎沒有數字/) && has(fb0, 'warn', /沒有得分/));
+  // 以期望增長率 0% 代入：有數字但結果沒對上，並列出常見錯誤
+  const wrong = '期望成長率=(3%+0%-3%)/3=0%，PV=100/5%=2000，NPV=2000-2200=-200，拒絕。';
+  const fbw = C.feedbackEssayPart(p21, { text: wrong, auto: sc(p21, wrong), scores: sc(p21, wrong) });
+  assert.ok(has(fbw, 'tip', /有寫出數字/), '有數字但結果沒對上應提醒逐步對照');
+  assert.ok(has(fbw, 'tip', /先把增長率取期望值/), '應列出常見錯誤');
+  assert.ok(has(fbw, null, /完全沒得分的得分點|只拿到部分分數/));
+  // 概念題：只寫名詞沒有得分點時，列出失分細目與提示
+  const p11 = qs[0].parts[1], t11 = 'S&P 500 只有 500 檔股票，所以不夠。';
+  const fb11 = C.feedbackEssayPart(p11, { text: t11, auto: sc(p11, t11), scores: sc(p11, t11) });
+  assert.ok(has(fb11, 'warn', /沒有得分|都沒有得分|完全沒得分/) && has(fb11, 'tip', /提示：/) && has(fb11, 'tip', /常見錯誤/));
+  // 整題總評：只評第（一）小題，其餘小題尚未評分，且指出失分最多的得分點
+  const p41 = qs[3].parts[0], t41 = '分為持有至到期、備供出售、交易目的與放款及應收款四類。';
+  const tot = C.feedbackEssay(qs[3], { [p41.id]: { text: t41, auto: sc(p41, t41), scores: sc(p41, t41) } });
+  assert.ok(has(tot, 'tip', /尚未評分/) && has(tot, 'warn', /失分最多/));
+  // 學生把細目分數調高、但系統沒偵測到對應寫法時，會提醒
+  const p31 = qs[2].parts[0], z31 = zero(p31), up = Object.assign({}, z31, { r1: 3 });
+  assert.ok(has(C.feedbackEssayPart(p31, { text: '不知道', auto: z31, scores: up }), 'tip', /調高/));
+  // 參考答案作答、自評滿分時，整題為滿分
+  qs.forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const s = sc(p, C.stripHtml(p.model_answer)); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: s, scores: s }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+  });
+}
+console.log('113 年財務管理與投資學回饋測試通過');

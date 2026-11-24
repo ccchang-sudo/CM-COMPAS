@@ -78,9 +78,9 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 289);  // 含 113、115 年普通考試旅運經營學概要各 4 題（見檔尾）；含 113、115 年高考三級旅運經營學各 4 題（見檔尾）；含 113 年普考觀光學概要 4 題、113 年高考三級觀光英語／觀光學／觀光日語 11 題（見檔尾）；含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
+assert.strictEqual(data.essays.length, 314);  // 含 114 年高考三級貨幣銀行學 4 題與普考貨幣銀行學概要 5 題、115 年高考三級貨幣銀行學與普考貨幣銀行學概要各 4 題（見檔尾）；含 113 年貨幣銀行學（高考三級）與貨幣銀行學概要（普考）各 4 題（見檔尾）；以下為合併前的說明：  // 含 113、115 年普通考試旅運經營學概要各 4 題（見檔尾）；含 113、115 年高考三級旅運經營學各 4 題（見檔尾）；含 113 年普考觀光學概要 4 題、113 年高考三級觀光英語／觀光學／觀光日語 11 題（見檔尾）；含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
-const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要', '民法總則、親屬與繼承編', '民法（包括總則、物權、親屬與繼承編）', '民法與民事訴訟法', '民法物權編概要', '民法總則、親屬與繼承編概要', '觀光學', '觀光英語', '觀光日語', '觀光學概要', '觀光行銷學概要', '觀光資源規劃', '旅運經營學', '旅運經營學概要'];
+const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要', '民法總則、親屬與繼承編', '民法（包括總則、物權、親屬與繼承編）', '民法與民事訴訟法', '民法物權編概要', '民法總則、親屬與繼承編概要', '觀光學', '觀光英語', '觀光日語', '觀光學概要', '觀光行銷學概要', '觀光資源規劃', '旅運經營學', '旅運經營學概要', '貨幣銀行學', '貨幣銀行學概要'];
 data.essays.forEach(q => {
   const has = bank.questions.some(b => b.exam === q.exam && b.subject === q.subject);
   assert.strictEqual(has, !ESSAY_ONLY.includes(q.subject), q.id + ' exam/subject 與題庫不一致');
@@ -327,7 +327,7 @@ assert.deepStrictEqual(by114('經濟學與財政學概論').map(q => q.points), 
 assert.deepStrictEqual(by114('經濟學').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by114('公共經濟學').map(q => q.points), [20, 40, 20, 20]);       // 共 100 分
 assert.deepStrictEqual(by114('產業經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 65);  // 含 114 年旅運經營學 4 題、114 年觀光學 4 題、觀光資源規劃 4 題、觀光日語 3 題、觀光英語 3 題；9 科（含財政學 財稅行政、會計共 4 題）：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政；另加民法 財稅行政／財稅法務、公平交易管理各 2 題、地政 3 題、司法行政 2 題、法制與智慧財產行政 2 題、戶政 4 題
+assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 69);  // 含 114 年貨幣銀行學 4 題、114 年旅運經營學 4 題、114 年觀光學 4 題、觀光資源規劃 4 題、觀光日語 3 題、觀光英語 3 題；9 科（含財政學 財稅行政、會計共 4 題）：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政；另加民法 財稅行政／財稅法務、公平交易管理各 2 題、地政 3 題、司法行政 2 題、法制與智慧財產行政 2 題、戶政 4 題
 assert.strictEqual(shape('114-g3fin-E2'), '5,5,5,5,5'); assert.strictEqual(shape('114-g3econ-E1'), '10,10,5');
 assert.strictEqual(shape('114-g3econ-E2'), '2,2,21'); assert.strictEqual(shape('114-g3pe-E2'), '20,20');
 assert.strictEqual(shape('114-g3ie-E1'), '10,10,5'); assert.strictEqual(shape('114-g3ie-E2'), '5,10,10');
@@ -539,7 +539,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 /* ===== 113 年高考三級：經濟學、經濟學與財政學概論、公共經濟學的申論題 ===== */
 {
   const by113 = (subj) => data.essays.filter(q => q.year_roc === 113 && q.subject === subj);
-  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 61);  // 含 113 年觀光資源規劃 4 題、觀光英語 4 題、觀光學 4 題、觀光日語 3 題；含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）
+  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 65);  // 含 113 年貨幣銀行學 4 題；  // 含 113 年觀光資源規劃 4 題、觀光英語 4 題、觀光學 4 題、觀光日語 3 題；含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）
   assert.deepStrictEqual(by113('經濟學').map(q => q.points), [25, 25]);
   assert.deepStrictEqual(by113('經濟學與財政學概論').map(q => q.points), [20, 30]);        // 50 分
   assert.deepStrictEqual(by113('公共經濟學').map(q => q.points), [25, 25, 25, 25]);         // 100 分
@@ -648,7 +648,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 
 
 const y113 = data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政');  // 交通政策與行政另有測試
-assert.strictEqual(y113.length, 61);  // 28 題經濟財政類 + 113 年高考三級民法 14 題 + 113 年觀光資源規劃 4 題
+assert.strictEqual(y113.length, 65);  // 含 113 年貨幣銀行學 4 題；  // 28 題經濟財政類 + 113 年高考三級民法 14 題 + 113 年觀光資源規劃 4 題
 assert.deepStrictEqual(sub(113, '農業經濟學').map(q => q.points), [15, 30, 30, 25]);          // 共 100 分
 assert.deepStrictEqual(sub(113, '工程經濟學').map(q => q.points), [25, 25, 25, 25]);
 sub(113, '農業經濟學').forEach(q => assert.deepStrictEqual(q.categories, ['農業行政']));
@@ -781,6 +781,9 @@ assert.ok(!bank.questions.some(q => q.year_roc === 113 && (q.subject === '農業
 // 評分不可被其他科目的參考答案輕易騙過：拿別科的答案作答，得分應低於一半
 // 例外：概念或數字本來就相同的題目（不同科目的同一概念，或數字同構的計算題），不列入此檢查
 const OVERLAP = [
+  ['113-g3pft-E2', '115-ptmbk-E2'], ['114-g3fin-E2', '115-ptmbk-E2'], ['113-g3agr-E3', '115-ptmbk-E2'],  // 資訊不對稱：逆選擇、道德風險（社會保障金市場、名詞解釋、市場失靈）
+  ['115-g3econ-E2', '115-g3mbk-E4'],  // 預期與貨幣政策有效性（菲力普曲線 vs 新興凱因斯／新興古典）
+  ['115-g3mb-E4', '115-ptmbk-E4'],  // IS-LM 與政策有效性
   ['114-g3econ-E1', '114-g3ie-E4'],  // 兩題 Cournot 數字同構（均衡 40、30、利潤 1600）
   ['114-g3fin-E2', '115-g3pe-E2'],  // 道德風險
   ['114-g3fin-E2', '115-g3pe-E3'],  // 租稅資本化（財產稅）
@@ -873,6 +876,10 @@ OVERLAP.push(['115-ptp-E1', '113-g3trv-E2'], ['115-g3tp-E2', '115-g3trv-E3'], ['
   // 114 年旅運經營學：人力資源、智慧技術與 AI、批發與通路等主題與其他科目重疊
   ['113-pagr-E1', '114-g3trv-E2'], ['115-g3pe-E2', '114-g3trv-E2'], ['115-ptp-E1', '114-g3trv-E2'], ['115-ptp-E1', '114-g3trv-E3'], ['115-ptp-E4', '114-g3trv-E3'], ['113-g3agr-E3', '114-g3trv-E3'],
   ['114-g3agr-E1', '114-g3trv-E3'], ['115-g3pe-E4', '114-g3trv-E3'], ['114-g3tp-E4', '114-g3trv-E3'], ['113-g3io-E4', '114-g3trv-E4'], ['114-pagr-E2', '114-g3trv-E4']);
+
+OVERLAP.push(['113-pmbk-E3', '115-g3mb-E4']);  // 貨幣需求利率彈性、LM 曲線斜率與貨幣政策有效性（IS-LM）
+// 114 年貨幣銀行學：總合供需（失業率誤判、日本寬鬆）、通膨目標、央行獨立性、債券供需圖，與經濟學各題概念本來就重疊
+OVERLAP.push(['113-g3econ-E2', '114-g3mon-E4'], ['114-g3fin-E1', '114-g3mon-E4'], ['114-g3mon-E1', '115-g3econ-E2'], ['114-g3mon-E4', '115-pagr-E2'], ['114-pagr-E1', '114-pmon-E1'], ['114-g3mon-E1', '115-g3mb-E3'], ['113-g3econ-E2', '114-g3mon-E1'], ['114-g3fin-E1', '114-g3mon-E1'], ['114-g3econ-E2', '114-g3mon-E4'], ['113-g3econ-E2', '114-pmon-E4'], ['114-g3fin-E1', '114-pmon-E4'], ['114-pmon-E5', '115-g3mb-E3']);
 
 const fam = (s) => { s = s.replace(/概要$/, ''); if (/^民法/.test(s)) return '民法'; if (/^(觀光|旅運)/.test(s)) return '觀光'; return /^(運輸經濟學|交通政策與行政)$/.test(s) ? '交通運輸' : s; };  // 運輸經濟學與交通政策與行政同屬交通運輸領域，用語本來就會重疊
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
@@ -2026,4 +2033,176 @@ console.log('113 年民法申論題（法制／智財、財稅行政）測試通
     assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
   });
   console.log('114 年高考三級旅運經營學申論題測試通過');
+}
+
+/* ===== 113 年貨幣銀行學（高考三級，代號 31950、32750）與貨幣銀行學概要（普考，代號 41720、42220）：金融保險、經建行政 ===== */
+{
+  const g3 = data.essays.filter(q => q.id.startsWith('113-g3mbk-')), pg = data.essays.filter(q => q.id.startsWith('113-pmbk-'));
+  assert.strictEqual(g3.length, 4); assert.strictEqual(pg.length, 4);
+  assert.ok(g3.every(q => q.points === 25 && q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject === '貨幣銀行學'));
+  assert.ok(pg.every(q => q.points === 25 && q.year_roc === 113 && q.exam === '公務人員普通考試' && q.subject === '貨幣銀行學概要'));
+  g3.concat(pg).forEach(q => assert.deepStrictEqual(q.categories, ['金融保險', '經建行政']));
+  // 題庫沒有這兩科的選擇題（純申論科目，已列入 ESSAY_ONLY）
+  assert.ok(!bank.questions.some(q => q.subject === '貨幣銀行學' || q.subject === '貨幣銀行學概要'));
+  assert.strictEqual(shape('113-g3mbk-E1'), '13,12'); assert.strictEqual(shape('113-g3mbk-E2'), '13,12');
+  assert.strictEqual(shape('113-g3mbk-E3'), '12,13'); assert.strictEqual(shape('113-g3mbk-E4'), '10,8,7');
+  assert.strictEqual(shape('113-pmbk-E1'), '12,13'); assert.strictEqual(shape('113-pmbk-E2'), '10,15');
+  assert.strictEqual(shape('113-pmbk-E3'), '12,13'); assert.strictEqual(shape('113-pmbk-E4'), '9,8,8');
+  const gr = (id, pid, t) => C.gradeEssayPart(part(id, pid), t).earned;
+  const mid = (id, pid, t, lo, hi) => { const e = gr(id, pid, t); assert.ok(e >= lo && e <= hi, id + '/' + pid + ' 預期 ' + lo + '~' + hi + '，實得 ' + e + '：' + t.slice(0, 20)); };
+
+  // 高考三級第 1 題：缺口分析寫對可得約 2/3；方向寫反或空泛答案不得分
+  mid('113-g3mbk-E1', '1', '淨利息收入＝利息收入－利息支出。重定價缺口 GAP = RSA − RSL，ΔNII = GAP × Δi。正缺口時利率上升獲利增加，負缺口時利率上升獲利減少。', 8, 10);
+  mid('113-g3mbk-E1', '1', '利率上升銀行賺比較多', 0, 2);
+  mid('113-g3mbk-E1', '2', '預期利率上升應建立正缺口，增加浮動利率放款與短期資產，出售長期固定利率債券；發行長期固定利率存單鎖定資金成本；利用利率交換付固定收浮動。', 11, 12);
+  mid('113-g3mbk-E1', '2', '預期利率上升，銀行要增加長期固定利率放款。', 0, 2);  // 方向寫反
+  // 第 2 題：只寫貿易順差等於賺外匯，沒有國際收支架構與資本外流 → 0 分
+  mid('113-g3mbk-E2', '1', '國際收支：經常帳＋資本與金融帳＋準備資產變動＝0。貿易順差只是經常帳一部分，若資本與金融帳逆差，例如企業對外投資、外資匯出，會抵銷順差，整體國際收支沒有盈餘，央行不必買進外匯，外匯存底沒有增加。', 12, 13);
+  mid('113-g3mbk-E2', '1', '貿易順差表示賺很多錢，外匯存底應該增加。', 0, 1);
+  mid('113-g3mbk-E2', '2', '浮動匯率下新台幣升值，央行未干預；出口商把外匯留在外匯存款與海外帳戶，沒有結匯；央行也可能賣出外匯干預。', 9, 12);
+  // 第 3 題：M1B 與 M2 的內容；M2 減少須說明資金流出 M2 的範圍
+  mid('113-g3mbk-E3', '1', 'M1B 是通貨淨額加支票存款、活期存款與活期儲蓄存款；M2 是 M1B 加準貨幣，包含定期存款、外匯存款等。', 11, 12);
+  mid('113-g3mbk-E3', '2', '股市活絡時，民眾把定期存款轉到活期存款與交割帳戶，M1B 增加；M2 減少是因為外資賣股匯出資金、交易稅繳政府，資金流出 M2 範圍。', 8, 11);
+  mid('113-g3mbk-E3', '2', '股市很熱，大家都有錢，所以貨幣增加。', 0, 1);
+  // 第 4 題：三個理論各一小題
+  mid('113-g3mbk-E4', '1', '預期理論認為長期利率等於未來各期預期短期利率的平均。長期利率低於短期利率，表示市場預期未來短期利率下降，例如預期景氣衰退、央行降息，殖利率曲線反轉。', 9, 10);
+  mid('113-g3mbk-E4', '2', '流動性貼水理論：長期利率等於預期短期利率平均加貼水，要預期短期利率大幅下降才會反轉；市場區隔理論：壽險與退休基金偏好長期債券，需求大，利率低。', 7, 8);
+  mid('113-g3mbk-E4', '3', '景氣不好。', 0, 1);
+  // 普考第 1 題：自選四項因素，前兩項（利率、提領風險）與後兩項（貼現借款、準備金利率）
+  mid('113-pmbk-E1', '1', '利率上升，持有超額準備的機會成本增加，銀行會減少超額準備；存款不穩定、提款風險高時，銀行為了預防提款而多持有超額準備。', 11, 12);
+  mid('113-pmbk-E1', '2', '央行重貼現率低、向央行借款容易，銀行就會減少超額準備；央行對準備金付息，超額準備會增加。', 5, 9);
+  // 第 2 題：每種方法都要寫成本；只列方法最多拿一半
+  mid('113-pmbk-E2', '1', '持有超額準備，成本是放棄放款的利息收入（機會成本）；出售證券，需付手續費，也可能有價格損失。', 10, 10);
+  mid('113-pmbk-E2', '1', '持有超額準備；出售證券。', 4, 6);
+  mid('113-pmbk-E2', '2', '向其他銀行拆款，要支付拆款利率；向央行貼現借款，要付重貼現率並受央行監督；發行定期存單，要付較高利息。', 12, 15);
+  // 第 3 題：彈性大小與貨幣政策效果的方向寫對才得分
+  mid('113-pmbk-E3', '1', '貨幣需求的利率彈性是貨幣需求量變動百分比除以利率變動百分比，衡量貨幣需求對利率的敏感程度。利率上升，持有貨幣的機會成本增加，貨幣需求減少。流動性陷阱時彈性無窮大。', 9, 12);
+  mid('113-pmbk-E3', '2', '彈性小時 LM 陡，貨幣政策效果大；彈性大時 LM 平坦，貨幣政策效果小；流動性陷阱時貨幣政策無效。', 6, 9);
+  mid('113-pmbk-E3', '2', '貨幣政策很重要。', 0, 1);
+  // 第 4 題：金融恐慌、地下經濟、財富增加的貨幣供給方向
+  mid('113-pmbk-E4', '1', '金融恐慌時民眾擠兌，提領存款換成現金，通貨存款比率上升；銀行也增加超額準備，貨幣乘數下降，貨幣供給減少。', 7, 9);
+  mid('113-pmbk-E4', '2', '地下經濟用現金交易以逃稅，通貨存款比率上升，貨幣乘數下降，貨幣供給減少。', 5, 8);
+  mid('113-pmbk-E4', '2', '地下經濟會讓貨幣供給增加。', 0, 1);  // 方向寫反
+  mid('113-pmbk-E4', '3', '財富增加，民眾存款增加，通貨存款比率下降，貨幣乘數上升，貨幣供給增加。', 5, 8);
+  // 貨幣乘數公式 m = (1+c)/(r+e+c)：c、e 同時上升則乘數下降，r 不變時 c 下降則乘數上升（驗算參考答案的方向）
+  const m = (c, r, e) => (1 + c) / (r + e + c);
+  assert.ok(m(0.4, 0.1, 0.1) < m(0.2, 0.1, 0.1) && m(0.2, 0.1, 0.3) < m(0.2, 0.1, 0.1) && m(0.1, 0.1, 0.1) > m(0.2, 0.1, 0.1));
+  // 長期利率等於預期短期利率平均加貼水：預期短期利率由 5%、3%、2% 下降，平均 3.33%，低於目前短期利率 5%（貼水 0.3%）
+  assert.ok((5 + 3 + 2) / 3 + 0.3 < 5);
+  // 重定價缺口：GAP = RSA − RSL，利率上升 2 個百分點、負缺口 −500 億時淨利息收入約減少 10 億
+  assert.strictEqual((300 - 800) * 0.02, -10);
+}
+console.log('113 年貨幣銀行學申論題測試通過');
+
+/* ===== 114 年高考三級貨幣銀行學（4 題）與普考貨幣銀行學概要（5 題）===== */
+{
+  const gq = data.essays.filter(q => q.id.startsWith('114-g3mon-E')), pq = data.essays.filter(q => q.id.startsWith('114-pmon-E'));
+  assert.deepStrictEqual(gq.map(q => q.points), [25, 20, 30, 25]);          // 共 100 分
+  assert.deepStrictEqual(pq.map(q => q.points), [20, 20, 20, 20, 20]);      // 共 100 分
+  assert.ok(gq.every(q => q.exam === '公務人員高等考試三級考試' && q.subject === '貨幣銀行學' && q.year_roc === 114 && q.categories.join() === '金融保險,經建行政'));
+  assert.ok(pq.every(q => q.exam === '公務人員普通考試' && q.subject === '貨幣銀行學概要' && q.year_roc === 114 && q.categories.join() === '金融保險,經建行政'));
+  const sh = (id) => E[id].parts.map(x => x.points).join(',');
+  assert.strictEqual(sh('114-g3mon-E2'), '10,10'); assert.strictEqual(sh('114-pmon-E1'), '10,10'); assert.strictEqual(sh('114-pmon-E2'), '10,10');
+  assert.strictEqual(sh('114-pmon-E4'), '5,5,5,5'); assert.strictEqual(sh('114-pmon-E3'), '20');
+  const g = (qid, pid, t) => C.gradeEssayPart(part(qid, pid), t), it = (r, id) => r.items.find(i => i.id === id).earned;
+
+  // 數學驗算（參考答案的數字）
+  const A = 300, L = 80, DA = 2, DL = 4, di = 0.03;
+  const dA = -DA * di * A, dL = -DL * di * L;
+  assert.ok(Math.abs(dA + 18) < 1e-9 && Math.abs(dL + 9.6) < 1e-9 && Math.abs((dA - dL) + 8.4) < 1e-9);
+  assert.ok(Math.abs(-(DA - (L / A) * DL) * A * di + 8.4) < 1e-9);          // 存續期間缺口寫法與逐項計算相同
+  const gap = 30 - 50; assert.strictEqual(gap, -20); assert.ok(Math.abs(gap * -0.05 - 1) < 1e-9);  // 缺口 × Δi ＝ +1
+  assert.ok(Math.abs((50 * 0.05) - (30 * 0.05) - 1) < 1e-9);
+  assert.strictEqual(3 + 3 + 0.5 * (3 - 2) + 0.5 * 1, 7);                  // 泰勒法則 7%
+  const req0 = 1000 * 0.2, tot = req0 + 90, req1 = 1000 * 0.25; assert.deepStrictEqual([req0, tot, req1, tot - req1], [200, 290, 250, 40]);
+
+  // 計算題：正確答案得分、典型錯誤不得滿分
+  assert.strictEqual(g('114-g3mon-E2', '1', '存續期間模型：價值變動≈-存續期間×利率變動。資產減少 ΔA=-2×3%×300=-18，ΔL=-4×3%×80=-9.6，淨值變動=-18-(-9.6)=-8.4 億元，淨值減少').earned, 10);
+  assert.ok(g('114-g3mon-E2', '1', '資產減少18億元，負債減少9.6億元，淨值減少27.6億元').earned < 8);     // 把負債變動加進去
+  assert.ok(g('114-g3mon-E2', '1', '淨值減少8.4億元').earned >= 3);
+  assert.strictEqual(g('114-g3mon-E2', '2', '缺口=30-50=-20 億元（負缺口），利潤變動=(-20)×(-5%)=+1 億元，利潤增加').earned, 10);
+  assert.ok(g('114-g3mon-E2', '2', '缺口=50-30=20，利潤減少1億元').earned < 6);                         // 方向寫反
+  assert.strictEqual(it(g('114-g3mon-E3', '2', '聯邦基金利率=3%+3%+0.5×(3%-2%)+0.5×1%=7%'), 'r3'), 4);
+  assert.ok(g('114-g3mon-E3', '2', '3%+0.5×1%+0.5×1%=4%').earned < 8);                                  // 漏加目前通膨率
+  assert.strictEqual(g('114-pmon-E3', '1', '法定準備=1000×20%=200，總準備=200+90=290，新法定準備=1000×25%=250，超額準備=290-250=40 億元').earned, 20);
+  assert.ok(g('114-pmon-E3', '1', '超額準備=90-50=40億元').earned < 12);
+  assert.ok(g('114-pmon-E3', '1', '超額準備變為 190 億元').earned < 10);
+
+  // 概念題：時點寫反、方向寫反、只寫名詞不得滿分
+  assert.ok(g('114-pmon-E2', '1', '逆選擇是借貸之後借款人從事高風險活動；道德危險是借貸之前選到壞借款人。').earned < 10);
+  assert.ok(it(g('114-pmon-E2', '2', '大到不能倒會加劇逆選擇。'), 'r1') === 0);
+  assert.ok(g('114-pmon-E2', '2', '大到不能倒會加劇道德危險。').earned <= 3);
+  assert.ok(g('114-pmon-E4', '4', '金本位屬於貨幣目標機制。').earned < 5);
+  assert.ok(g('114-g3mon-E1', '1', '決策者低估自然失業率，所以採擴張政策，通膨會上升。').earned < 8);
+  assert.ok(g('114-pmon-E1', '1', '政府擔保使公司債價格上升。').earned < 10 * 0.6);   // 沒答公債
+
+  // 繪圖題：沒有說明軸與曲線時，意見與建議要提醒
+  const tf = '緊縮政策會讓產出減少、物價下降。';
+  const gr = g('114-g3mon-E1', '2', tf), sc = {}; gr.items.forEach(i => { sc[i.id] = i.earned; });
+  const fb = C.feedbackEssayPart(part('114-g3mon-E1', '2'), { text: tf, auto: sc, scores: sc });
+  assert.ok(fb.points.some(x => /繪圖/.test(x.text)), '繪圖題答案沒有說明軸與曲線時應提醒');
+
+  // 整題回饋：參考答案總分為滿分
+  gq.concat(pq).forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const gr2 = C.gradeEssayPart(p, C.stripHtml(p.model_answer)), sc2 = {}; gr2.items.forEach(i => { sc2[i.id] = i.earned; }); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: sc2, scores: sc2 }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+  });
+  console.log('114 年高考三級貨幣銀行學與普考貨幣銀行學概要申論題測試通過');
+}
+
+/* ===== 115 年經建行政：高考三級貨幣銀行學、普考貨幣銀行學概要（純申論，各 4 題） ===== */
+{
+  const g3 = data.essays.filter(q => q.id.startsWith('115-g3mbk-')), pt = data.essays.filter(q => q.id.startsWith('115-ptmbk-'));
+  assert.strictEqual(g3.length, 4); assert.strictEqual(pt.length, 4);
+  g3.forEach(q => { assert.strictEqual(q.exam, '公務人員高等考試三級考試'); assert.strictEqual(q.subject, '貨幣銀行學'); assert.deepStrictEqual(q.categories, ['經建行政']); });
+  pt.forEach(q => { assert.strictEqual(q.exam, '公務人員普通考試'); assert.strictEqual(q.subject, '貨幣銀行學概要'); assert.deepStrictEqual(q.categories, ['經建行政']); });
+  assert.strictEqual(g3.reduce((a, q) => a + q.points, 0), 100); assert.strictEqual(pt.reduce((a, q) => a + q.points, 0), 100);
+  // 小題結構（對照試題 PDF：高考 10+15、5+5+15、10+15、15+10；普考 15+10、10+15、25、25）
+  assert.strictEqual(shape('115-g3mbk-E1'), '10,15'); assert.strictEqual(shape('115-g3mbk-E2'), '5,5,15');
+  assert.strictEqual(shape('115-g3mbk-E3'), '10,15'); assert.strictEqual(shape('115-g3mbk-E4'), '15,10');
+  assert.strictEqual(shape('115-ptmbk-E1'), '15,10'); assert.strictEqual(shape('115-ptmbk-E2'), '10,15');
+  assert.strictEqual(shape('115-ptmbk-E3'), '25'); assert.strictEqual(shape('115-ptmbk-E4'), '25');
+  E['115-g3mbk-E2'].parts.forEach(p => assert.ok(p.calc, '資本適足率計算題應標記 calc'));
+
+  // 數值驗算：資本適足率
+  const rwa = 4000 * 1 + 1500 * 0.5 + 1250 * 0.2, car = 550 / rwa;
+  assert.strictEqual(rwa, 5000); assert.ok(Math.abs(car - 0.11) < 1e-12);
+  const rwa2 = rwa - 500 * (1 - 0.2), car2 = 550 / rwa2;
+  assert.strictEqual(rwa2, 4600); assert.ok(Math.abs(car2 * 100 - 11.9565) < 1e-3); assert.ok(Math.abs((car2 - car) * 100 - 0.9565) < 1e-3);
+  const rwa3 = rwa - 100, car3 = (550 - 100) / rwa3;
+  assert.strictEqual(rwa3, 4900); assert.ok(Math.abs(car3 * 100 - 9.1837) < 1e-3);
+  assert.ok(car3 < 0.105 && car3 > 0.08, '事件後低於 10.5% 但仍高於 8%');
+  // IS-LM：Y = α(A − br)，M/P = kY − hr；公開市場賣出使 M 下降，b 愈大所得降幅愈大、利率升幅愈小
+  const eff = (b, dM) => { const al = 2.5, k = 0.5, h = 40, A = 1000, M = 300;
+    const Y = M_ => (M_ + h * A / b) / (k + h / (al * b)), r = M_ => (A - Y(M_) / al) / b;
+    return { dY: Y(M + dM) - Y(M), dr: r(M + dM) - r(M), formula: al * b / (k * al * b + h) * dM }; };
+  const lo = eff(10, -20), hi = eff(40, -20);
+  assert.ok(Math.abs(lo.dY - lo.formula) < 1e-9 && Math.abs(hi.dY - hi.formula) < 1e-9);
+  assert.ok(hi.dY < lo.dY && hi.dr < lo.dr, '彈性大：所得降幅較大（dY 更負）、利率升幅較小（dr 較小）');
+  assert.ok(lo.dr > 0 && hi.dr > 0 && lo.dY < 0 && hi.dY < 0);
+  // 參考答案與評分
+  const a = id => C.stripHtml(E[id].parts[E[id].parts.length - 1].model_answer);
+  ['9.18', '4,900', '450'].forEach(x => assert.ok(a('115-g3mbk-E2').includes(x), '(三)參考答案應含 ' + x));
+  const pp = (id, pid, txt) => C.gradeEssayPart(part(id, pid), txt);
+  // 學生式作答：部分得分
+  assert.strictEqual(pp('115-g3mbk-E2', '1', 'RWA=4000+750+250=5000億，CAR=550/5000=11%，高於8%及10.5%，符合規定。').earned, 5);
+  assert.ok(pp('115-g3mbk-E2', '1', 'CAR=550/6750=8.15%，符合8%。').earned <= 1, '用總資產當分母不應拿高分');
+  assert.strictEqual(pp('115-g3mbk-E2', '2', 'RWA減少500*0.8=400，變成4600，CAR=550/4600=11.96%，提高0.96個百分點。').earned, 5);
+  assert.strictEqual(pp('115-g3mbk-E2', '2', '提高 5 個百分點').earned, 0);
+  { const g = pp('115-g3mbk-E2', '3', '金管會會要求銀行增資，不能發股利。'); assert.ok(g.earned > 0 && g.earned < 8, '口語寫法應得部分分數，實得 ' + g.earned); }
+  assert.strictEqual(pp('115-g3mbk-E1', '1', '駝峰型代表中期利率最高，央行升息使短中期利率上升，但市場預期未來降息、景氣轉弱所以長期利率較低。這通常表示景氣在擴張末期的高峰，即將進入衰退。').earned, 10);
+  assert.strictEqual(pp('115-g3mbk-E1', '1', '這代表景氣即將復甦，進入擴張階段。').earned, 0);
+  assert.ok(pp('115-g3mbk-E3', '1', '公開市場操作透過買賣債券影響準備貨幣；重貼現率改變銀行向央行借款成本，影響準備貨幣；法定準備率影響貨幣乘數。').earned >= 9);
+  assert.ok(pp('115-g3mbk-E4', '2', '新興古典學派認為價格與工資完全彈性且有理性預期，廠商只會因為無法分辨一般物價與相對價格而產生錯誤認知，預料到的貨幣政策會被預期完全吸收，因此無效。').earned >= 9);
+  assert.strictEqual(pp('115-ptmbk-E3', '1', '預期通膨上升會使債券價格上漲，殖利率下降。').earned, 0, '方向錯誤不應得分');
+  assert.ok(pp('115-ptmbk-E3', '1', '依費雪效果，預期通膨上升使名目利率上升，債券價格下跌。長天期債券存續期間較長，價格跌幅大於短天期。殖利率曲線整體上移，長端上升較多而變陡。').earned >= 20);
+  assert.ok(pp('115-ptmbk-E4', '1', '賣出公債會使貨幣供給增加，所得上升。').earned <= 2);
+  assert.ok(pp('115-ptmbk-E4', '1', '賣債使貨幣供給減少，LM左移，利率上升所得下降。投資利率彈性大時IS平坦，利率上升較小，所得減少較大，貨幣政策效果較強；彈性小時IS陡峭，利率上升較大，所得減少較小，效果較弱。').earned >= 15);
+  // 整題回饋：只評一小題時，總評要提醒尚未評分的小題；全部滿分時沒有警告
+  const st = {}; E['115-g3mbk-E1'].parts.forEach(p => { const g = C.gradeEssayPart(p, C.stripHtml(p.model_answer)), sc = {}, au = {}; g.items.forEach(i => { sc[i.id] = i.earned; au[i.id] = i.earned; }); st[p.id] = { text: C.stripHtml(p.model_answer), auto: au, scores: sc }; });
+  const full = C.feedbackEssay(E['115-g3mbk-E1'], st); assert.strictEqual(full.earned, full.possible);
+  const half = C.feedbackEssay(E['115-g3mbk-E1'], { 1: st['1'] }); assert.ok(half.points.some(x => /尚未評分/.test(x.text)));
+  console.log('115 年貨幣銀行學申論題測試通過');
 }

@@ -157,7 +157,7 @@ console.log('feedback tests passed');
   const tot4 = C.feedbackEssay(e4, { [p41.id]: { text: '不知道', auto: z41, scores: z41 } });
   assert.ok(has(tot4, 'tip', /尚未評分/) && has(tot4, 'warn', /失分最多/));
   // 全對時：農業經濟學、工程經濟學 8 題都是「結構完整」（上方迴圈已涵蓋全部題目；此處再確認 113 年有被涵蓋）
-  assert.strictEqual(essays.essays.filter(e => e.year_roc === 113 && e.exam === '公務人員高等考試三級考試' && e.subject !== '交通政策與行政').length, 61);  // 含 113 年觀光行政三科 11 題（觀光英語 4、觀光學 4、觀光日語 3）與觀光資源規劃 4 題；113 年高考三級原 7 科 24 題＋財政學 4 題；另含民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）；交通政策與行政 4 題另計
+  assert.strictEqual(essays.essays.filter(e => e.year_roc === 113 && e.exam === '公務人員高等考試三級考試' && e.subject !== '交通政策與行政').length, 65);  // 含 113 年觀光行政三科 11 題（觀光英語 4、觀光學 4、觀光日語 3）與觀光資源規劃 4 題；113 年高考三級原 7 科 24 題＋財政學 4 題；另含民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）；交通政策與行政 4 題另計
 }
 console.log('113 年申論題回饋測試通過');
 
@@ -295,3 +295,26 @@ console.log('115 年觀光行政（觀光學、觀光英語、觀光日語）回
   assert.ok(fe && has(fe, 'tip', /還有 2 個小題尚未評分/));
 }
 console.log('113 年觀光行政（觀光英語、觀光學、觀光日語）回饋測試通過');
+
+/* ===== 113 年貨幣銀行學（高考三級）與貨幣銀行學概要（普考）：依作答的意見與建議 ===== */
+{
+  const qs = essays.essays.filter(e => /^113-(g3mbk|pmbk)-/.test(e.id));
+  assert.strictEqual(qs.length, 8);
+  const zero = (p) => { const s = {}; p.rubric.forEach(r => s[r.id] = 0); return s; };
+  // 方向寫反的答案：沒有得分的細目與「常見錯誤」都會列出
+  const e4 = qs.find(e => e.id === '113-pmbk-E4'), p42 = e4.parts[1], z42 = zero(p42);
+  const fb = C.feedbackEssayPart(p42, { text: '地下經濟會讓貨幣供給增加。', auto: z42, scores: z42 });
+  assert.ok(has(fb, null, /常見錯誤/) && has(fb, null, /沒有得分|都沒有得分|完全沒得分|部分/), '應列出失分細目與常見錯誤');
+  // 整題總評：只評第（一）小題時，提醒其餘小題尚未評分
+  const p41 = e4.parts[0], z41 = zero(p41);
+  const tot = C.feedbackEssay(e4, { [p41.id]: { text: '不知道', auto: z41, scores: z41 } });
+  assert.ok(has(tot, 'tip', /尚未評分/) && has(tot, 'warn', /失分最多/));
+  // 參考答案作答、自評滿分時，整題為滿分（8 題皆然）
+  qs.forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const gr = C.gradeEssayPart(p, C.stripHtml(p.model_answer)), sc = {}; gr.items.forEach(i => { sc[i.id] = i.earned; }); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: sc, scores: sc }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+  });
+}
+console.log('113 年貨幣銀行學申論題回饋測試通過');

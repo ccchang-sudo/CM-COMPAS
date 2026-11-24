@@ -78,7 +78,7 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 246);  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
+assert.strictEqual(data.essays.length, 269);  // 含 113 年普考觀光學概要 4 題、113 年高考三級觀光英語／觀光學／觀光日語 11 題（見檔尾）；含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
 const ESSAY_ONLY = ['公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要', '民法總則、親屬與繼承編', '民法（包括總則、物權、親屬與繼承編）', '民法與民事訴訟法', '民法物權編概要', '民法總則、親屬與繼承編概要', '觀光學', '觀光英語', '觀光日語', '觀光學概要', '觀光行銷學概要', '觀光資源規劃'];
 data.essays.forEach(q => {
@@ -539,7 +539,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 /* ===== 113 年高考三級：經濟學、經濟學與財政學概論、公共經濟學的申論題 ===== */
 {
   const by113 = (subj) => data.essays.filter(q => q.year_roc === 113 && q.subject === subj);
-  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 42);  // 含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）
+  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 57);  // 含 113 年觀光資源規劃 4 題、觀光英語 4 題、觀光學 4 題、觀光日語 3 題；含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）
   assert.deepStrictEqual(by113('經濟學').map(q => q.points), [25, 25]);
   assert.deepStrictEqual(by113('經濟學與財政學概論').map(q => q.points), [20, 30]);        // 50 分
   assert.deepStrictEqual(by113('公共經濟學').map(q => q.points), [25, 25, 25, 25]);         // 100 分
@@ -648,7 +648,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 
 
 const y113 = data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政');  // 交通政策與行政另有測試
-assert.strictEqual(y113.length, 42);  // 28 題經濟財政類 + 113 年高考三級民法 14 題
+assert.strictEqual(y113.length, 57);  // 28 題經濟財政類 + 113 年高考三級民法 14 題 + 113 年觀光資源規劃 4 題
 assert.deepStrictEqual(sub(113, '農業經濟學').map(q => q.points), [15, 30, 30, 25]);          // 共 100 分
 assert.deepStrictEqual(sub(113, '工程經濟學').map(q => q.points), [25, 25, 25, 25]);
 sub(113, '農業經濟學').forEach(q => assert.deepStrictEqual(q.categories, ['農業行政']));
@@ -858,6 +858,10 @@ OVERLAP.push(
   ['115-pmkt-E1', '114-pagr-E5'], ['115-pmkt-E1', '115-g3io-E4'], ['115-pmkt-E3', '113-g3te-E4'], ['115-pmkt-E3', '113-pte-E3'], ['115-pmkt-E3', '114-g3tre-E1'], ['115-pmkt-E3', '114-pte-E3'], ['115-pmkt-E3', '114-g3ie-E2'],
   ['115-ptour-E1', '113-g3tp-E4'], ['115-ptour-E1', '115-ptp-E4'], ['115-ptour-E1', '114-g3tp-E4'], ['115-ptour-E2', '113-g3pe-E4'], ['115-ptour-E2', '113-pte-E1'], ['115-ptour-E4', '113-g3tp-E1'],
   ['115-ptour-E2', '114-pagr-E5'], ['115-pmkt-E1', '114-pagr-E4'], ['115-pmkt-E3', '113-pte-E1'], ['115-g3tres-E1', '113-pte-E1'], ['115-g3tres-E1', '113-ptp-E1'], ['115-g3tres-E1', '113-g3tp-E1'], ['115-g3tres-E2', '114-g3agr-E1']);  // 農業六級產業（農業觀光）、租車市場訂價與需求、軌道與國際旅客航網等
+// 113 年觀光行政（觀光資源規劃、觀光行銷學概要）：觀光資源與農業觀光、自行車與綠運輸、道路安全改善、環島高鐵效益、營運成本與效率等主題本來就會重疊
+OVERLAP.push(['113-g3tres-E4', '114-pagr-E5'], ['113-g3tres-E4', '113-g3tp-E2'], ['113-g3tres-E2', '114-ptp-E4'], ['113-g3tres-E2', '114-g3tp-E1'], ['113-pmkt-E4', '113-pte-E3']);
+// 113 年觀光學第 4 題（觀光科技與實體環境）：與資訊產業的數位科技、交通政策的智慧運輸與旅遊服務等主題本來就會重疊
+OVERLAP.push(['115-g3io-E4', '113-g3tour-E4'], ['113-g3tp-E4', '113-g3tour-E4']);
 // 114 年觀光行政（觀光學、觀光資源規劃）：觀光衝擊與農業觀光、交通旅遊、跨部會輔導農漁村休閒等主題本來就會重疊
 OVERLAP.push(['114-g3tour-E1', '113-ptp-E1'], ['114-g3tres-E2', '114-g3agr-E1'], ['114-g3tres-E2', '114-ptp-E4']);
 const fam = (s) => { s = s.replace(/概要$/, ''); if (/^民法/.test(s)) return '民法'; if (/^觀光/.test(s)) return '觀光'; return /^(運輸經濟學|交通政策與行政)$/.test(s) ? '交通運輸' : s; };  // 運輸經濟學與交通政策與行政同屬交通運輸領域，用語本來就會重疊
@@ -1708,4 +1712,157 @@ console.log('113 年民法申論題（法制／智財、財稅行政）測試通
   assert.ok(g('114-g3tres-E1', '2', '黑鮪魚要遵守配額與體長限制，保護幼魚與產卵場，並建立漁獲追溯。').earned >= 3);
   assert.ok(g('114-g3tour-E2', '2', '觀光倫理規範第6條要求業者提供誠實資訊、契約透明、安全與保險救援；政府要保障旅客安全，旅遊警示須公正準確。').earned >= 6);
   console.log('114 年觀光行政（觀光學、觀光資源規劃）申論題測試通過');
+}
+
+/* ===== 113 年觀光行政：高考三級觀光資源規劃（33240、33340）、普考觀光行銷學概要（42530） ===== */
+{
+  const sel = (k) => data.essays.filter(q => q.id.startsWith(k));
+  const res = sel('113-g3tres-E'), mkt = sel('113-pmkt-E');
+  assert.strictEqual(res.length, 4); assert.strictEqual(mkt.length, 4);
+  assert.ok(res.every(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject === '觀光資源規劃' && q.points === 25 && q.categories.length === 2 && q.categories.every(x => /^觀光行政（選試觀光(英語|日語)）$/.test(x))));
+  assert.ok(mkt.every(q => q.year_roc === 113 && q.exam === '公務人員普通考試' && q.subject === '觀光行銷學概要' && q.categories.join() === '觀光行政'));
+  assert.deepStrictEqual(mkt.map(q => q.points), [20, 25, 30 - 5, 30].map((x, i) => [20, 25, 25, 30][i]));  // 對照試題：10＋10、25、25、30 分
+  const sh = (id) => data.essays.find(q => q.id === id).parts.map(p => p.points).join();
+  assert.strictEqual(sh('113-g3tres-E1'), '5,5,5,5,5');   // 脫碳五項手段
+  assert.strictEqual(sh('113-g3tres-E3'), '5,5,15');       // 原題 10 分（遊憩與生態因素）＋15 分（管制）
+  assert.strictEqual(sh('113-pmkt-E1'), '10,10');          // 原題 10＋10 分
+  assert.strictEqual(sh('113-pmkt-E3'), '5,5,5,5,5');      // 五種缺口
+  assert.strictEqual(sh('113-pmkt-E4'), '10,10,10');       // 三個交叉體系
+  const g = (id, pid, t) => C.gradeEssayPart(data.essays.find(q => q.id === id).parts.find(p => p.id === pid), t);
+  const it = (r, rid) => r.items.find(x => x.id === rid).earned;
+  // 空泛答案不得分
+  res.concat(mkt).forEach(q => q.parts.forEach(p => assert.ok(C.gradeEssayPart(p, '這題很重要，觀光需要發展。').earned <= 1, q.id + '/' + p.id + ' 空泛答案不應得分')));
+  // 各題合理的簡答可得分、單一名詞不可滿分
+  assert.ok(g('113-g3tres-E1', '1', '旅宿業應汰換為LED照明與高效率變頻空調，並導入能源管理系統監測用電。').earned >= 4);
+  assert.ok(g('113-g3tres-E1', '4', '旅館應裝設太陽光電、購買綠電憑證，並以熱泵取代燃油鍋爐。').earned >= 4);
+  assert.ok(g('113-g3tres-E1', '5', '旅館要減少用電。').earned <= 1);
+  assert.ok(g('113-g3tres-E2', '1', '舉辦臺灣自行車節與登山王挑戰，並加強東西向挑戰路線的安全與國際行銷。').earned >= 6);
+  assert.ok(g('113-g3tres-E2', '3', '自行車道要改善鋪面、護欄與視距不佳的險坡，並縫合斷鏈、串聯路網與臺鐵車站。').earned >= 4);  // 簡短但切題，可得部分分
+  assert.ok(g('113-g3tres-E2', '3', '自行車環島路網要優化安全：整修鋪面、加高護欄、在隧道增設智慧偵測，並設置慢車道；同時盤整既有路網、縫合斷鏈、串聯地方路線，改善臺鐵場站與補給站的友善服務設施。').earned >= 7);
+  assert.ok(g('113-g3tres-E2', '2', '政府要蓋很多自行車道。').earned <= 2);
+  assert.ok(g('113-g3tres-E3', '3', '綠島應採總量管制與預約制，依船班運量限制每日人數，並收取環境費、推動淡季旅遊與限制機車數量。').earned >= 9);
+  assert.ok(g('113-g3tres-E3', '3', '限制遊客人數。').earned < 15 * 0.4);
+  assert.ok(it(g('113-g3tres-E4', '1', '觀光資源有多樣性與地域性。'), 'r3') === 0);
+  assert.ok(g('113-g3tres-E4', '2', '觀光資源能帶動就業與稅收，促進區域平衡發展，也要推動保育與永續。').earned >= 6);
+  assert.ok(g('113-pmkt-E1', '2', '觀光產品最大的不同是無形性，看不見摸不到，所有權不移轉，購買前無法試用。').earned >= 4);
+  assert.ok(g('113-pmkt-E1', '2', '觀光產品比較貴。').earned <= 1);
+  assert.ok(g('113-pmkt-E2', '2', '內部行銷是公司對員工，透過教育訓練與激勵提高員工滿意，才能兌現對顧客的承諾。').earned >= 6);
+  assert.ok(g('113-pmkt-E3', '1', '缺口一是顧客期望與管理者認知之間的落差，原因是缺乏市場研究，應加強顧客調查。').earned >= 4);
+  assert.ok(g('113-pmkt-E3', '4', '缺口四是廣告承諾與實際服務傳遞的落差，因為過度承諾，需與營運部門協調。').earned >= 4);
+  assert.ok(g('113-pmkt-E3', '2', '服務有五個缺口。').earned <= 1);
+  assert.ok(g('113-pmkt-E4', '1', '服務營運系統是顧客看不見的後台，包含設施設備與作業流程，負責生產服務。').earned >= 4);
+  // 回饋：失分細目會被點名、並顯示常見錯誤
+  const part = (id, pid) => data.essays.find(q => q.id === id).parts.find(p => p.id === pid);
+  const t0 = '缺口五是顧客期望與知覺服務之間的落差。', gr0 = g('113-pmkt-E3', '5', t0), sc0 = {}; gr0.items.forEach(i => { sc0[i.id] = i.earned; });
+  const fb = C.feedbackEssayPart(part('113-pmkt-E3', '5'), { text: t0, auto: sc0, scores: sc0 });
+  assert.ok(gr0.earned > 0 && gr0.earned < 5);
+  assert.ok(fb.points.some(x => /常見錯誤/.test(x.text)) && fb.points.some(x => /完全沒得分/.test(x.text)), '失分時應提示未得分的細目與常見錯誤');
+  // 整題回饋：參考答案總分應為滿分
+  res.concat(mkt).forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const gr = C.gradeEssayPart(p, C.stripHtml(p.model_answer)), sc = {}; gr.items.forEach(i => { sc[i.id] = i.earned; }); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: sc, scores: sc }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+  });
+  console.log('113 年觀光行政（觀光資源規劃、觀光行銷學概要）申論題測試通過');
+}
+/* ===== 113 年普通考試觀光行政：觀光學概要（42520）4 題 ===== */
+{
+  const tour = data.essays.filter(q => q.id.startsWith('113-ptour-E'));
+  assert.strictEqual(tour.length, 4);
+  assert.ok(tour.every(q => q.year_roc === 113 && q.exam === '公務人員普通考試' && q.subject === '觀光學概要' && q.categories.join() === '觀光行政' && q.points === 25));
+  const sh = (id) => E[id].parts.map(p => p.points).join(',');
+  assert.strictEqual(sh('113-ptour-E1'), '7,7,6,5');   // 四個名詞：原題 7、7、6、5 分
+  assert.strictEqual(sh('113-ptour-E2'), '9,8,8');     // 編者拆分：資源、市場、服務
+  assert.strictEqual(sh('113-ptour-E3'), '8,8,9');     // 編者拆分：一階、二階、三階與差別
+  assert.strictEqual(sh('113-ptour-E4'), '7,10,8');    // 編者拆分：架構、成本領導與差異化、集中與選擇
+  const g = (qid, pid, t) => C.gradeEssayPart(part(qid, pid), t);
+  const it = (r, id) => r.items.find(x => x.id === id).earned;
+  // 名詞解釋：定義正確可得高分，空泛或只寫名詞者低分
+  assert.ok(g('113-ptour-E1', '1', 'RSO 是地接社，受國外旅行社委託，在當地接待入境旅客，安排住宿、餐飲、交通與導遊行程。').earned >= 5);
+  assert.ok(g('113-ptour-E1', '1', 'RSO 是旅行社。').earned <= 2);
+  assert.ok(g('113-ptour-E1', '2', 'tailor-made tour 是依客戶的需求、偏好與預算量身設計行程，不同於標準化的套裝行程，彈性高但價格較高。').earned >= 5);
+  assert.ok(g('113-ptour-E1', '2', '客製化旅遊。').earned <= 3);   // 只寫名詞，不得拿到滿分
+  assert.ok(g('113-ptour-E1', '3', 'rack rate 是旅館公告的牌價，是未打折的最高房價，作為各種折扣與議價的基準，實際成交價通常較低。').earned >= 5);
+  assert.ok(g('113-ptour-E1', '3', 'rack rate 是最便宜的促銷價。').earned <= 2);
+  assert.ok(g('113-ptour-E1', '4', 'mass tourism 是大眾觀光，大量旅客參加標準化套裝行程集中旅遊，帶動經濟但造成擁擠與環境衝擊。').earned >= 4);
+  assert.ok(g('113-ptour-E1', '4', 'mass tourism 是很多人去玩。').earned <= 1);
+  // 申論題：各小題的關鍵得分點
+  assert.ok(g('113-ptour-E2', '1', '觀光資源包括自然與人文資源，是吸引遊客的基礎，也要保育與永續利用，管制承載量。').earned >= 6);
+  assert.ok(g('113-ptour-E2', '1', '觀光資源很重要。').earned <= 2);
+  assert.ok(g('113-ptour-E2', '2', '觀光市場是客源與需求，規模與消費力影響收益，要做市場區隔、選擇目標市場並加強行銷。').earned >= 5);
+  assert.ok(g('113-ptour-E2', '3', '觀光服務連結資源與市場，包含住宿、餐飲與導遊；服務品質影響滿意度與重遊；三者相輔相成，缺一不可。').earned >= 6);
+  assert.ok(g('113-ptour-E2', '3', '要提供好的服務。').earned <= 2);
+  assert.ok(g('113-ptour-E3', '1', '一階通路是供應商透過零售旅行社賣給旅客，只有一個中間商，供應商支付佣金，例如航空公司機票。').earned >= 6);
+  assert.ok(g('113-ptour-E3', '2', '二階通路是供應商先賣給躉售商（批發商），包裝成套裝行程後再交給零售旅行社銷售給旅客，通路較長、價格較高。').earned >= 6);
+  assert.ok(g('113-ptour-E3', '3', '三階通路是供應商、地接社、國外躉售商、零售旅行社到旅客，通路越長，加價越多，控制力越低，但可觸及跨國客源。').earned >= 7);
+  assert.ok(g('113-ptour-E3', '3', '通路越長越複雜。').earned <= 3);
+  assert.ok(g('113-ptour-E4', '1', 'Porter 的一般性策略有成本領導、差異化與集中，並以五力分析競爭環境。').earned >= 5);
+  assert.ok(g('113-ptour-E4', '2', '成本領導以規模經濟降低成本並提供低價，如廉價航空；差異化以品牌與服務品質建立特色，讓顧客願意付較高價格。').earned >= 7);
+  assert.ok(g('113-ptour-E4', '2', '我會降低成本、提高品質。').earned <= 5);
+  assert.ok(g('113-ptour-E4', '3', '我會採集中策略，聚焦親子客群，並依自身資源選擇，避免卡在中間。').earned >= 5);
+  // 只寫一階，二階與三階不應拿高分（不被別的小題的內容蒙混）
+  const only1 = '一階通路是供應商透過零售旅行社賣給旅客，只有一個中間商，支付佣金。';
+  assert.ok(g('113-ptour-E3', '2', only1).earned <= 3);
+  assert.ok(g('113-ptour-E3', '3', only1).earned <= 2);
+  // 回饋：失分時列出未得分細目與常見錯誤
+  const t0 = 'RSO 是旅行社。', gr0 = g('113-ptour-E1', '1', t0), sc0 = {}; gr0.items.forEach(i => { sc0[i.id] = i.earned; });
+  const fb = C.feedbackEssayPart(part('113-ptour-E1', '1'), { text: t0, auto: sc0, scores: sc0 });
+  assert.ok(fb.points.some(x => /常見錯誤/.test(x.text)) && fb.points.some(x => /完全沒得分|部分/.test(x.text)), '失分時應提示未得分的細目與常見錯誤');
+  // 整題回饋：參考答案總分應為滿分；只寫一個小題時總分明顯偏低
+  tour.forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const gr = C.gradeEssayPart(p, C.stripHtml(p.model_answer)), sc = {}; gr.items.forEach(i => { sc[i.id] = i.earned; }); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: sc, scores: sc }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+  });
+  console.log('113 年普通考試觀光學概要（42520）申論題測試通過');
+}
+
+/* ===== 113 年高考三級觀光行政：觀光英語（33260）、觀光學（33220、33320）、觀光日語（33360） ===== */
+{
+  const en = data.essays.filter(q => q.id.startsWith('113-g3ten-')), tour = data.essays.filter(q => q.id.startsWith('113-g3tour-')), ja = data.essays.filter(q => q.id.startsWith('113-g3tja-'));
+  assert.strictEqual(en.length, 4); assert.strictEqual(tour.length, 4); assert.strictEqual(ja.length, 3);
+  assert.deepStrictEqual(en.map(q => q.points), [20, 20, 20, 40]); assert.deepStrictEqual(tour.map(q => q.points), [25, 25, 25, 25]); assert.deepStrictEqual(ja.map(q => q.points), [40, 30, 30]);
+  assert.ok(en.concat(tour, ja).every(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試'));
+  assert.ok(en.every(q => q.subject === '觀光英語' && q.categories.join() === '觀光行政（選試觀光英語）'));
+  assert.ok(ja.every(q => q.subject === '觀光日語' && q.categories.join() === '觀光行政（選試觀光日語）'));
+  assert.ok(tour.every(q => q.subject === '觀光學' && q.categories.join() === '觀光行政（選試觀光英語）,觀光行政（選試觀光日語）'));
+  // 小題配分（依原試題）
+  assert.strictEqual(shape('113-g3ten-E1'), '10,10'); assert.strictEqual(shape('113-g3ten-E4'), '40');
+  assert.strictEqual(shape('113-g3tour-E1'), '5,7,8,5'); assert.strictEqual(shape('113-g3tour-E3'), '10,15'); assert.strictEqual(shape('113-g3tour-E4'), '12,13');
+  assert.strictEqual(shape('113-g3tja-E1'), '10,10,10,10'); assert.strictEqual(shape('113-g3tja-E2'), '10,10,10'); assert.strictEqual(shape('113-g3tja-E3'), '30');
+  // 作答語言與字數範圍
+  assert.deepStrictEqual(en.map(q => q.parts.map(p => p.lang).join()), ['en,en', 'zh', 'en', 'en']);
+  assert.deepStrictEqual(tour.map(q => q.parts.map(p => p.lang).join()), ['zh,zh,zh,zh', 'zh,zh,zh', 'zh,zh', 'zh,zh']);
+  assert.deepStrictEqual(ja.map(q => q.parts.map(p => p.lang).join()), ['ja,ja,ja,ja', 'zh,zh,zh', 'ja']);
+  assert.deepStrictEqual(part('113-g3ten-E4', '1').limit, { unit: 'word', min: 250, max: 300 });
+  assert.deepStrictEqual(part('113-g3tja-E3', '1').limit, { unit: 'char', min: 300, max: 400 });
+  const wc = C.countUnits(C.stripHtml(part('113-g3ten-E4', '1').model_answer).replace(/<br>/g, ' '), 'word').n;
+  assert.ok(wc >= 250 && wc <= 300, '英文作文參考答案應在 250–300 字，實為 ' + wc);
+  const jc = C.countUnits(C.stripHtml(part('113-g3tja-E3', '1').model_answer), 'char').n;
+  assert.ok(jc >= 300 && jc <= 400, '日文作文參考答案應在 300–400 字，實為 ' + jc);
+  // 參考答案拿滿分、空白與無關答案得 0、泛泛而談不得高分
+  en.concat(tour, ja).forEach(q => q.parts.forEach(p => {
+    assert.strictEqual(C.gradeEssayPart(p, C.stripHtml(p.model_answer.replace(/<br>/g, ' '))).earned, p.points, q.id + '/' + p.id + ' 參考答案應得滿分');
+    assert.strictEqual(C.gradeEssayPart(p, '').earned, 0);
+    assert.ok(C.gradeEssayPart(p, '這題很重要，觀光需要發展，我認為大家都要努力。').earned <= p.points * 0.2, q.id + '/' + p.id + ' 空泛答案不應得高分');
+  }));
+  const g = (id, pid, t) => C.gradeEssayPart(part(id, pid), t);
+  const mid = (id, pid, t, lo, hi) => { const e = g(id, pid, t).earned; assert.ok(e >= lo && e <= hi, id + '/' + pid + ' 部分作答應得 ' + lo + '～' + hi + ' 分，實得 ' + e); };
+  // 部分作答：得部分分數，不是 0 也不是滿分
+  mid('113-g3ten-E1', '1', 'A DMO is an organization that markets and promotes a destination to attract visitors.', 3, 7);
+  mid('113-g3ten-E1', '2', 'A Tourism Satellite Account is a statistical framework to measure the economic contribution of tourism.', 3, 7);
+  mid('113-g3ten-E2', '1', '位於臺灣東部的太魯閣國家公園是國內外遊客熱門的旅遊地點，今年4月發生25年來最強烈的地震，園區將關閉至另行通知。', 5, 14);
+  mid('113-g3ten-E3', '1', 'The rapid development of artificial intelligence has created unprecedented opportunities for all walks of life, and tourism operators are actively introducing AI and robots to improve service quality and efficiency.', 5, 12);
+  mid('113-g3tour-E1', '4', '改良式美式計價（MAP）的房價包含客房與兩餐，通常是早餐與晚餐。', 3, 4);
+  mid('113-g3tour-E3', '1', '紅海策略是在既有市場中與對手正面競爭，常打價格戰；藍海策略是開創新市場與新需求，讓競爭變得無關緊要。', 4, 8);
+  mid('113-g3tja-E2', '2', '在世界經濟論壇（WEF）的性別差距指數2023年版中，日本在146個國家中排名第125位。', 3, 5);
+  mid('113-g3tja-E3', '1', '台湾の一番美しい風景は人だとよく言われます。私は賛成だと思います。例えば、道に迷った時に親切に案内してもらったことがあります。', 4, 18);
+  // 作文字數不到下限一半時，初判分數按比例調降
+  const shortJa = g('113-g3tja-E3', '1', 'まず、台湾の人は親切です。例えば、道を教えてくれます。しかし、期待しすぎも問題です。このように、人を大切にしたいと思います。');
+  assert.ok(shortJa.scale < 1 && shortJa.earned <= 15);
+  // 常見錯誤：MAP 寫成三餐（那是 AP）只能拿到部分分數
+  assert.ok(g('113-g3tour-E1', '4', 'MAP 是房價包含三餐的美式計價。').earned <= 2);
+  console.log('113 年觀光行政（觀光英語、觀光學、觀光日語）申論題測試通過');
 }

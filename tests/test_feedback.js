@@ -157,7 +157,7 @@ console.log('feedback tests passed');
   const tot4 = C.feedbackEssay(e4, { [p41.id]: { text: '不知道', auto: z41, scores: z41 } });
   assert.ok(has(tot4, 'tip', /尚未評分/) && has(tot4, 'warn', /失分最多/));
   // 全對時：農業經濟學、工程經濟學 8 題都是「結構完整」（上方迴圈已涵蓋全部題目；此處再確認 113 年有被涵蓋）
-  assert.strictEqual(essays.essays.filter(e => e.year_roc === 113 && e.exam === '公務人員高等考試三級考試' && e.subject !== '交通政策與行政').length, 42);  // 113 年高考三級原 7 科 24 題＋財政學 4 題；另含民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）；交通政策與行政 4 題另計
+  assert.strictEqual(essays.essays.filter(e => e.year_roc === 113 && e.exam === '公務人員高等考試三級考試' && e.subject !== '交通政策與行政').length, 57);  // 含 113 年觀光行政三科 11 題（觀光英語 4、觀光學 4、觀光日語 3）與觀光資源規劃 4 題；113 年高考三級原 7 科 24 題＋財政學 4 題；另含民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）；交通政策與行政 4 題另計
 }
 console.log('113 年申論題回饋測試通過');
 
@@ -255,3 +255,43 @@ console.log('113 年申論題回饋測試通過');
   assert.ok(C.gradeEssayPart(i2, gen + '以澎湖為例。').items.find(i => i.id === 'r3').earned === 2);
 }
 console.log('115 年觀光行政（觀光學、觀光英語、觀光日語）回饋測試通過');
+
+/* ===== 113 年觀光行政（觀光英語、觀光學、觀光日語）回饋 ===== */
+{
+  const grade = (p, text) => { const g = C.gradeEssayPart(p, text), a = {}; g.items.forEach(i => { a[i.id] = i.earned; }); return { text, auto: a, scores: a }; };
+  const part = (id, pid) => essays.essays.find(e => e.id === id).parts.find(p => p.id === pid);
+  // 英文作文：太短會提醒字數；用中文作答會被提醒語言
+  const es = part('113-g3ten-E4', '1');
+  const shortEn = 'Taiwan tourism has similar attractions. I suggest we promote local culture and use social media.';
+  const f1 = C.feedbackEssayPart(es, grade(es, shortEn));
+  assert.ok(has(f1, null, /字數 \d+ 個單字，低於建議的 250/), '英文作文字數太少應提醒');
+  const zhEn = '臺灣的觀光資源同質性很高，我建議各地發展自己的文化特色，並結合數位科技與行銷來吸引國際旅客，讓每個地方都有獨特的故事與體驗。';
+  assert.ok(has(C.feedbackEssayPart(es, grade(es, zhEn)), 'warn', /要用英文作答/), '用中文寫英文作文應提醒語言');
+  // 英文作文：參考答案落在字數範圍內，回饋會稱讚字數
+  const full = C.stripHtml(es.model_answer.replace(/<br>/g, ' '));
+  const ff = C.feedbackEssayPart(es, grade(es, full));
+  assert.ok(has(ff, 'good', /在要求範圍內/) && ff.earned === 40);
+  // 日文作文：超過 400 字會警告
+  const ja = part('113-g3tja-E3', '1');
+  const longJa = C.stripHtml(ja.model_answer) + C.stripHtml(ja.model_answer).slice(0, 80);
+  assert.ok(has(C.feedbackEssayPart(ja, grade(ja, longJa)), 'warn', /超過上限 400/), '日文作文超過 400 字應警告');
+  // 日文題用中文作答：提醒語言；日翻中用日文作答：提醒語言
+  const jt = part('113-g3tja-E1', '1');
+  assert.ok(has(C.feedbackEssayPart(jt, grade(jt, '福隆國際沙雕藝術季昨天開幕，日本沙雕師保坂俊彥與林真理感謝臺灣在311大地震時伸出援手，今年也聯手創作臺灣加油作品。')), 'warn', /要用日文作答/));
+  const zt = part('113-g3tja-E2', '3');
+  assert.ok(has(C.feedbackEssayPart(zt, grade(zt, '東京都知事選は六月二十日告示、七月七日投開票され、蓮舫参院議員が出馬を表明した。小池百合子都知事も出馬の方針を固めている。')), 'warn', /要用中文（本國文字）作答/));
+  // 觀光學：只寫紅海藍海的口號，案例分析小題抓不到案例與結果
+  const bo = part('113-g3tour-E3', '2');
+  const bf = C.feedbackEssayPart(bo, grade(bo, '藍海策略比較好，紅海策略很競爭。'));
+  assert.ok(bf.earned <= 3 && has(bf, 'warn', /沒得分/));
+  assert.ok(has(bf, 'tip', /常見錯誤提醒/));
+  // 觀光學：名詞解釋寫得完整時幾乎滿分
+  const gds = part('113-g3tour-E1', '2');
+  const gf = C.feedbackEssayPart(gds, grade(gds, '全球分銷系統GDS是整合航空、旅館、租車等供應商資訊的電腦訂位系統，旅行社與OTA可即時查詢比價並預訂，代表系統有Amadeus、Sabre與Travelport，能降低成本、提升效率，是旅遊配銷通路的核心。'));
+  assert.ok(gf.earned >= 6, 'GDS 完整答案應得 6 分以上，實得 ' + gf.earned);
+  // 整題總評：只評一個小題時提醒其餘小題未評
+  const eo = essays.essays.find(e => e.id === '113-g3tour-E2');
+  const fe = C.feedbackEssay(eo, { 1: grade(eo.parts[0], '銀髮族、青年學生、女性、身心障礙者與同志是五大特殊市場，銀髮族規模因高齡化而成長。') });
+  assert.ok(fe && has(fe, 'tip', /還有 2 個小題尚未評分/));
+}
+console.log('113 年觀光行政（觀光英語、觀光學、觀光日語）回饋測試通過');

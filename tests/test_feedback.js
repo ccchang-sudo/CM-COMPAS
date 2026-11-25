@@ -479,3 +479,26 @@ console.log('114 年保險學與保險學概要回饋測試通過');
   assert.ok(has(C.feedbackEssayPart(p41, { text: '不知道', auto: z41, scores: up }), 'tip', /調高/));
 }
 console.log('113 年保險學與保險學概要回饋測試通過');
+
+// 115 年高考三級運輸規劃學與運輸學：參考答案滿分、空泛答案的回饋
+{
+  const E = (id) => essays.essays.find(e => e.id === id);
+  const sc = (p, x) => { const g = C.gradeEssayPart(p, x), o = {}; g.items.forEach(i => { o[i.id] = i.earned; }); return o; };
+  ['115-g3tpl-E1', '115-g3tpl-E2', '115-g3tpl-E3', '115-g3tpl-E4', '115-g3tr-E1', '115-g3tr-E2', '115-g3tr-E3', '115-g3tr-E4'].map(E).forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const s = sc(p, C.stripHtml(p.model_answer)); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: s, scores: s }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+    assert.ok(has(te, 'good', /全部拿滿分/));
+  });
+  // 空泛答案：列出沒得分的得分點、提示與常見錯誤，並提醒字數偏少
+  const p = E('115-g3tr-E3').parts[1], x = '要有無障礙與性別平等。';
+  const f = C.feedbackEssayPart(p, { text: x, auto: sc(p, x), scores: sc(p, x) });
+  assert.ok(has(f, 'warn', /沒有得分|完全沒得分|只拿到部分/) && has(f, 'tip', /常見錯誤/) && has(f, 'tip', /偏少/));
+  // 只寫一個小題：整題總評提醒另一小題尚未評分，並指出失分最多的得分點
+  const q4 = E('115-g3tr-E4'), p1 = q4.parts[0], x1 = '臺鐵局改制為國營公司，附屬事業可以轉投資。';
+  const te = C.feedbackEssay(q4, { [p1.id]: { text: x1, auto: sc(p1, x1), scores: sc(p1, x1) } });
+  assert.ok(has(te, 'tip', /尚未評分/) && has(te, 'warn', /失分最多/));
+}
+console.log('115 年運輸規劃學與運輸學回饋測試通過');
+

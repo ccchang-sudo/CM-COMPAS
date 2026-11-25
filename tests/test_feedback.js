@@ -157,7 +157,7 @@ console.log('feedback tests passed');
   const tot4 = C.feedbackEssay(e4, { [p41.id]: { text: '不知道', auto: z41, scores: z41 } });
   assert.ok(has(tot4, 'tip', /尚未評分/) && has(tot4, 'warn', /失分最多/));
   // 全對時：農業經濟學、工程經濟學 8 題都是「結構完整」（上方迴圈已涵蓋全部題目；此處再確認 113 年有被涵蓋）
-  assert.strictEqual(essays.essays.filter(e => e.year_roc === 113 && e.exam === '公務人員高等考試三級考試' && e.subject !== '交通政策與行政').length, 69);  // 含 113 年觀光行政三科 11 題（觀光英語 4、觀光學 4、觀光日語 3）與觀光資源規劃 4 題；113 年高考三級原 7 科 24 題＋財政學 4 題；另含民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）；交通政策與行政 4 題另計
+  assert.strictEqual(essays.essays.filter(e => e.year_roc === 113 && e.exam === '公務人員高等考試三級考試' && e.subject !== '交通政策與行政').length, 73);  // 含 113 年觀光行政三科 11 題（觀光英語 4、觀光學 4、觀光日語 3）與觀光資源規劃 4 題；113 年高考三級原 7 科 24 題＋財政學 4 題；另含民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）；交通政策與行政 4 題另計
 }
 console.log('113 年申論題回饋測試通過');
 
@@ -383,3 +383,99 @@ console.log('114、115 年財務管理與投資學申論題回饋測試通過');
   });
 }
 console.log('113 年財務管理與投資學回饋測試通過');
+
+/* ===== 115 年高考三級保險學、普考保險學概要：依作答的意見與建議 ===== */
+{
+  const E = (id) => essays.essays.find(e => e.id === id);
+  const sc = (p, t) => { const g = C.gradeEssayPart(p, t), o = {}; g.items.forEach(i => { o[i.id] = i.earned; }); return o; };
+  const zero = (p) => { const o = {}; p.rubric.forEach(r => { o[r.id] = 0; }); return o; };
+  const qs = ['115-g3ins-E1', '115-g3ins-E2', '115-g3ins-E3', '115-g3ins-E4', '115-pins-E1', '115-pins-E2', '115-pins-E3', '115-pins-E4'].map(E);
+  // 參考答案作答、自評滿分時，整題為滿分，且只評一小題時提醒尚未評分
+  qs.forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const s = sc(p, C.stripHtml(p.model_answer)); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: s, scores: s }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+    const h = C.feedbackEssay(q, { [q.parts[0].id]: ps[q.parts[0].id] });
+    assert.ok(q.parts.length === 1 || has(h, 'tip', /尚未評分/));
+  });
+  // 空泛答案：沒得分，列出失分提示與常見錯誤
+  const p31 = qs[2].parts[2], t31 = '兩者都是保險的重要原則。';
+  const f31 = C.feedbackEssayPart(p31, { text: t31, auto: sc(p31, t31), scores: sc(p31, t31) });
+  assert.ok(has(f31, 'warn', /沒有得分|都沒有得分/) && has(f31, 'tip', /常見錯誤/));
+  // 法律題：沒引用條文、沒有明確結論時提醒（高考 3（二）代位，應引用保險法第 53 條）
+  const p32 = qs[2].parts[1], t32 = '保險公司賠錢以後可以向別人要錢。';
+  const f32 = C.feedbackEssayPart(p32, { text: t32, auto: sc(p32, t32), scores: sc(p32, t32) });
+  assert.ok(has(f32, 'tip', /保險法第 53 條/), '應提醒引用保險法第 53 條');
+  // 已引用條文時不再提醒該條
+  const t32b = '依保險法第53條，保險人賠付後得代位求償，以賠償金額為限，應負責任的是第三人。';
+  const f32b = C.feedbackEssayPart(p32, { text: t32b, auto: sc(p32, t32b), scores: sc(p32, t32b) });
+  assert.ok(!has(f32b, 'tip', /保險法第 53 條/), '已引用第 53 條不應再提醒');
+  // 普考 1（三）無效與解除：寫反（解除向後）時列出失分的得分點與常見錯誤
+  const p53 = qs[4].parts[2], t53 = '解除是向後消滅，終止是溯及既往。';
+  const f53 = C.feedbackEssayPart(p53, { text: t53, auto: sc(p53, t53), scores: sc(p53, t53) });
+  assert.ok(has(f53, 'tip', /常見錯誤/) && has(f53, null, /沒得分|沒有得分|得分不到一半/));
+  // 學生自行調高系統沒偵測到的細目時提醒
+  const p11 = qs[0].parts[0], z11 = zero(p11), up = Object.assign({}, z11, { r1: 3 });
+  assert.ok(has(C.feedbackEssayPart(p11, { text: '不知道', auto: z11, scores: up }), 'tip', /調高/));
+}
+console.log('115 年保險學與保險學概要回饋測試通過');
+
+/* ===== 114 年高考三級保險學、普考保險學概要：依作答的意見與建議 ===== */
+{
+  const E = (id) => essays.essays.find(e => e.id === id);
+  const sc = (p, x) => { const g = C.gradeEssayPart(p, x), o = {}; g.items.forEach(i => { o[i.id] = i.earned; }); return o; };
+  const qs = ['114-g3ins-E1', '114-g3ins-E2', '114-g3ins-E3', '114-g3ins-E4', '114-pins-E1', '114-pins-E2', '114-pins-E3', '114-pins-E4'].map(E);
+  qs.forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const s = sc(p, C.stripHtml(p.model_answer)); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: s, scores: s }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+    assert.ok(q.parts.length === 1 || has(C.feedbackEssay(q, { [q.parts[0].id]: ps[q.parts[0].id] }), 'tip', /尚未評分/));
+  });
+  // 法律題：特約條款第 68 條。沒引用條文、沒結論時提醒；已引用則不提醒
+  const p3 = qs[1].parts[2], x3 = '違反特約條款對方可以處理。';
+  const f3 = C.feedbackEssayPart(p3, { text: x3, auto: sc(p3, x3), scores: sc(p3, x3) });
+  assert.ok(has(f3, 'tip', /保險法第 68 條/) && has(f3, 'tip', /常見錯誤/));
+  const x3b = '依保險法第68條，違背特約條款他方得解除契約，危險發生後亦同。';
+  assert.ok(!has(C.feedbackEssayPart(p3, { text: x3b, auto: sc(p3, x3b), scores: sc(p3, x3b) }), 'tip', /保險法第 68 條/));
+  // 空泛答案：列出失分的得分點與常見錯誤
+  const p7 = qs[7].parts[0], x7 = '費率要公平合理。';
+  const f7 = C.feedbackEssayPart(p7, { text: x7, auto: sc(p7, x7), scores: sc(p7, x7) });
+  assert.ok(has(f7, null, /沒有得分|完全沒得分|只拿到部分/) && has(f7, 'tip', /常見錯誤/));
+}
+console.log('114 年保險學與保險學概要回饋測試通過');
+
+
+/* ===== 113 年高考三級保險學、普考保險學概要：依作答的意見與建議 ===== */
+{
+  const E = (id) => essays.essays.find(e => e.id === id);
+  const sc = (p, t) => { const g = C.gradeEssayPart(p, t), o = {}; g.items.forEach(i => { o[i.id] = i.earned; }); return o; };
+  const zero = (p) => { const o = {}; p.rubric.forEach(r => { o[r.id] = 0; }); return o; };
+  const qs = ['113-g3ins-E1', '113-g3ins-E2', '113-g3ins-E3', '113-g3ins-E4', '113-pins-E1', '113-pins-E2', '113-pins-E3', '113-pins-E4'].map(E);
+  // 參考答案作答、自評滿分時，整題為滿分，且只評一小題時提醒尚未評分
+  qs.forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const s = sc(p, C.stripHtml(p.model_answer)); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: s, scores: s }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+    const h = C.feedbackEssay(q, { [q.parts[0].id]: ps[q.parts[0].id] });
+    assert.ok(q.parts.length === 1 || has(h, 'tip', /尚未評分/));
+  });
+  // 計算題寫錯（平分損失）：沒得分，列出失分得分點與常見錯誤
+  const p11 = qs[0].parts[0], t11 = '兩家保險公司各賠 300 萬。';
+  const f11 = C.feedbackEssayPart(p11, { text: t11, auto: sc(p11, t11), scores: sc(p11, t11) });
+  assert.ok(has(f11, 'warn', /沒有得分|都沒有得分/) && has(f11, 'tip', /常見錯誤/));
+  // 法律題：沒引用條文時提醒（普考 2（二）應引用保險法第 21 條與第 44 條）
+  const p62 = qs[5].parts[1], t62 = '保險契約是諾成契約，因為雙方同意就成立，不須交付保險費。';
+  const f62 = C.feedbackEssayPart(p62, { text: t62, auto: sc(p62, t62), scores: sc(p62, t62) });
+  assert.ok(has(f62, 'tip', /保險法第 21 條/) && has(f62, 'tip', /保險法第 44 條/), '應提醒引用第 21、44 條');
+  // 已引用條文時不再提醒該條
+  const t62b = '依保險法第44條，保險人同意要保人聲請後簽訂即成立，為諾成契約；第21條保險費應於生效前交付，但書另有訂定者不在此限。';
+  const f62b = C.feedbackEssayPart(p62, { text: t62b, auto: sc(p62, t62b), scores: sc(p62, t62b) });
+  assert.ok(!has(f62b, 'tip', /保險法第 21 條/) && !has(f62b, 'tip', /保險法第 44 條/), '已引用不應再提醒');
+  // 學生自行調高系統沒偵測到的細目時提醒
+  const p41 = qs[3].parts[0], z41 = zero(p41), up = Object.assign({}, z41, { r1: 2 });
+  assert.ok(has(C.feedbackEssayPart(p41, { text: '不知道', auto: z41, scores: up }), 'tip', /調高/));
+}
+console.log('113 年保險學與保險學概要回饋測試通過');

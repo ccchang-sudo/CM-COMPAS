@@ -157,7 +157,7 @@ console.log('feedback tests passed');
   const tot4 = C.feedbackEssay(e4, { [p41.id]: { text: '不知道', auto: z41, scores: z41 } });
   assert.ok(has(tot4, 'tip', /尚未評分/) && has(tot4, 'warn', /失分最多/));
   // 全對時：農業經濟學、工程經濟學 8 題都是「結構完整」（上方迴圈已涵蓋全部題目；此處再確認 113 年有被涵蓋）
-  assert.strictEqual(essays.essays.filter(e => e.year_roc === 113 && e.exam === '公務人員高等考試三級考試' && e.subject !== '交通政策與行政').length, 73);  // 含 113 年觀光行政三科 11 題（觀光英語 4、觀光學 4、觀光日語 3）與觀光資源規劃 4 題；113 年高考三級原 7 科 24 題＋財政學 4 題；另含民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）；交通政策與行政 4 題另計
+  assert.strictEqual(essays.essays.filter(e => e.year_roc === 113 && e.exam === '公務人員高等考試三級考試' && e.subject !== '交通政策與行政').length, 81);  // 含 113 年觀光行政三科 11 題（觀光英語 4、觀光學 4、觀光日語 3）與觀光資源規劃 4 題；113 年高考三級原 7 科 24 題＋財政學 4 題；另含民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）；交通政策與行政 4 題另計  // 113 年高考三級運輸規劃學、運輸學各 4 題已含在內
 }
 console.log('113 年申論題回饋測試通過');
 
@@ -502,3 +502,29 @@ console.log('113 年保險學與保險學概要回饋測試通過');
 }
 console.log('115 年運輸規劃學與運輸學回饋測試通過');
 
+
+/* ===== 113 年運輸規劃學、運輸學、運輸學概要：依作答的意見與建議 ===== */
+{
+  const E = (id) => essays.essays.find(e => e.id === id);
+  const sc = (p, x) => { const g = C.gradeEssayPart(p, x), o = {}; g.items.forEach(i => { o[i.id] = i.earned; }); return o; };
+  // 參考答案本身：沒有失分提醒
+  const pm = E('113-g3tpl-E3').parts[0], fm = C.feedbackEssayPart(pm, { text: C.stripHtml(pm.model_answer), auto: sc(pm, C.stripHtml(pm.model_answer)), scores: sc(pm, C.stripHtml(pm.model_answer)) });
+  assert.ok(has(fm, 'good', /結構完整/) && !has(fm, 'warn', /沒有得分/));
+  // 只寫結論：列出沒得分的得分點、提示與常見錯誤，並提醒字數偏少
+  const p = E('113-g3tpl-E2').parts[2], x = '用 RP 調查。';
+  const f = C.feedbackEssayPart(p, { text: x, auto: sc(p, x), scores: sc(p, x) });
+  assert.ok(has(f, 'warn', /沒有得分|完全沒得分|只拿到部分/) && has(f, 'tip', /常見錯誤/) && has(f, 'tip', /偏少/));
+  // 補貼題：只寫資本補貼的作法，營運補貼小題仍有失分提示；整題提醒另一小題尚未評分
+  const q3 = E('113-g3tr-E3'), p1 = q3.parts[0], x1 = '資本補貼是補助業者購置電動公車，降低資金壓力。';
+  const te = C.feedbackEssay(q3, { [p1.id]: { text: x1, auto: sc(p1, x1), scores: sc(p1, x1) } });
+  assert.ok(has(te, 'tip', /尚未評分/) && has(te, 'warn', /失分最多/));
+  // 自行調高系統未偵測的細目：提醒確認
+  const p4 = E('113-ptr-E1').parts[1], x4 = '服務水準與流量有關。', auto4 = sc(p4, x4), up = Object.assign({}, auto4, { r1: p4.rubric[0].points });
+  assert.ok(has(C.feedbackEssayPart(p4, { text: x4, auto: auto4, scores: up }), 'tip', /調高/));
+  // 整題總評：已評小題都滿分
+  const q5 = E('113-ptr-E4'), full = {};
+  q5.parts.forEach(pt => { const t = C.stripHtml(pt.model_answer); full[pt.id] = { text: t, auto: sc(pt, t), scores: sc(pt, t) }; });
+  const tf = C.feedbackEssay(q5, full);
+  assert.strictEqual(tf.earned, 25); assert.ok(has(tf, 'good', /全部拿滿分/));
+  console.log('113 年運輸規劃學、運輸學與運輸學概要回饋測試通過');
+}

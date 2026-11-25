@@ -78,7 +78,7 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 362);  // 含 115 年普考運輸學概要 4 題（見檔尾）；以下為加入前 358 題的說明：  // 含 115 年高考三級運輸規劃學（交通行政、交通技術）與運輸學（交通行政）各 4 題（見檔尾）；以下為加入前的說明：  // 含 114 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 115 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 113 年高考三級（金融保險）財務管理與投資學 4 題（見檔尾）；含 114、115 年高考三級（金融保險）財務管理與投資學各 4 題（見檔尾）；含 114 年高考三級貨幣銀行學 4 題與普考貨幣銀行學概要 5 題、115 年高考三級貨幣銀行學與普考貨幣銀行學概要各 4 題（見檔尾）；含 113 年貨幣銀行學（高考三級）與貨幣銀行學概要（普考）各 4 題（見檔尾）；以下為合併前的說明：  // 含 113、115 年普通考試旅運經營學概要各 4 題（見檔尾）；含 113、115 年高考三級旅運經營學各 4 題（見檔尾）；含 113 年普考觀光學概要 4 題、113 年高考三級觀光英語／觀光學／觀光日語 11 題（見檔尾）；含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
+assert.strictEqual(data.essays.length, 386);  // 含 114 年高考三級運輸規劃學、運輸學與普考運輸學概要各 4 題（見檔尾）；以下為加入前 374 題的說明：  // 含 113 年高考三級運輸規劃學、運輸學與普考運輸學概要各 4 題（見檔尾）；以下為加入前 362 題的說明：  // 含 115 年普考運輸學概要 4 題（見檔尾）；以下為加入前 358 題的說明：  // 含 115 年高考三級運輸規劃學（交通行政、交通技術）與運輸學（交通行政）各 4 題（見檔尾）；以下為加入前的說明：  // 含 114 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 115 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 113 年高考三級（金融保險）財務管理與投資學 4 題（見檔尾）；含 114、115 年高考三級（金融保險）財務管理與投資學各 4 題（見檔尾）；含 114 年高考三級貨幣銀行學 4 題與普考貨幣銀行學概要 5 題、115 年高考三級貨幣銀行學與普考貨幣銀行學概要各 4 題（見檔尾）；含 113 年貨幣銀行學（高考三級）與貨幣銀行學概要（普考）各 4 題（見檔尾）；以下為合併前的說明：  // 含 113、115 年普通考試旅運經營學概要各 4 題（見檔尾）；含 113、115 年高考三級旅運經營學各 4 題（見檔尾）；含 113 年普考觀光學概要 4 題、113 年高考三級觀光英語／觀光學／觀光日語 11 題（見檔尾）；含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
 const ESSAY_ONLY = ['財務管理與投資學', '公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要', '民法總則、親屬與繼承編', '民法（包括總則、物權、親屬與繼承編）', '民法與民事訴訟法', '民法物權編概要', '民法總則、親屬與繼承編概要', '觀光學', '觀光英語', '觀光日語', '觀光學概要', '觀光行銷學概要', '觀光資源規劃', '旅運經營學', '旅運經營學概要', '貨幣銀行學', '貨幣銀行學概要', '保險學', '保險學概要', '運輸規劃學', '運輸學', '運輸學概要'];
 data.essays.forEach(q => {
@@ -327,7 +327,7 @@ assert.deepStrictEqual(by114('經濟學與財政學概論').map(q => q.points), 
 assert.deepStrictEqual(by114('經濟學').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by114('公共經濟學').map(q => q.points), [20, 40, 20, 20]);       // 共 100 分
 assert.deepStrictEqual(by114('產業經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 77);  // 含 114 年保險學 4 題、114 年財務管理與投資學 4 題、114 年貨幣銀行學 4 題、114 年旅運經營學 4 題、114 年觀光學 4 題、觀光資源規劃 4 題、觀光日語 3 題、觀光英語 3 題；9 科（含財政學 財稅行政、會計共 4 題）：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政；另加民法 財稅行政／財稅法務、公平交易管理各 2 題、地政 3 題、司法行政 2 題、法制與智慧財產行政 2 題、戶政 4 題
+assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 85);  // 含 114 年運輸規劃學 4 題、運輸學 4 題（見檔尾）；含 114 年保險學 4 題、114 年財務管理與投資學 4 題、114 年貨幣銀行學 4 題、114 年旅運經營學 4 題、114 年觀光學 4 題、觀光資源規劃 4 題、觀光日語 3 題、觀光英語 3 題；9 科（含財政學 財稅行政、會計共 4 題）：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政；另加民法 財稅行政／財稅法務、公平交易管理各 2 題、地政 3 題、司法行政 2 題、法制與智慧財產行政 2 題、戶政 4 題
 assert.strictEqual(shape('114-g3fin-E2'), '5,5,5,5,5'); assert.strictEqual(shape('114-g3econ-E1'), '10,10,5');
 assert.strictEqual(shape('114-g3econ-E2'), '2,2,21'); assert.strictEqual(shape('114-g3pe-E2'), '20,20');
 assert.strictEqual(shape('114-g3ie-E1'), '10,10,5'); assert.strictEqual(shape('114-g3ie-E2'), '5,10,10');
@@ -539,7 +539,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 /* ===== 113 年高考三級：經濟學、經濟學與財政學概論、公共經濟學的申論題 ===== */
 {
   const by113 = (subj) => data.essays.filter(q => q.year_roc === 113 && q.subject === subj);
-  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 73);  // 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 含 113 年觀光資源規劃 4 題、觀光英語 4 題、觀光學 4 題、觀光日語 3 題；含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）
+  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 81);  // 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 含 113 年觀光資源規劃 4 題、觀光英語 4 題、觀光學 4 題、觀光日語 3 題；含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）  // 113 年高考三級運輸規劃學、運輸學各 4 題已含在內
   assert.deepStrictEqual(by113('經濟學').map(q => q.points), [25, 25]);
   assert.deepStrictEqual(by113('經濟學與財政學概論').map(q => q.points), [20, 30]);        // 50 分
   assert.deepStrictEqual(by113('公共經濟學').map(q => q.points), [25, 25, 25, 25]);         // 100 分
@@ -648,7 +648,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 
 
 const y113 = data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政');  // 交通政策與行政另有測試
-assert.strictEqual(y113.length, 73);  // 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 28 題經濟財政類 + 113 年高考三級民法 14 題 + 113 年觀光資源規劃 4 題
+assert.strictEqual(y113.length, 81);  // 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 28 題經濟財政類 + 113 年高考三級民法 14 題 + 113 年觀光資源規劃 4 題
 assert.deepStrictEqual(sub(113, '農業經濟學').map(q => q.points), [15, 30, 30, 25]);          // 共 100 分
 assert.deepStrictEqual(sub(113, '工程經濟學').map(q => q.points), [25, 25, 25, 25]);
 sub(113, '農業經濟學').forEach(q => assert.deepStrictEqual(q.categories, ['農業行政']));
@@ -905,6 +905,10 @@ OVERLAP.push(['115-ptr-E1', '113-ptrv-E4'],  // 第一航權、芝加哥公約�
   ['115-ptr-E4', '113-g3tour-E4'], ['115-ptr-E4', '113-g3trv-E2'], ['115-ptr-E4', '114-g3trv-E3']);  // 智慧運輸與智慧觀光、旅行社資訊系統：大數據、APP、即時資訊
 OVERLAP.push(['114-pagr-E4', '115-g3tpl-E4'], ['114-pagr-E4', '115-g3tr-E4'], ['114-pagr-E5', '115-g3tr-E4'], ['115-g3tour-E3', '115-g3tr-E1'], ['115-ptour-E2', '115-g3tr-E4'], ['115-pmkt-E4', '115-g3tr-E4'], ['115-g3tres-E2', '115-g3tpl-E3'], ['114-g3tour-E1', '115-g3tr-E4'], ['114-g3tour-E2', '115-g3tr-E2'], ['114-g3tres-E2', '115-g3tpl-E3'], ['113-g3tres-E2', '115-g3tpl-E4'], ['113-g3tour-E4', '115-g3tr-E2'], ['113-g3trv-E1', '115-g3tr-E4'], ['113-g3trv-E2', '115-g3tr-E4'], ['113-g3trv-E3', '115-g3tr-E2'], ['113-g3trv-E3', '115-g3tr-E3'], ['114-g3trv-E3', '115-g3tr-E4'], ['113-g3ins-E4', '115-g3tr-E3']);  // 115 年運輸規劃學、運輸學：資產開發、觀光商業、船舶設施等用語與農業、觀光、保險題自然重疊
 const fam = (s) => { s = s.replace(/概要$/, ''); if (/^民法/.test(s)) return '民法'; if (/^(觀光|旅運)/.test(s)) return '觀光'; return /^(運輸經濟學|交通政策與行政|運輸規劃學|運輸學)$/.test(s) ? '交通運輸' : s; };  // 運輸經濟學與交通政策與行政同屬交通運輸領域，用語本來就會重疊
+// 113 年運輸規劃學、運輸學與普考運輸學概要：服務特性與行銷、利益關係人與人力資源、外部成本與庇古稅、智慧技術與數位化、永續與碳排等用語與其他領域本來就會重疊
+OVERLAP.push(['113-g3tpl-E1', '115-g3tres-E3'], ['113-g3tpl-E2', '114-g3pe-E3'], ['113-g3tpl-E4', '115-g3ins-E4'], ['113-g3tr-E4', '113-pmkt-E1'], ['113-g3tpl-E1', '113-g3tres-E2'], ['113-g3tr-E3', '113-g3trv-E1'], ['113-g3tr-E1', '113-g3trv-E3'], ['113-g3tr-E4', '113-g3trv-E3'], ['113-ptour-E2', '113-ptr-E2'], ['113-ptr-E1', '115-g3pe-E4'], ['113-ptr-E2', '115-pcivil-E1'], ['113-g3pfa-E1', '113-ptr-E3'], ['113-ptr-E3', '114-g3pe-E1'], ['113-ptr-E3', '115-g3econ-E1'], ['113-ptr-E3', '115-g3pe-E1'], ['113-g3tr-E1', '114-g3trv-E2'], ['113-g3tr-E4', '114-g3trv-E2'], ['113-g3tpl-E1', '114-g3trv-E3'], ['113-ptr-E4', '114-g3trv-E3'], ['113-g3tr-E2', '114-pagr-E4'], ['113-g3tr-E4', '114-pagr-E4'], ['113-ptr-E4', '115-g3io-E4'], ['113-g3tpl-E4', '115-g3tres-E2'], ['113-g3tpl-E1', '115-pins-E4'], ['113-g3tr-E4', '115-pmkt-E3']);
+// 114 年高考三級運輸規劃學、運輸學與普考運輸學概要：與觀光、農業、保險等科目在低碳、交通管理、補貼與碳定價、航空與鐵路觀光等概念上本來就會重疊
+OVERLAP.push(['113-g3agr-E1', '114-g3tr-E4'], ['113-g3ins-E4', '114-ptr-E1'], ['113-g3tres-E2', '114-g3tpl-E1'], ['113-g3tres-E2', '114-ptr-E2'], ['113-g3tres-E2', '114-ptr-E3'], ['113-g3tres-E2', '114-ptr-E4'], ['114-g3tpl-E4', '113-g3tres-E2'], ['114-g3tr-E3', '113-pins-E4'], ['114-g3tr-E3', '113-ptrv-E3'], ['114-g3tr-E3', '115-ptrv-E3'], ['114-g3tr-E4', '115-g3trv-E3'], ['114-g3tr-E4', '115-pagr-E2'], ['114-g3trv-E3', '114-g3tpl-E2'], ['114-ptr-E1', '115-ptour-E4'], ['114-ptr-E2', '113-g3agr-E3'], ['114-ptr-E2', '115-g3tres-E1'], ['114-ptr-E4', '113-g3tres-E3'], ['114-ptr-E4', '114-g3tour-E4'], ['114-ptr-E4', '115-g3ins-E4'], ['114-ptr-E4', '115-g3tres-E1'], ['115-g3tour-E2', '114-ptr-E1'], ['115-g3tres-E1', '114-ptr-E1'], ['115-pagr-E2', '114-g3tr-E4'], ['115-ptour-E2', '114-ptr-E1']);
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
 data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
   if (fam(q2.subject) === fam(q.subject) || overlap(q.id, q2.id)) return;  // 同領域（含「概要」版）內容本來就會重疊
@@ -2596,7 +2600,7 @@ console.log('114、115 年高考三級財務管理與投資學申論題測試通
 
 // 115 年普通考試（交通行政）運輸學概要：純申論 4 題各 25 分（試題代號 42430）
 {
-  const T = data.essays.filter(q => q.subject === '運輸學概要');
+  const T = data.essays.filter(q => q.subject === '運輸學概要' && q.year_roc === 115);
   assert.strictEqual(T.length, 4);
   assert.ok(T.every(q => q.year_roc === 115 && q.exam === '公務人員普通考試' && q.points === 25 && q.categories.join() === '交通行政' && /^115-ptr-E[1-4]$/.test(q.id)));
   assert.ok(!bank.questions.some(b => b.subject === '運輸學概要'), '純申論科目，題庫沒有選擇題（已列入 ESSAY_ONLY）');
@@ -2623,4 +2627,112 @@ console.log('114、115 年高考三級財務管理與投資學申論題測試通
   assert.ok(gp('115-ptr-E4', '3', '號誌時制計畫不宜公開，避免用路人搶快闖紅燈、分心，也有資安與個資問題，且個人最適不等於系統最適，可能湧入同一替代路線。').earned >= 6);
   assert.ok(gp('115-ptr-E4', '3', '因為要保密。').earned < 3);
   console.log('115 年普考運輸學概要申論題測試通過');
+}
+
+/* ===== 113 年高考三級運輸規劃學、運輸學與普考運輸學概要：結構、配分、部分作答與空泛答案 ===== */
+{
+  const ids = [];
+  ['g3tpl', 'g3tr', 'ptr'].forEach(k => [1, 2, 3, 4].forEach(n => ids.push('113-' + k + '-E' + n)));
+  ids.forEach(id => { assert.ok(E[id], id + ' 應存在'); assert.strictEqual(E[id].points, 25); assert.strictEqual(E[id].year_roc, 113); });
+  assert.deepStrictEqual(E['113-g3tpl-E1'].categories, ['交通行政', '交通技術']);
+  assert.deepStrictEqual(E['113-g3tr-E1'].categories, ['交通行政', '交通技術']);
+  assert.deepStrictEqual(E['113-ptr-E1'].categories, ['交通行政']);
+  assert.strictEqual(E['113-ptr-E1'].exam, '公務人員普通考試');
+  assert.deepStrictEqual(E['113-g3tpl-E2'].parts.map(p => p.points), [8, 9, 8]);
+  assert.deepStrictEqual(E['113-g3tpl-E3'].parts.map(p => p.points), [10, 7, 8]);
+  assert.deepStrictEqual(E['113-g3tr-E1'].parts.map(p => p.points), [5, 20]);
+  assert.deepStrictEqual(E['113-ptr-E2'].parts.map(p => p.points), [5, 10, 10]);
+  const gp = (id, pid, text) => C.gradeEssayPart(part(id, pid), text);
+
+  // 運輸規劃學第 2 題：SP 與 RP 不可混淆，結論要選 SP 並說明無人機尚未存在
+  assert.ok(gp('113-g3tpl-E2', '3', '應採敘述性偏好（SP）調查。無人機計程車在臺灣尚未營運，沒有實際選擇資料，只能設計假設情境，屬性包含票價、時間、安全與噪音，用羅吉特模式估計支付意願。').earned >= 6);
+  assert.ok(gp('113-g3tpl-E2', '3', '用顯示性偏好 RP 調查就可以。').earned < 3, '主張用 RP 不應拿高分');
+  assert.ok(gp('113-g3tpl-E2', '2', '敘述性偏好 SP 是設計假設情境讓受訪者選擇，可用實驗設計控制屬性水準避免共線性，缺點是假設性偏誤，適用於新運具與新政策。').earned >= 7);
+  assert.ok(gp('113-g3tpl-E2', '1', '顯示性偏好 RP 是調查受訪者實際發生的選擇行為，真實可信，但屬性變化範圍有限，適用於現有運具的需求分析。').earned >= 6);
+  // 第 3 題：選 NL 的理由要點出 IIA 與運具相似
+  assert.ok(gp('113-g3tpl-E3', '1', '建議選擇巢式羅吉特模式，因為捷運、臺鐵、公車相似，MNL 的 IIA 假設不成立，可設公共運輸巢與私人運具巢，logsum 係數介於 0 與 1。').earned >= 8);
+  assert.ok(gp('113-g3tpl-E3', '1', '巢式羅吉特比較好。').earned < 5, '只寫結論沒有 IIA 理由');
+  assert.ok(gp('113-g3tpl-E3', '2', 'MNL 假設誤差項獨立同分配（Gumbel），選擇機率有封閉形式；具 IIA 性質，如紅藍巴士問題，適用於替選方案差異大的情況。').earned >= 6);
+  assert.ok(gp('113-g3tpl-E3', '3', 'NL 把相似運具分成巢，同巢內相關，放寬 IIA，logsum 係數須介於 0 與 1，等於 1 時退化為 MNL；缺點是須假設巢結構、估計較複雜。').earned >= 7);
+  // 第 1 題與第 4 題：空泛口號不得高分
+  assert.ok(gp('113-g3tpl-E1', '1', '要有專業，要負責任，要努力。').earned < 4);
+  assert.ok(gp('113-g3tpl-E4', '2', '運輸規劃軟體很好用，可以幫助永續發展。').earned < 3);
+
+  // 運輸學第 1 題：只列名詞不說明影響只得部分分
+  const stk = '臺鐵的利害關係人：旅客與貨主影響運量與收入；政府與交通部是股東，提供補貼與監理；員工與工會影響人力成本與服務品質；高鐵與公路客運是競爭者，分食旅客。';
+  assert.ok(gp('113-g3tr-E1', '2', stk).earned >= 16);
+  assert.ok(gp('113-g3tr-E1', '2', '旅客、政府、員工、廠商。').earned < 8, '只列名詞不說明如何影響');
+  assert.ok(gp('113-g3tr-E1', '1', '利害關係人是能影響組織目標或受組織行動影響的個人、群體或組織，可分為內部與外部，須溝通平衡其期望。').earned >= 4);
+  // 第 3 題：資本補貼與營運補貼不可混淆
+  assert.ok(gp('113-g3tr-E3', '1', '資本補貼例如補助業者購置電動公車，降低業者資金壓力，乘客得到較舒適新穎的車輛，主管機關達成減碳政策目標但要負擔預算並監督。').earned >= 9);
+  assert.ok(gp('113-g3tr-E3', '1', '補貼票價讓乘客比較便宜。').earned < 5, '票價補貼屬營運補貼，不應拿資本補貼高分');
+  assert.ok(gp('113-g3tr-E3', '2', '營運補貼如偏鄉公路客運營運虧損補貼與 TPASS，業者收入穩定但可能降低成本控制誘因（道德風險），乘客票價較低、路線維持，政府要負擔財政並做績效管理。').earned >= 10);
+  // 第 4 題：不可儲存性要談尖離峰與對策
+  assert.ok(gp('113-g3tr-E4', '2', '服務不可儲存，空座位未賣就消失；尖離峰需求與固定運能不平衡，須用差別定價、預約訂位與收益管理，並彈性調度人力與班次。').earned >= 11);
+  assert.ok(gp('113-g3tr-E4', '2', '服務不能儲存，所以很重要。').earned < 4);
+  assert.ok(gp('113-g3tr-E2', '1', '零售商決定庫存要先做需求預測，看歷史銷售、季節與促銷，需求波動大要提高安全存量與服務水準，鮮食有保存期限與報廢風險。').earned >= 9);
+
+  // 普考運輸學概要
+  assert.ok(gp('113-ptr-E1', '1', '供給函數描述旅行時間與流量的關係，流量增加旅行時間增加，常用 BPR 函數 t = t0[1+α(q/C)^β]，與需求函數相交得到供需均衡。').earned >= 8);
+  assert.ok(gp('113-ptr-E1', '1', '供給函數就是道路有多少車道。').earned < 4, '把供給函數寫成車道數');
+  assert.ok(gp('113-ptr-E1', '2', '服務水準分 A 到 F 六級，以密度與 V/C 衡量。流量低時速率高、服務水準高；流量增加干擾加大、速率下降密度上升；接近容量就不穩定，超過容量成為壅塞 F 級，流量反而下降。').earned >= 12);
+  assert.ok(gp('113-ptr-E2', '3', '營運者如北捷公司負責行控調度與維修，確保安全準點；營運計畫包含路線停靠站、班距班表、票價與轉乘，配合尖峰離峰安排運能。').earned >= 8);
+  assert.ok(gp('113-ptr-E2', '2', '運具是捷運列車。').earned < 5);
+  assert.ok(gp('113-ptr-E3', '1', '壅塞有外部成本，每多一輛車使他人旅行時間增加，私人成本低於社會成本，造成無謂損失；收取等於邊際外部成本的壅塞費，讓私人成本等於邊際社會成本，把外部成本內部化。').earned >= 10);
+  assert.ok(gp('113-ptr-E3', '2', '公平性上低所得者負擔較重；民眾視道路為免費公共財，接受度低；電子收費系統建置成本高並有隱私疑慮；車流會轉移到鄰近免費道路。').earned >= 9);
+  assert.ok(gp('113-ptr-E3', '2', '民眾會反對。').earned < 5);
+  assert.ok(gp('113-ptr-E4', '1', '以車輛偵測器 VD 與自動事件偵測 AID 發現速度突降，CCTV 確認事故位置，eCall 自動通報救援縮短反應時間。').earned >= 9);
+  assert.ok(gp('113-ptr-E4', '2', '交控中心調度救援與車道管制；可變資訊標誌 CMS 顯示事故與替代路線；匝道儀控與可變速限控制主線流量避免二次事故；導航 App 提供路徑引導分流。').earned >= 11);
+  assert.ok(gp('113-ptr-E4', '2', '用智慧運輸系統就可以改善。').earned < 4);
+  console.log('113 年運輸規劃學、運輸學與普考運輸學概要申論題測試通過');
+}
+
+// 114 年高考三級運輸規劃學（交通行政、交通技術，試題代號 23920）、運輸學（交通行政，23950）與普考運輸學概要（交通行政，42130）：各 4 題，每題 25 分
+{
+  const tpl = data.essays.filter(q => q.id.startsWith('114-g3tpl-')), tr = data.essays.filter(q => q.id.startsWith('114-g3tr-')), ptr = data.essays.filter(q => q.id.startsWith('114-ptr-'));
+  assert.deepStrictEqual([tpl.length, tr.length, ptr.length], [4, 4, 4]);
+  [tpl, tr, ptr].forEach(qs => assert.ok(qs.every(q => q.points === 25 && q.year_roc === 114)));
+  assert.ok(tpl.every(q => q.exam === '公務人員高等考試三級考試' && q.subject === '運輸規劃學' && q.categories.join() === '交通行政,交通技術'));
+  assert.ok(tr.every(q => q.exam === '公務人員高等考試三級考試' && q.subject === '運輸學' && q.categories.join() === '交通行政'));
+  assert.ok(ptr.every(q => q.exam === '公務人員普通考試' && q.subject === '運輸學概要' && q.categories.join() === '交通行政'));
+  assert.ok(!bank.questions.some(b => b.year_roc === 114 && /^(運輸規劃學|運輸學|運輸學概要)$/.test(b.subject)), '純申論科目，題庫沒有選擇題');
+  // 小題結構（對照試題 PDF：運輸規劃學第 1 題為 15 分＋10 分；其餘各題不分小題，配分為編者拆分）
+  assert.strictEqual(shape('114-g3tpl-E1'), '15,10'); assert.strictEqual(shape('114-g3tpl-E2'), '8,9,8');
+  assert.strictEqual(shape('114-g3tpl-E3'), '13,12'); assert.strictEqual(shape('114-g3tpl-E4'), '8,9,8');
+  assert.strictEqual(shape('114-g3tr-E1'), '12,13'); assert.strictEqual(shape('114-g3tr-E2'), '12,13');
+  assert.strictEqual(shape('114-g3tr-E3'), '8,9,8'); assert.strictEqual(shape('114-g3tr-E4'), '8,9,8');
+  assert.strictEqual(shape('114-ptr-E1'), '8,9,8'); assert.strictEqual(shape('114-ptr-E2'), '8,9,8');
+  assert.strictEqual(shape('114-ptr-E3'), '12,13'); assert.strictEqual(shape('114-ptr-E4'), '8,9,8');
+  const gp = (id, pid, s) => C.gradeEssayPart(part(id, pid), s);
+  // 好的作答：應得高分
+  assert.ok(gp('114-g3tpl-E1', '2', '要收集違規件數、事故資料（A1、A2）、交通量與車速，以及路口號誌時制、標誌標線與問卷。').earned >= 9);
+  assert.ok(gp('114-g3tpl-E3', '1', '容量限制指派考慮路段旅行時間隨流量增加，用 BPR 函數 t=t0[1+α(v/c)^β]，反覆迭代更新旅行時間，用 MSA 或增量指派，直到收斂。').earned >= 10);
+  assert.ok(gp('114-g3tr-E1', '2', 'RAMS 是可靠度、可用度、維修度與安全。EN 50126 規範整個生命週期，做危害分析與風險評估（SIL），驗證後營運維修持續回饋。').earned >= 12);
+  assert.ok(gp('114-g3tr-E2', '2', '基本運價 = 每車公里合理成本 ×（1＋合理經營報酬率）÷（平均每車公里全票人數 ＋ 義務性優待票換算全票人數）。').earned >= 9);
+  assert.ok(gp('114-g3tr-E4', '1', 'IMO 訂 2050 淨零目標，有 EEXI 與 CII，歐盟 ETS 也把航運納入，我國出口導向的航商受影響。').earned >= 7);
+  assert.ok(gp('114-ptr-E3', '1', '公路法第 2 條：慢車指腳踏自行車、電動輔助自行車、電動自行車，以及三輪以上人力或獸力行駛之車輛。').earned >= 8);
+  assert.ok(gp('114-ptr-E4', '1', '2050 淨零路徑，運輸以公路為主，目標 2030 市區公車、2035 機車、2040 小客車全面電動化。').earned >= 7);
+  // 只寫名詞或空泛內容：不應拿高分
+  assert.ok(gp('114-g3tpl-E1', '1', '要加強執法和宣導。').earned <= 1);
+  assert.ok(gp('114-g3tpl-E3', '2', '兩個方法不一樣。').earned < 2);
+  assert.ok(gp('114-g3tr-E1', '2', 'RAMS 很重要。').earned < 2);
+  assert.ok(gp('114-g3tr-E2', '2', '基本運價就是成本加利潤除以座位數。').earned < 13 * 0.5, '分母應為乘客人數而非座位數，且缺少合理經營報酬率與優待票換算');
+  assert.ok(gp('114-g3tr-E4', '1', '海運要減碳。').earned < 3);
+  assert.ok(gp('114-ptr-E4', '2', '慢慢推廣。').earned < 2);
+  // 部分作答：只寫公式分子，不應拿到分母的分數
+  const fm = gp('114-g3tr-E2', '2', '每車公里合理成本乘以（1＋合理經營報酬率）。');
+  assert.ok(fm.items.find(i => i.id === 'r1').earned > 0 && fm.items.find(i => i.id === 'r2').earned === 0);
+  // 回饋：失分的細目與常見錯誤提醒會出現
+  const t0 = '全有全無是全部旅次走最短路徑，不考慮壅塞，簡單快速但流量集中。', gr0 = gp('114-g3tpl-E3', '2', t0), sc0 = {}; gr0.items.forEach(i => { sc0[i.id] = i.earned; });
+  const fb = C.feedbackEssayPart(part('114-g3tpl-E3', '2'), { text: t0, auto: sc0, scores: sc0 });
+  assert.ok(gr0.earned > 0 && gr0.earned < 12);
+  assert.ok(fb.points.some(x => /常見錯誤/.test(x.text)) && fb.points.some(x => /完全沒得分/.test(x.text)), '失分時應提示未得分的細目與常見錯誤');
+  // 整題回饋：參考答案滿分
+  data.essays.filter(q => /^114-(g3tpl|g3tr|ptr)-/.test(q.id)).forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const gr = C.gradeEssayPart(p, C.stripHtml(p.model_answer)), sc = {}; gr.items.forEach(i => { sc[i.id] = i.earned; }); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: sc, scores: sc }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+  });
+  console.log('114 年高考三級運輸規劃學、運輸學與普考運輸學概要申論題測試通過');
 }

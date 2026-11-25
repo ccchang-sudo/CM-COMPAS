@@ -78,7 +78,7 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 386);  // 含 114 年高考三級運輸規劃學、運輸學與普考運輸學概要各 4 題（見檔尾）；以下為加入前 374 題的說明：  // 含 113 年高考三級運輸規劃學、運輸學與普考運輸學概要各 4 題（見檔尾）；以下為加入前 362 題的說明：  // 含 115 年普考運輸學概要 4 題（見檔尾）；以下為加入前 358 題的說明：  // 含 115 年高考三級運輸規劃學（交通行政、交通技術）與運輸學（交通行政）各 4 題（見檔尾）；以下為加入前的說明：  // 含 114 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 115 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 113 年高考三級（金融保險）財務管理與投資學 4 題（見檔尾）；含 114、115 年高考三級（金融保險）財務管理與投資學各 4 題（見檔尾）；含 114 年高考三級貨幣銀行學 4 題與普考貨幣銀行學概要 5 題、115 年高考三級貨幣銀行學與普考貨幣銀行學概要各 4 題（見檔尾）；含 113 年貨幣銀行學（高考三級）與貨幣銀行學概要（普考）各 4 題（見檔尾）；以下為合併前的說明：  // 含 113、115 年普通考試旅運經營學概要各 4 題（見檔尾）；含 113、115 年高考三級旅運經營學各 4 題（見檔尾）；含 113 年普考觀光學概要 4 題、113 年高考三級觀光英語／觀光學／觀光日語 11 題（見檔尾）；含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
+assert.strictEqual(data.essays.length, 415);  // 合併 4 個系統：113 年中級會計學 2 題與會計學 3 題、115 年高考三級中級會計學 3 題與會計學 3 題、115 年普考會計學概要 6 題與 114 年高考三級中級會計學 2 題、114 年會計學（高考三級 3 題、普考 7 題）；各系統加入前的說明如下：  // 含 114 年高考三級運輸規劃學、運輸學與普考運輸學概要各 4 題（見檔尾）；以下為加入前 374 題的說明：  // 含 113 年高考三級運輸規劃學、運輸學與普考運輸學概要各 4 題（見檔尾）；以下為加入前 362 題的說明：  // 含 115 年普考運輸學概要 4 題（見檔尾）；以下為加入前 358 題的說明：  // 含 115 年高考三級運輸規劃學（交通行政、交通技術）與運輸學（交通行政）各 4 題（見檔尾）；以下為加入前的說明：  // 含 114 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 115 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 113 年高考三級（金融保險）財務管理與投資學 4 題（見檔尾）；含 114、115 年高考三級（金融保險）財務管理與投資學各 4 題（見檔尾）；含 114 年高考三級貨幣銀行學 4 題與普考貨幣銀行學概要 5 題、115 年高考三級貨幣銀行學與普考貨幣銀行學概要各 4 題（見檔尾）；含 113 年貨幣銀行學（高考三級）與貨幣銀行學概要（普考）各 4 題（見檔尾）；以下為合併前的說明：  // 含 113、115 年普通考試旅運經營學概要各 4 題（見檔尾）；含 113、115 年高考三級旅運經營學各 4 題（見檔尾）；含 113 年普考觀光學概要 4 題、113 年高考三級觀光英語／觀光學／觀光日語 11 題（見檔尾）；含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
 const ESSAY_ONLY = ['財務管理與投資學', '公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要', '民法總則、親屬與繼承編', '民法（包括總則、物權、親屬與繼承編）', '民法與民事訴訟法', '民法物權編概要', '民法總則、親屬與繼承編概要', '觀光學', '觀光英語', '觀光日語', '觀光學概要', '觀光行銷學概要', '觀光資源規劃', '旅運經營學', '旅運經營學概要', '貨幣銀行學', '貨幣銀行學概要', '保險學', '保險學概要', '運輸規劃學', '運輸學', '運輸學概要'];
 data.essays.forEach(q => {
@@ -327,7 +327,7 @@ assert.deepStrictEqual(by114('經濟學與財政學概論').map(q => q.points), 
 assert.deepStrictEqual(by114('經濟學').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by114('公共經濟學').map(q => q.points), [20, 40, 20, 20]);       // 共 100 分
 assert.deepStrictEqual(by114('產業經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 85);  // 含 114 年運輸規劃學 4 題、運輸學 4 題（見檔尾）；含 114 年保險學 4 題、114 年財務管理與投資學 4 題、114 年貨幣銀行學 4 題、114 年旅運經營學 4 題、114 年觀光學 4 題、觀光資源規劃 4 題、觀光日語 3 題、觀光英語 3 題；9 科（含財政學 財稅行政、會計共 4 題）：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政；另加民法 財稅行政／財稅法務、公平交易管理各 2 題、地政 3 題、司法行政 2 題、法制與智慧財產行政 2 題、戶政 4 題
+assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 90);  // 合併：含 114 年中級會計學 2 題、會計學 3 題；  // 含 114 年運輸規劃學 4 題、運輸學 4 題（見檔尾）；含 114 年保險學 4 題、114 年財務管理與投資學 4 題、114 年貨幣銀行學 4 題、114 年旅運經營學 4 題、114 年觀光學 4 題、觀光資源規劃 4 題、觀光日語 3 題、觀光英語 3 題；9 科（含財政學 財稅行政、會計共 4 題）：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政；另加民法 財稅行政／財稅法務、公平交易管理各 2 題、地政 3 題、司法行政 2 題、法制與智慧財產行政 2 題、戶政 4 題
 assert.strictEqual(shape('114-g3fin-E2'), '5,5,5,5,5'); assert.strictEqual(shape('114-g3econ-E1'), '10,10,5');
 assert.strictEqual(shape('114-g3econ-E2'), '2,2,21'); assert.strictEqual(shape('114-g3pe-E2'), '20,20');
 assert.strictEqual(shape('114-g3ie-E1'), '10,10,5'); assert.strictEqual(shape('114-g3ie-E2'), '5,10,10');
@@ -539,7 +539,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 /* ===== 113 年高考三級：經濟學、經濟學與財政學概論、公共經濟學的申論題 ===== */
 {
   const by113 = (subj) => data.essays.filter(q => q.year_roc === 113 && q.subject === subj);
-  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 81);  // 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 含 113 年觀光資源規劃 4 題、觀光英語 4 題、觀光學 4 題、觀光日語 3 題；含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）  // 113 年高考三級運輸規劃學、運輸學各 4 題已含在內
+  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 86);  // 含 113 年中級會計學 2 題、會計學 3 題； 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 含 113 年觀光資源規劃 4 題、觀光英語 4 題、觀光學 4 題、觀光日語 3 題；含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）  // 113 年高考三級運輸規劃學、運輸學各 4 題已含在內
   assert.deepStrictEqual(by113('經濟學').map(q => q.points), [25, 25]);
   assert.deepStrictEqual(by113('經濟學與財政學概論').map(q => q.points), [20, 30]);        // 50 分
   assert.deepStrictEqual(by113('公共經濟學').map(q => q.points), [25, 25, 25, 25]);         // 100 分
@@ -648,7 +648,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 
 
 const y113 = data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政');  // 交通政策與行政另有測試
-assert.strictEqual(y113.length, 81);  // 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 28 題經濟財政類 + 113 年高考三級民法 14 題 + 113 年觀光資源規劃 4 題
+assert.strictEqual(y113.length, 86);  // 含 113 年中級會計學 2 題、會計學 3 題； 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 28 題經濟財政類 + 113 年高考三級民法 14 題 + 113 年觀光資源規劃 4 題
 assert.deepStrictEqual(sub(113, '農業經濟學').map(q => q.points), [15, 30, 30, 25]);          // 共 100 分
 assert.deepStrictEqual(sub(113, '工程經濟學').map(q => q.points), [25, 25, 25, 25]);
 sub(113, '農業經濟學').forEach(q => assert.deepStrictEqual(q.categories, ['農業行政']));
@@ -909,6 +909,16 @@ const fam = (s) => { s = s.replace(/概要$/, ''); if (/^民法/.test(s)) return
 OVERLAP.push(['113-g3tpl-E1', '115-g3tres-E3'], ['113-g3tpl-E2', '114-g3pe-E3'], ['113-g3tpl-E4', '115-g3ins-E4'], ['113-g3tr-E4', '113-pmkt-E1'], ['113-g3tpl-E1', '113-g3tres-E2'], ['113-g3tr-E3', '113-g3trv-E1'], ['113-g3tr-E1', '113-g3trv-E3'], ['113-g3tr-E4', '113-g3trv-E3'], ['113-ptour-E2', '113-ptr-E2'], ['113-ptr-E1', '115-g3pe-E4'], ['113-ptr-E2', '115-pcivil-E1'], ['113-g3pfa-E1', '113-ptr-E3'], ['113-ptr-E3', '114-g3pe-E1'], ['113-ptr-E3', '115-g3econ-E1'], ['113-ptr-E3', '115-g3pe-E1'], ['113-g3tr-E1', '114-g3trv-E2'], ['113-g3tr-E4', '114-g3trv-E2'], ['113-g3tpl-E1', '114-g3trv-E3'], ['113-ptr-E4', '114-g3trv-E3'], ['113-g3tr-E2', '114-pagr-E4'], ['113-g3tr-E4', '114-pagr-E4'], ['113-ptr-E4', '115-g3io-E4'], ['113-g3tpl-E4', '115-g3tres-E2'], ['113-g3tpl-E1', '115-pins-E4'], ['113-g3tr-E4', '115-pmkt-E3']);
 // 114 年高考三級運輸規劃學、運輸學與普考運輸學概要：與觀光、農業、保險等科目在低碳、交通管理、補貼與碳定價、航空與鐵路觀光等概念上本來就會重疊
 OVERLAP.push(['113-g3agr-E1', '114-g3tr-E4'], ['113-g3ins-E4', '114-ptr-E1'], ['113-g3tres-E2', '114-g3tpl-E1'], ['113-g3tres-E2', '114-ptr-E2'], ['113-g3tres-E2', '114-ptr-E3'], ['113-g3tres-E2', '114-ptr-E4'], ['114-g3tpl-E4', '113-g3tres-E2'], ['114-g3tr-E3', '113-pins-E4'], ['114-g3tr-E3', '113-ptrv-E3'], ['114-g3tr-E3', '115-ptrv-E3'], ['114-g3tr-E4', '115-g3trv-E3'], ['114-g3tr-E4', '115-pagr-E2'], ['114-g3trv-E3', '114-g3tpl-E2'], ['114-ptr-E1', '115-ptour-E4'], ['114-ptr-E2', '113-g3agr-E3'], ['114-ptr-E2', '115-g3tres-E1'], ['114-ptr-E4', '113-g3tres-E3'], ['114-ptr-E4', '114-g3tour-E4'], ['114-ptr-E4', '115-g3ins-E4'], ['114-ptr-E4', '115-g3tres-E1'], ['115-g3tour-E2', '114-ptr-E1'], ['115-g3tres-E1', '114-ptr-E1'], ['115-pagr-E2', '114-g3tr-E4'], ['115-ptour-E2', '114-ptr-E1']);
+// 113 年中級會計學、會計學申論題：答案中的金額（如 49,048,767、3,671,072、920,000）恰含民法、保險學、財務金融題以數字當比對字串（767、87、184、179、300 萬等）的巧合
+OVERLAP.push(['115-g3land-E1', '113-g3inter-E1'], ['115-g3fmi-E1', '113-g3acct-E1'], ['113-g3ins-E1', '113-g3inter-E1']);
+// 115 年高考三級中級會計學、會計學：數字或用語巧合與民法、財務管理（EPS 稀釋）、保險學（金額相同）等科目重疊
+OVERLAP.push(['115-g3ip-E1', '115-g3inter-E1'], ['114-g3fmi-E3', '115-g3inter-E1'], ['113-g3ins-E1', '115-g3inter-E2']);
+// 115 年普考會計學概要、114 年高考三級中級會計學：權益證券投資、限制型股票、金融工具等用語與財務管理、保險學的既有評分細目本來就會重疊
+OVERLAP.push(['114-g3fmi-E3', '115-pacc-acc-E1'], ['113-g3ins-E1', '114-g3ima-E2'], ['115-pacc-tax-E2', '113-g3fmi-E4']);
+// 114 年會計學（高考三級、普考）：現金流量、折舊、金額數字與財務管理與投資學的營運現金流量用語、整數金額自然重疊
+OVERLAP.push(['114-g3fmi-E1', '114-pac2-E1'], ['114-g3fmi-E3', '114-pac2-E1'], ['114-g3ac-E1', '114-g3fmi-E1']);
+// 合併後新增：不同系統加入的會計類申論題之間，金額與會計用語自然重疊
+OVERLAP.push(['113-g3acct-E3', '114-g3ima-E1']);
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
 data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
   if (fam(q2.subject) === fam(q.subject) || overlap(q.id, q2.id)) return;  // 同領域（含「概要」版）內容本來就會重疊
@@ -2736,3 +2746,266 @@ console.log('114、115 年高考三級財務管理與投資學申論題測試通
   });
   console.log('114 年高考三級運輸規劃學、運輸學與普考運輸學概要申論題測試通過');
 }
+
+/* ===== 113 年高考三級中級會計學（會計）與會計學（財稅行政、金融保險）申論題 ===== */
+{
+  const shape = (id) => E[id].parts.map(p => p.points).join(',');
+  assert.strictEqual(shape('113-g3inter-E1'), '8,8,9'); assert.strictEqual(shape('113-g3inter-E2'), '15,10');
+  assert.strictEqual(shape('113-g3acct-E1'), '4,3,6'); assert.strictEqual(shape('113-g3acct-E2'), '3,3,6');
+  assert.strictEqual(shape('113-g3acct-E3'), '5,5,5,5,5');
+  // 中級會計學 2 題各 25 分；會計學 13＋12＋25 = 50 分
+  assert.strictEqual(['113-g3inter-E1', '113-g3inter-E2'].reduce((a, id) => a + E[id].points, 0), 50);
+  assert.strictEqual(['113-g3acct-E1', '113-g3acct-E2', '113-g3acct-E3'].reduce((a, id) => a + E[id].points, 0), 50);
+  const gp = (id, pid, s) => C.gradeEssayPart(part(id, pid), s);
+  // 參考答案中的數字驗算
+  const r = Math.round;
+  assert.strictEqual(r(5000000 * 0.6209), 3104500);
+  const cost = 102000000 + 3104500; assert.strictEqual(cost, 105104500);
+  assert.strictEqual(r(cost * 5 / 15 * 9 / 12), 26276125);
+  assert.strictEqual(r(3104500 * 0.1 * 9 / 12), 232838);
+  assert.strictEqual(r(cost * 5 / 15 * 3 / 12 + cost * 4 / 15 * 9 / 12), 29779608);
+  assert.strictEqual(r((3104500 + 232838) * 0.1), 333734);
+  assert.strictEqual(r(10000000 * (1 + 6.24689)), 72468900);
+  assert.strictEqual(r((72468900 - 10000000) * 0.08), 4997512);
+  const pvL = r(10000000 * 1.73554 + 12000000 * (6.14457 - 1.73554)); assert.strictEqual(pvL, 70263760);
+  assert.strictEqual(r(pvL * 1.1 - 10000000), 67290136);
+  assert.strictEqual((10000000 * 2 + 12000000 * 8) / 10, 11600000);
+  assert.strictEqual((25 * 1 + 20 * 2 + 10 * 3) * 1500 / 100, 1425);
+  assert.strictEqual((360000 - 20000) / 5, 68000);
+  // 好的作答：應得高分
+  assert.ok(gp('113-g3inter-E1', '1', 'X1 專案借款利息 5,000,000 扣除投資收益 200,000 = 4,800,000；一般借款加權平均累積支出 52,500,000，超過專案借款 2,500,000，資本化率 9%，資本化 225,000，合計 5,025,000。X2 專案借款 1,250,000，一般借款 1,103,063，合計 2,353,063。').earned >= 7);
+  assert.ok(gp('113-g3inter-E1', '3', '折舊 29,779,608；利息 333,734，除役負債 3,671,072。屬估計變動，借除役負債 3,671,072 貸設備 3,671,072，不超過帳面金額，不認列利益。').earned >= 7);
+  assert.ok(gp('113-g3inter-E2', '2', '在 X8/1/1 重評估，用 10% 折現，現值 70,263,760，X9 年初付租金後餘額 67,290,136。乙公司租金 116,000,000/10 年，每年租賃收入 11,600,000，應收租金 1,600,000。').earned >= 7);
+  assert.ok(gp('113-g3acct-E1', '1', '借現金 920,000，借應收帳款-A銀行（保留款）50,000，借手續費 30,000，貸應收帳款 1,000,000').earned === 4);
+  assert.ok(gp('113-g3acct-E2', '3', '宣告日借保留盈餘 10,000,000 貸應付股利 10,000,000；6/28 借應付股利 貸現金 10,000,000').earned === 6);
+  assert.strictEqual(gp('113-g3acct-E3', '3', '預期值 0.95 個 × 1,500 = 1,425').earned, 5);
+  // 常見錯誤：不應拿到對應的分數
+  assert.strictEqual(gp('113-g3inter-E2', '2', '以 X9 年 1 月 1 日的 8% 折現，餘額 77,290,136').items.find(i => i.id === 'r3').earned, 0, '支付前的餘額不是答案');
+  assert.ok(gp('113-g3inter-E1', '1', '專案借款利息 5,000,000，資本化 5,000,000。').earned <= 2);
+  assert.ok(gp('113-g3acct-E3', '4', '丁公司處分利益 10,000').items.find(i => i.id === 'r3').earned <= 1, '公允價值低於帳面金額應為損失，寫成利益最多只得數字的部分分數');
+  assert.strictEqual(gp('113-g3acct-E3', '2', '水梨 300,000').items.find(i => i.id === 'r3').earned, 0, '漏減出售成本');
+  assert.ok(gp('113-g3acct-E3', '5', '年數合計法折舊 90,000，改良後直接用 (300,000-30,000)/5 = 54,000').earned <= 2);
+  assert.ok(gp('113-g3acct-E1', '3', '銀行付給甲公司 978,000').earned <= 2);
+  // 整題回饋：參考答案總分應為滿分
+  data.essays.filter(q => /^113-g3(inter|acct)-E/.test(q.id)).forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const gr = C.gradeEssayPart(p, C.stripHtml(p.model_answer)), sc = {}; gr.items.forEach(i => { sc[i.id] = i.earned; }); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: sc, scores: sc }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+  });
+  console.log('113 年高考三級中級會計學與會計學申論題測試通過');
+}
+
+/* ===== 115 年高考三級中級會計學（會計、審計）與會計學（財稅行政、金融保險）：結構、配分、部分作答與空泛答案 ===== */
+{
+  const inter = data.essays.filter(q => q.id.startsWith('115-g3inter-')), acct = data.essays.filter(q => q.id.startsWith('115-g3acct-'));
+  assert.deepStrictEqual([inter.length, acct.length], [3, 3]);
+  assert.deepStrictEqual(inter.map(q => q.points), [10, 15, 25]); assert.deepStrictEqual(acct.map(q => q.points), [20, 15, 15]);
+  assert.ok(inter.every(q => q.year_roc === 115 && q.exam === '公務人員高等考試三級考試' && q.subject === '中級會計學' && q.categories.join() === '會計,審計'));
+  assert.ok(acct.every(q => q.year_roc === 115 && q.exam === '公務人員高等考試三級考試' && q.subject === '會計學' && q.categories.join() === '財稅行政,金融保險'));
+  assert.ok(bank.questions.some(b => b.year_roc === 115 && b.subject === '中級會計學') && bank.questions.some(b => b.year_roc === 115 && b.subject === '會計學'), '兩科都有選擇題，exam/subject 要與題庫一致');
+  // 小題結構（對照試題 PDF）：中級會計學 8＋2、9＋6、12＋13；會計學 15＋5、5＋5＋5、5＋5＋5
+  assert.strictEqual(shape('115-g3inter-E1'), '8,2'); assert.strictEqual(shape('115-g3inter-E2'), '9,6'); assert.strictEqual(shape('115-g3inter-E3'), '12,13');
+  assert.strictEqual(shape('115-g3acct-E1'), '15,5'); assert.strictEqual(shape('115-g3acct-E2'), '5,5,5'); assert.strictEqual(shape('115-g3acct-E3'), '5,5,5');
+  const gp = (id, pid, s) => C.gradeEssayPart(part(id, pid), s);
+  const item = (g, id) => g.items.find(i => i.id === id).earned;
+
+  // 數值驗算：參考答案的數字
+  { const ex = (100 * 10000 + 80 * 2000) / 12000, f = 100 / ex, w = 10000 * f * 6 / 12 + 12000 * 6 / 12;
+    assert.ok(Math.abs(ex - 96.6667) < 1e-4 && Math.abs(f - 1.0345) < 1e-4 && Math.abs(w - 11172.4138) < 1e-4);
+    assert.strictEqual((45190 - 500) / w >= 3.99995 && (45190 - 500) / w < 4.00005, true);
+    assert.strictEqual((45190 / (w + 500)).toFixed(4), '3.8715'); assert.strictEqual(((45190 / 2 - 1000) / 12000).toFixed(4), '1.7996'); }
+  { const pv = 1000000 / 1.08 + 1100000 / 1.08 ** 2, i1 = pv * 0.08, l1 = pv * 1.08 - 1000000, i2 = l1 * 0.08;
+    assert.ok(Math.abs(pv - 1868999) < 1 && Math.abs(i1 - 149520) < 1 && Math.abs(l1 - 1018519) < 1 && Math.abs(i2 - 81481) < 1 && Math.abs(l1 * 1.08 - 1100000) < 1e-6);
+    assert.strictEqual(5400000 * 8 / 36, 1200000); assert.strictEqual(5400000 * 7 / 36, 1050000); }
+  { const x1 = 66000 * 5 / 15 / 2, x2 = x1 + 66000 * 4 / 15 / 2, cv = 71000 - x1 - x2, x3 = cv * 0.4, cv4 = cv - x3, dep4 = cv4 * 0.4 / 2;
+    assert.deepStrictEqual([x1, x2, cv, x3, cv4, dep4, cv4 - dep4], [11000, 19800, 40200, 16080, 24120, 4824, 19296]); assert.strictEqual(20000 - (cv4 - dep4), 704);
+    assert.strictEqual(241000 * 1800 / 2500, 173520); assert.strictEqual(1800 * 600 - 173520, 906480); }
+
+  // 好的作答：應得高分
+  assert.ok(gp('115-g3inter-E1', '1', '理論除權價=(10000×100+2000×80)/12000=96.6667，調整因子=100/96.6667=1.0345。加權平均股數=10000×1.0345×6/12+12000×6/12=11172.4138。特別股股利=10×1000×5%=500，基本 EPS=(45190-500)/11172.4138=4.0000。稀釋：特別股轉換 500 股，加回股利 500，稀釋 EPS=45190/11672.4138=3.8715。').earned >= 7);
+  assert.ok(gp('115-g3inter-E1', '2', '全部股利 22,595，特別股積欠 1 年加當年共 1,000 先分配，普通股 21,595÷12,000=1.7996。').earned >= 2);
+  assert.ok(gp('115-g3inter-E2', '1', 'X3：借 其他綜合損益—重估增值 1,000,000，借 重估價損失 2,000,000，貸 著作權 3,000,000。').earned >= 3);
+  assert.ok(gp('115-g3inter-E2', '2', '非確定耐用年限的無形資產、尚未可供使用的無形資產，以及企業合併取得的商譽，每年都要測試。').earned >= 6);
+  assert.ok(gp('115-g3inter-E3', '1', '屬營業租賃，租期短且不移轉所有權。每年租金收入 1,050,000，直線基礎，X1 認列應收租金 50,000；租賃誘因 80,000 每年分攤 40,000 抵減租金收入；年數合計法折舊 X1 1,200,000、X2 1,050,000。').earned >= 10);
+  assert.ok(gp('115-g3inter-E3', '2', '以隱含利率 8% 折現，租賃負債與使用權資產 1,868,999；佣金與租賃誘因 80,000 互抵。X1 利息費用 149,520，償還本金 850,480；X2 利息費用 81,481，租賃負債 1,018,519 歸零；使用權資產按租期 2 年直線折舊，每年 934,500。').earned >= 12);
+  assert.ok(gp('115-g3acct-E1', '1', '成本=65000+2000+3000+1000=71000，可折舊 66000，X1=66000×5/15×6/12=11000；X2=11000+66000×4/15×6/12=19800；X3 改雙倍餘額遞減，40200×40%=16080。').earned >= 14);
+  assert.ok(gp('115-g3acct-E1', '2', 'X4 折舊 24120×40%×6/12=4824，帳面金額 19296，處分利益 704。').earned >= 5);
+  assert.ok(gp('115-g3acct-E2', '1', '公允價值減出售成本，250,000-4,000-5,000=241,000。').earned >= 5);
+  assert.ok(gp('115-g3acct-E2', '2', '鵝蛋是農產品，收成時以公允價值減出售成本衡量，增加 168,000。').earned >= 4);
+  assert.ok(gp('115-g3acct-E2', '3', '剩 1,800 隻 × 600 = 1,080,000，調整前 173,520，生物資產增加 906,480。').earned >= 5);
+  assert.ok(gp('115-g3acct-E3', '1', '股利收入 200×3=600，評價利益 200×(56-50)=1,200，淨利增加 1,800。').earned >= 5);
+  assert.ok(gp('115-g3acct-E3', '2', '股利收入 800，評價損失 600，股東權益增加 200。').earned >= 5);
+  assert.ok(gp('115-g3acct-E3', '3', '售價等於 X2 年底公允價值，處分損益為 0。').earned >= 3);
+
+  // 常見錯誤與空泛答案：不應拿高分
+  assert.ok(gp('115-g3inter-E1', '1', '加權平均股數=10000×6/12+12000×6/12=11000，基本 EPS=(45190-500)/11000。').earned <= 3, '沒有除權調整因子');
+  assert.ok(gp('115-g3inter-E1', '1', '每股盈餘就是淨利除以股數。').earned <= 1);
+  assert.ok(gp('115-g3inter-E1', '2', '22595/12000=1.8829。').earned <= 1, '沒有先扣特別股積欠股利');
+  assert.strictEqual(item(gp('115-g3inter-E2', '1', '減損損失=28,000,000-25,000,000=3,000,000。'), 'r2'), 0, '減損測試要用公允價值減處分成本與使用價值的較高者');
+  assert.ok(gp('115-g3inter-E2', '2', '有減損跡象的資產都要測試。').earned < 2);
+  assert.ok(gp('115-g3inter-E3', '1', '這是融資租賃，認列租賃投資淨額與利息收入。').earned < 4, '誤判租賃分類');
+  assert.strictEqual(item(gp('115-g3inter-E3', '2', '以增額借款利率 10% 折現，PV=1,000,000/1.1+1,100,000/1.21=1,818,182。'), 'r1'), 0, '折現率應使用已知的隱含利率 8%');
+  assert.ok(gp('115-g3acct-E1', '1', '折舊=(65000-5000)×5/15×6/12=10000。').earned <= 5, '成本漏加運費、安裝費與保險費');
+  assert.strictEqual(item(gp('115-g3acct-E1', '2', '處分損失 704。'), 'r2'), 0, '方向寫反');
+  assert.ok(gp('115-g3acct-E2', '1', '入帳金額 250,000。').earned < 2, '忘記扣出售成本');
+  assert.strictEqual(item(gp('115-g3acct-E2', '2', '減少 168,000。'), 'r1'), 0, '方向寫反');
+  assert.strictEqual(item(gp('115-g3acct-E2', '3', '生物資產減少 906,480。'), 'r1'), 0, '方向寫反');
+  assert.ok(gp('115-g3acct-E2', '3', '2,500 隻 × 600 = 1,500,000，增加 1,500,000。').earned < 2, '要扣除已出售的 700 隻');
+  assert.strictEqual(item(gp('115-g3acct-E3', '1', '增加 600。'), 'r1'), 0); assert.strictEqual(item(gp('115-g3acct-E3', '2', '減少 600。'), 'r1'), 0);
+  assert.strictEqual(item(gp('115-g3acct-E3', '3', '處分利益 600。'), 'r1'), 0, '不可用原始成本 50 計算處分利益');
+  // 部分作答：只答對一個分錄，不應拿到全部分數
+  { const g = gp('115-g3inter-E2', '1', 'X3：借 其他綜合損益—重估增值 1,000,000，借 重估價損失 2,000,000，貸 著作權 3,000,000。'); assert.ok(g.earned >= 3 && g.earned < 9); assert.strictEqual(item(g, 'r4'), 0); }
+  // 回饋：失分的細目與常見錯誤提醒、計算題提醒會出現
+  { const t0 = '這是融資租賃，認列租賃投資淨額與利息收入。', gr0 = gp('115-g3inter-E3', '1', t0), sc0 = {}; gr0.items.forEach(i => { sc0[i.id] = i.earned; });
+    const fb = C.feedbackEssayPart(part('115-g3inter-E3', '1'), { text: t0, auto: sc0, scores: sc0 });
+    assert.ok(fb.points.some(x => /常見錯誤/.test(x.text)) && fb.points.some(x => /沒有得分|完全沒得分/.test(x.text)), '失分時應提示未得分的細目與常見錯誤');
+    assert.ok(fb.points.some(x => /計算題/.test(x.text)), '計算題要提醒列式與過程'); }
+  // 整題回饋：參考答案滿分
+  data.essays.filter(q => /^115-g3(inter|acct)-/.test(q.id)).forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const gr = C.gradeEssayPart(p, C.stripHtml(p.model_answer)), sc = {}; gr.items.forEach(i => { sc[i.id] = i.earned; }); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: sc, scores: sc }; });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+  });
+  console.log('115 年高考三級中級會計學與會計學申論題測試通過');
+}
+
+// 115 年普考會計學概要（財稅行政、金融保險 3 題；會計 3 題）與 114 年高考三級中級會計學（2 題）
+{
+  const pick = (re) => data.essays.filter(q => re.test(q.id));
+  const tax = pick(/^115-pacc-tax-/), acc = pick(/^115-pacc-acc-/), ima = pick(/^114-g3ima-/);
+  assert.deepStrictEqual([tax.length, acc.length, ima.length], [3, 3, 2]);
+  assert.strictEqual(tax.reduce((a, q) => a + q.points, 0), 50);   // 申論題部分 50 分
+  assert.strictEqual(acc.reduce((a, q) => a + q.points, 0), 50);
+  assert.strictEqual(ima.reduce((a, q) => a + q.points, 0), 50);
+  assert.ok(tax.every(q => q.exam === '公務人員普通考試' && q.subject === '會計學概要' && q.categories.join() === '財稅行政,金融保險'));
+  assert.ok(acc.every(q => q.exam === '公務人員普通考試' && q.subject === '會計學概要' && q.categories.join() === '會計'));
+  assert.ok(ima.every(q => q.exam === '公務人員高等考試三級考試' && q.subject === '中級會計學' && q.categories.join() === '會計'));
+  // 參考答案數學驗算
+  const r = Math.round;
+  assert.strictEqual(500000 - 40000 + 15000, 475000);                         // 收現
+  assert.strictEqual(200000 + 10000 + 10000 - 4000, 216000);                  // 付現
+  assert.strictEqual([55000 + 24000 + 2000, 60000 - 6000 + 3000, 62000 - 6000 - 4000].join(), '81000,57000,52000');
+  assert.strictEqual(100143 + 9857 + 8800 + 12616 - 31273 + 31273, 100143 + 31273);   // FVOCI 累計
+  assert.strictEqual(110000 - 100143, 9857); assert.strictEqual(1100 * 108 - 110000, 8800); assert.strictEqual(1100 * 120 - 1100 * 108, 13200);
+  assert.strictEqual(9857 + 8800 + 13200 - 584, 31273);
+  assert.strictEqual(r(20322 * 0.95), 19306); assert.strictEqual(950000 - 19306, 930694);
+  assert.strictEqual(r(40000 * 3.46511 + 1000000 * 0.79209), 930694);          // 6% 現值
+  assert.strictEqual(r(930694 * 0.06), 55842); assert.strictEqual(r(946536 * 0.06), 56792);
+  assert.strictEqual(930694 + 55842 - 40000, 946536); assert.strictEqual(946536 + 56792 - 40000, 963328);
+  assert.strictEqual(1100000 + 105000 - 963328, 241672);
+  assert.strictEqual(7 * 10000 * 57, 3990000); assert.strictEqual(8 * 10000 * 57 * 2 / 3 - 1330000, 1710000);
+  assert.strictEqual(3990000 - 1000000 + 200000 + 570000, 3760000); assert.strictEqual(8 * 10000 * 57 - 8 * 10000 * 57 * 2 / 3, 1520000);
+  // 試算表：現金 660、淨利 8,159、權益 8,011
+  assert.strictEqual(1200 - 540, 660);
+  assert.strictEqual((15200 + 279 - 2000) - (3800 + 120 + 200 + (1600 - 700) + (900 - 600)), 8159);
+  assert.strictEqual(1952 + 8159 - (1500 + 600), 8011);
+  // 綜合損益表
+  assert.strictEqual((4400000 - 2600000 - 1100000 - 4000) * 0.75 + (70000 + 500000) * 0.75, 949500);
+  // 部分答對與誤答
+  const g = (q, p, t) => C.gradeEssayPart(part(q, p), t);
+  assert.strictEqual(g('115-pacc-tax-E1', '1', '應收帳款增加 40,000 要減，預收貨款增加 15,000 要加：收現 = 500,000 − 40,000 + 15,000 = 475,000').earned, 5);
+  assert.ok(g('115-pacc-tax-E1', '1', '收現 = 500,000 − 40,000 − 15,000 = 445,000').earned < 5);   // 預收貨款方向弄反
+  assert.ok(g('115-pacc-tax-E1', '2', '付款 = 210,000 + 10,000 + 4,000 = 224,000').earned <= 3);
+  assert.ok(g('115-pacc-tax-E3', '1', 'X1 正確淨利 81,000').earned === 3);
+  assert.ok(g('115-pacc-acc-E1', '2', 'X1 當期綜合損益 +9,857').earned <= 3);
+  assert.ok(g('114-g3ima-E2', '3', 'X4 薪資費用 1,520,000').earned === 2);
+  // 整題回饋：參考答案總分為滿分
+  [...tax, ...acc, ...ima].forEach(q => {
+    const ps = {};
+    q.parts.forEach(p => { const gr = C.gradeEssayPart(p, C.stripHtml(p.model_answer)), sc = {}; gr.items.forEach(i => { sc[i.id] = i.earned; }); ps[p.id] = { text: C.stripHtml(p.model_answer), auto: sc, scores: sc }; assert.ok(p.calc === true || q.id.endsWith('E2') && q.id.startsWith('115-pacc-tax')); });
+    const te = C.feedbackEssay(q, ps);
+    assert.strictEqual(te.earned, te.possible, q.id + ' 參考答案總分應為滿分');
+  });
+  console.log('115 年普考會計學概要與 114 年高考三級中級會計學申論題測試通過');
+}
+
+/* ===== 114 年會計學（高考三級 22240/22340；普考 41330/41430、41530）申論題 ===== */
+{
+  const acc = data.essays.filter(q => /^114-(g3ac|pac1|pac2)-/.test(q.id));
+  assert.strictEqual(acc.length, 10);
+  const shp = (id) => E[id].parts.map(p => p.points).join(',');
+  assert.deepStrictEqual(['114-g3ac-E1', '114-g3ac-E2', '114-g3ac-E3'].map(id => E[id].points), [15, 15, 20]);   // 高考三級：50 分
+  assert.deepStrictEqual(['114-pac1-E1', '114-pac1-E2', '114-pac1-E3'].map(id => E[id].points), [15, 15, 20]);  // 普考財稅／金融：50 分
+  assert.deepStrictEqual(['114-pac2-E1', '114-pac2-E2', '114-pac2-E3', '114-pac2-E4'].map(id => E[id].points), [12, 20, 12, 6]);  // 普考會計：50 分
+  assert.strictEqual(shp('114-g3ac-E3'), '8,12'); assert.strictEqual(shp('114-pac2-E2'), '5,5,5,5'); assert.strictEqual(shp('114-pac2-E3'), '2,2,2,2,2,2');
+  // exam／subject／類科與題庫一致
+  acc.forEach(q => { const cats = new Set(bank.questions.filter(b => b.exam === q.exam && b.subject === q.subject && b.year_roc === 114).flatMap(b => b.categories)); q.categories.forEach(c => assert.ok(cats.has(c), q.id + ' 類科 ' + c + ' 不在題庫')); });
+  // 數值驗算（獨立重算參考答案的金額）
+  const has = (id, pid, ...xs) => { const a = C.stripHtml(E[id].parts.find(p => p.id === pid).model_answer).replace(/,/g, ''); xs.forEach(x => assert.ok(a.includes(String(x)), id + '/' + pid + ' 參考答案應含 ' + x)); };
+  { // 高考 Q1：投資性不動產
+    const fvX1 = 5100000 + 3200000, fvX2 = 5150000 + 3050000, pre = 5600000 + 2800000;
+    assert.strictEqual(fvX2 - fvX1, -100000); assert.strictEqual((5600000 - 5150000) + (2800000 - 3050000), 200000);
+    const dep = (2800000 - 160000) / 12 * 3 / 12; assert.strictEqual(dep, 55000); assert.strictEqual(200000 - dep, 145000); assert.strictEqual(pre, 8400000);
+    has('114-g3ac-E1', '3', 145000);
+  }
+  { // 高考 Q3：EPS
+    const wa = 80000 - 2000 * 9 / 12 + 4000 * 6 / 12 + 10000 * 3 / 12; assert.strictEqual(wa, 83000);
+    const pd = 5000 * 100 * 0.08, beps = (222600 - pd) / wa; assert.strictEqual(pd, 40000); assert.ok(Math.abs(beps - 2.2) < 1e-9);
+    const warr = 4000 * (1 - 30 / 50) * 6 / 12 + 6000 * (1 - 30 / 60); assert.strictEqual(warr, 3800);
+    const ieps_p = pd / 25000, ieps_b = 525000 * 0.05 * 0.8 / 10000; assert.ok(Math.abs(ieps_p - 1.6) < 1e-9); assert.ok(Math.abs(ieps_b - 2.1) < 1e-9);
+    const d1 = (222600 - pd) / (wa + warr), d2 = 222600 / (wa + warr + 25000), d3 = (222600 + 21000) / (wa + warr + 25000 + 10000);
+    assert.ok(d2 < d1 && d3 > d2, '公司債為反稀釋'); assert.ok(Math.abs(d2 - 1.99) < 0.005);
+    has('114-g3ac-E3', '2', 3800, 111800);
+  }
+  { // 普考財稅／金融 Q1：公司債與負債
+    const exp = 482700 * 0.06; assert.ok(Math.abs(exp - 28962) < 1e-9); const cv = 482700 + (exp - 25000);
+    assert.ok(Math.abs(cv - 486662) < 1e-9); assert.ok(Math.abs(cv + 60000 + 60000 * 0.08 * 4 / 12 - 548262) < 1e-9);
+    has('114-pac1-E1', '3', 548262);
+  }
+  { // 普考財稅／金融 Q2：折舊與處分
+    const m1 = 800000 * 0.4, m2 = (800000 - m1) * 0.4, m3 = (800000 - m1 - m2) * 0.4 * 6 / 12; assert.strictEqual(m2, 192000); assert.ok(Math.abs(m3 - 57600) < 1e-9);
+    assert.ok(Math.abs(240000 - (800000 - m1 - m2 - m3) - 9600) < 1e-9);
+    assert.strictEqual(57500 + m2 + 22000 * 3, 315500); assert.ok(Math.abs(57500 + m3 + 30000 * 3 - 205100) < 1e-9);
+    assert.ok(Math.abs((1200000 - 57500 * 3) + (800000 - m1 - m2) + (550000 - 66000) - 1799500) < 1e-9);
+    has('114-pac1-E2', '2', 1799500);
+  }
+  { // 普考財稅／金融 Q3：股東權益、每股數字
+    const sh = 20000 - 1000 + 5000, div = sh * 1.5; assert.strictEqual(div, 36000);
+    const eq = 200000 + 50000 + 700000 + 150000 + 3000 + (382400 + 87800 - div) - 400 * 30; assert.strictEqual(eq, 1525200);
+    assert.strictEqual(eq / 24600, 62); const w = 20000 - 750 + 2500 + 200; assert.strictEqual(w, 21950); assert.strictEqual(87800 / w, 4);
+    has('114-pac1-E3', '2', 1525200, 21950);
+  }
+  { // 普考會計 Q1：現金流量
+    const collect = 583000 + 16000 - 5000, pay = (315000 + 9000 - 18000) + (168000 - 51000 - 4000 + 6000 - 3000), tax = 16000 + 4000;
+    assert.strictEqual(collect, 594000); assert.strictEqual(pay, 422000); assert.strictEqual(collect - pay - tax, 152000);
+    assert.strictEqual(117000 + 51000 + 4000 - 33000 + 11000 - 9000 - 6000 + 18000 + 3000 - 4000, 152000);
+  }
+  { // 普考會計 Q2：公司債（半年付息、8 期 4%）
+    let b = 100000 * 0.7307 + 3500 * 6.7327; assert.ok(Math.abs(b - 96634.45) < 0.01);
+    const iv = (n) => { const a = []; for (let i = 0; i < n; i++) { const e = b * 0.04; a.push([e, e - 3500]); b += e - 3500; } return a; };
+    const B0 = b, per = iv(4); // 11/1/23、5/1/24、11/1/24、5/1/25 的各期
+    // 2023/12/31：第 2 期的 2/6
+    assert.ok(Math.abs(per[1][0] * 2 / 6 - 3500 * 2 / 6 - 126.66) < 0.05);
+    // 2024：第 2 期 4/6 + 第 3 期 + 第 4 期 2/6
+    const ie24 = per[1][0] * 4 / 6 + per[2][0] + per[3][0] * 2 / 6; assert.ok(Math.abs(ie24 - 7785.5) < 0.6);
+    const carry = B0 + per[0][1] + per[1][1] + per[2][1] + per[3][1] * 2 / 6; assert.ok(Math.abs(carry - 97912) < 1);
+    assert.ok(Math.abs(99000 - carry - 1088) < 1);
+  }
+  { // 普考會計 Q3：調整後數字
+    const cash = 24600 + 33000 + 6300 + 36000 + 267000 - 32200 - 400 * 8 - 188200; assert.strictEqual(cash, 143300);
+    const ar = 45500 + 276000 - 267000 - 1300; assert.strictEqual(ar, 53200);
+    const pre = 276000 + 36000 * 9 / 12 - (188200 + (4400 + 26100 - 5900) + (3500 - (1500 - 1300)) + (130000 - 10000) / 30); assert.strictEqual(pre, 82900);
+    const ni = pre * 0.7; assert.ok(Math.abs(ni - 58030) < 1e-6);
+    const dv = 1500 * 20 * 0.06 + (50000 + 900 - 400) * 0.5; assert.strictEqual(dv, 27050); assert.ok(Math.abs(147400 + ni - dv - 178380) < 1e-6);
+    const assets = cash + (ar - 3500) + 5900 + 40000 + (130000 - 20000 - 4000); assert.strictEqual(assets, 344900);
+    const liab = (25600 + 26100 - 32200) + (36000 - 27000) + dv + pre * 0.3, eq = 50000 + 900 + 30000 + 5400 + 3000 + 147400 + ni - dv - 400 * 8 - 0;
+    // 權益：股本 50,900、特別股 30,000、股本溢價 5,400、特別股溢價 3,000、保留盈餘 178,380、庫藏股 −3,200
+    assert.ok(Math.abs(liab + (50900 + 30000 + 5400 + 3000 + 178380 - 3200) - assets) < 1e-6);
+  }
+  { // 普考會計 Q4：無形資產
+    const pat = (54000 + 45000) / 9, fr = 48000 / 10, nfr = 100000 / 40 * 3 / 12; assert.strictEqual(pat, 11000); assert.strictEqual(nfr, 625);
+    assert.strictEqual(168000 + 58000 + pat + fr + nfr, 242425);
+    assert.strictEqual((54000 + 45000 - pat) + (28800 - fr) + (100000 - nfr), 211375);
+  }
+  // 部分作答：只答出部分得分點 → 得部分分數；計算題標記 calc
+  { const p = E['114-g3ac-E3'].parts[1]; const g = C.gradeEssayPart(p, '認股權增額股數 3,800；特別股每增額股份盈餘 1.6；公司債每增額股份盈餘 2.1');
+    assert.ok(g.earned > 0 && g.earned < p.points, '只答出增額股份盈餘，稀釋 EPS 未答：實得 ' + g.earned);
+    assert.strictEqual(g.items.find(i => i.id === 'r5').earned, 0); }
+  { const p = E['114-pac2-E2'].parts[3]; const g = C.gradeEssayPart(p, '買回價格 99,000 大於帳面金額 97,912，產生債務清償損失 1,088');
+    assert.strictEqual(g.earned, 5);
+    const g2 = C.gradeEssayPart(p, '以面額 100,000 與買回價 99,000 比較，利益 1,000'); assert.ok(g2.earned < 3, '用面額比較應得低分，實得 ' + g2.earned); }
+  acc.forEach(q => q.parts.forEach(p => { if (p.id !== '1' || q.id !== '114-g3ac-E2') assert.ok(p.calc, q.id + '/' + p.id + ' 應標記 calc'); }));
+}
+console.log('114 年會計學申論題測試通過');

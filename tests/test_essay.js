@@ -78,9 +78,9 @@ const bank = require(path.join(__dirname, '..', 'data', 'bank.json'));
 assert.deepStrictEqual(by('經濟學與貨幣銀行學').map(q => q.points), [15, 15, 10, 10]);
 assert.deepStrictEqual(by('經濟學與財政學概論').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by('公共經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.length, 434);  // 含 113 年財稅行政稅務法規 5 題（高考三級 3 題、普考 2 題）、115 年普考稅務法規概要 2 題、115 年高考三級稅務法規 2 題（見檔尾）、114 年財稅行政稅務法規 4 題（高考三級稅務法規、普考稅務法規概要各 2 題，見檔尾）；以下為加入前 421 題的說明：含 113 年普考會計學概要 6 題（財稅行政、金融保險 3 題；會計 3 題，見檔尾）；以下為合併 4 個系統：113 年中級會計學 2 題與會計學 3 題、115 年高考三級中級會計學 3 題與會計學 3 題、115 年普考會計學概要 6 題與 114 年高考三級中級會計學 2 題、114 年會計學（高考三級 3 題、普考 7 題）；各系統加入前的說明如下：  // 含 114 年高考三級運輸規劃學、運輸學與普考運輸學概要各 4 題（見檔尾）；以下為加入前 374 題的說明：  // 含 113 年高考三級運輸規劃學、運輸學與普考運輸學概要各 4 題（見檔尾）；以下為加入前 362 題的說明：  // 含 115 年普考運輸學概要 4 題（見檔尾）；以下為加入前 358 題的說明：  // 含 115 年高考三級運輸規劃學（交通行政、交通技術）與運輸學（交通行政）各 4 題（見檔尾）；以下為加入前的說明：  // 含 114 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 115 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 113 年高考三級（金融保險）財務管理與投資學 4 題（見檔尾）；含 114、115 年高考三級（金融保險）財務管理與投資學各 4 題（見檔尾）；含 114 年高考三級貨幣銀行學 4 題與普考貨幣銀行學概要 5 題、115 年高考三級貨幣銀行學與普考貨幣銀行學概要各 4 題（見檔尾）；含 113 年貨幣銀行學（高考三級）與貨幣銀行學概要（普考）各 4 題（見檔尾）；以下為合併前的說明：  // 含 113、115 年普通考試旅運經營學概要各 4 題（見檔尾）；含 113、115 年高考三級旅運經營學各 4 題（見檔尾）；含 113 年普考觀光學概要 4 題、113 年高考三級觀光英語／觀光學／觀光日語 11 題（見檔尾）；含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
+assert.strictEqual(data.essays.length, 464);  // 含 115 年高考三級行政法 2 題、統計學申論題 24 題（見檔尾）；以下為合併前的說明：  // 含 113、114、115 年高考三級行政法申論題各 2 題（見檔尾）；  // 含 113 年財稅行政稅務法規 5 題（高考三級 3 題、普考 2 題）、115 年普考稅務法規概要 2 題、115 年高考三級稅務法規 2 題（見檔尾）、114 年財稅行政稅務法規 4 題（高考三級稅務法規、普考稅務法規概要各 2 題，見檔尾）；以下為加入前 421 題的說明：含 113 年普考會計學概要 6 題（財稅行政、金融保險 3 題；會計 3 題，見檔尾）；以下為合併 4 個系統：113 年中級會計學 2 題與會計學 3 題、115 年高考三級中級會計學 3 題與會計學 3 題、115 年普考會計學概要 6 題與 114 年高考三級中級會計學 2 題、114 年會計學（高考三級 3 題、普考 7 題）；各系統加入前的說明如下：  // 含 114 年高考三級運輸規劃學、運輸學與普考運輸學概要各 4 題（見檔尾）；以下為加入前 374 題的說明：  // 含 113 年高考三級運輸規劃學、運輸學與普考運輸學概要各 4 題（見檔尾）；以下為加入前 362 題的說明：  // 含 115 年普考運輸學概要 4 題（見檔尾）；以下為加入前 358 題的說明：  // 含 115 年高考三級運輸規劃學（交通行政、交通技術）與運輸學（交通行政）各 4 題（見檔尾）；以下為加入前的說明：  // 含 114 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 115 年高考三級保險學與普考保險學概要各 4 題（見檔尾）；以下為加入前的說明：  // 含 113 年高考三級（金融保險）財務管理與投資學 4 題（見檔尾）；含 114、115 年高考三級（金融保險）財務管理與投資學各 4 題（見檔尾）；含 114 年高考三級貨幣銀行學 4 題與普考貨幣銀行學概要 5 題、115 年高考三級貨幣銀行學與普考貨幣銀行學概要各 4 題（見檔尾）；含 113 年貨幣銀行學（高考三級）與貨幣銀行學概要（普考）各 4 題（見檔尾）；以下為合併前的說明：  // 含 113、115 年普通考試旅運經營學概要各 4 題（見檔尾）；含 113、115 年高考三級旅運經營學各 4 題（見檔尾）；含 113 年普考觀光學概要 4 題、113 年高考三級觀光英語／觀光學／觀光日語 11 題（見檔尾）；含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 113 年觀光資源規劃（高考三級）與觀光行銷學概要（普考）各 4 題；  // 含 114 年高考三級觀光學、觀光資源規劃各 4 題；含 115 年觀光類三科申論題 12 題（普考觀光學概要、觀光行銷學概要，高考三級觀光資源規劃，各 4 題）、115 年高考三級觀光學 4 題、觀光英語 4 題、觀光日語 3 題  // 含 113 年民法申論題 24 題（戶政、司法行政 9 題；法制／智財、財稅行政／財稅法務、普考財稅行政 6 題；公平交易管理、地政 9 題）；以下為合併前共同基礎 185 題的說明：  // 高考三級：113、114、115 年各 24 題（7 科）；財政學（財稅行政、會計／審計）113、114、115 年各 4 題；普考：115 年交通政策與行政概要 4 題、高考三級：115 年交通政策與行政 4 題；113 年與 114 年交通政策與行政概要（普考）、交通政策與行政（高考三級）各 4 題；普考：113 年農業經濟學概要、運輸經濟學概要各 4 題，115 年農業經濟學概要、運輸經濟學概要各 4 題，114 年農業經濟學概要 5 題、運輸經濟學概要 4 題；114 年民法申論題 6 題（高考三級財稅行政／財稅法務 2 題、普考財稅行政民法概要 2 題、高考三級公平交易管理 2 題）；另有 114 年地政民法 7 題（高考三級 3、普考 4）、114 年高考三級民法（司法行政 2、法制與智慧財產行政 2）、114 年戶政民法 8 題（高考三級 4、普考 4）
 // exam / subject 字串要與選擇題題庫一致（有選擇題的科目）；以下為純申論科目（題庫沒有選擇題）
-const ESSAY_ONLY = ['財務管理與投資學', '公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要', '民法總則、親屬與繼承編', '民法（包括總則、物權、親屬與繼承編）', '民法與民事訴訟法', '民法物權編概要', '民法總則、親屬與繼承編概要', '觀光學', '觀光英語', '觀光日語', '觀光學概要', '觀光行銷學概要', '觀光資源規劃', '旅運經營學', '旅運經營學概要', '貨幣銀行學', '貨幣銀行學概要', '保險學', '保險學概要', '運輸規劃學', '運輸學', '運輸學概要'];
+const ESSAY_ONLY = ['財務管理與投資學', '公共經濟學', '產業經濟學', '運輸經濟學', '農業經濟學', '工程經濟學', '運輸經濟學概要', '農業經濟學概要', '交通政策與行政', '交通政策與行政概要', '民法總則、親屬與繼承編', '民法（包括總則、物權、親屬與繼承編）', '民法與民事訴訟法', '民法物權編概要', '民法總則、親屬與繼承編概要', '觀光學', '觀光英語', '觀光日語', '觀光學概要', '觀光行銷學概要', '觀光資源規劃', '旅運經營學', '旅運經營學概要', '貨幣銀行學', '貨幣銀行學概要', '保險學', '保險學概要', '運輸規劃學', '運輸學', '運輸學概要', '統計學', '統計學概要'];
 data.essays.forEach(q => {
   const has = bank.questions.some(b => b.exam === q.exam && b.subject === q.subject);
   assert.strictEqual(has, !ESSAY_ONLY.includes(q.subject), q.id + ' exam/subject 與題庫不一致');
@@ -327,7 +327,7 @@ assert.deepStrictEqual(by114('經濟學與財政學概論').map(q => q.points), 
 assert.deepStrictEqual(by114('經濟學').map(q => q.points), [25, 25]);
 assert.deepStrictEqual(by114('公共經濟學').map(q => q.points), [20, 40, 20, 20]);       // 共 100 分
 assert.deepStrictEqual(by114('產業經濟學').map(q => q.points), [25, 25, 25, 25]);
-assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 92);  // 含 114 年稅務法規 2 題（見檔尾）；以下為加入前 90 題的說明：合併：含 114 年中級會計學 2 題、會計學 3 題；  // 含 114 年運輸規劃學 4 題、運輸學 4 題（見檔尾）；含 114 年保險學 4 題、114 年財務管理與投資學 4 題、114 年貨幣銀行學 4 題、114 年旅運經營學 4 題、114 年觀光學 4 題、觀光資源規劃 4 題、觀光日語 3 題、觀光英語 3 題；9 科（含財政學 財稅行政、會計共 4 題）：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政；另加民法 財稅行政／財稅法務、公平交易管理各 2 題、地政 3 題、司法行政 2 題、法制與智慧財產行政 2 題、戶政 4 題
+assert.strictEqual(data.essays.filter(q => q.year_roc === 114 && q.exam === '公務人員高等考試三級考試').length, 98);  // 含 114 年高考三級統計學 4 題；以下為合併前的說明：  // 含 114 年行政法 2 題（見檔尾）、114 年稅務法規 2 題（見檔尾）；以下為加入前 90 題的說明：合併：含 114 年中級會計學 2 題、會計學 3 題；  // 含 114 年運輸規劃學 4 題、運輸學 4 題（見檔尾）；含 114 年保險學 4 題、114 年財務管理與投資學 4 題、114 年貨幣銀行學 4 題、114 年旅運經營學 4 題、114 年觀光學 4 題、觀光資源規劃 4 題、觀光日語 3 題、觀光英語 3 題；9 科（含財政學 財稅行政、會計共 4 題）：經濟學、財政學概論、公共、產業、運輸、農業、工程、交通政策與行政；另加民法 財稅行政／財稅法務、公平交易管理各 2 題、地政 3 題、司法行政 2 題、法制與智慧財產行政 2 題、戶政 4 題
 assert.strictEqual(shape('114-g3fin-E2'), '5,5,5,5,5'); assert.strictEqual(shape('114-g3econ-E1'), '10,10,5');
 assert.strictEqual(shape('114-g3econ-E2'), '2,2,21'); assert.strictEqual(shape('114-g3pe-E2'), '20,20');
 assert.strictEqual(shape('114-g3ie-E1'), '10,10,5'); assert.strictEqual(shape('114-g3ie-E2'), '5,10,10');
@@ -539,7 +539,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 /* ===== 113 年高考三級：經濟學、經濟學與財政學概論、公共經濟學的申論題 ===== */
 {
   const by113 = (subj) => data.essays.filter(q => q.year_roc === 113 && q.subject === subj);
-  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 89);  // 含 113 年高考三級稅務法規 3 題；含 113 年中級會計學 2 題、會計學 3 題； 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 含 113 年觀光資源規劃 4 題、觀光英語 4 題、觀光學 4 題、觀光日語 3 題；含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）  // 113 年高考三級運輸規劃學、運輸學各 4 題已含在內
+  assert.strictEqual(data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政').length, 95);  // 含 113 年高考三級統計學 4 題；以下為合併前的說明：  // 含 113 年行政法 2 題（見檔尾）；  // 含 113 年高考三級稅務法規 3 題；含 113 年中級會計學 2 題、會計學 3 題； 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 含 113 年觀光資源規劃 4 題、觀光英語 4 題、觀光學 4 題、觀光日語 3 題；含 113 年民法 14 題（戶政 3、司法行政 2、法制／智財 2、財稅行政／財稅法務 2、公平交易管理 2、地政 3）  // 113 年高考三級運輸規劃學、運輸學各 4 題已含在內
   assert.deepStrictEqual(by113('經濟學').map(q => q.points), [25, 25]);
   assert.deepStrictEqual(by113('經濟學與財政學概論').map(q => q.points), [20, 30]);        // 50 分
   assert.deepStrictEqual(by113('公共經濟學').map(q => q.points), [25, 25, 25, 25]);         // 100 分
@@ -648,7 +648,7 @@ for (const [al, be] of [[0.6, 0.5], [0.3, 0.4], [0.5, 0.5], [0.8, 0.9]]) {
 
 
 const y113 = data.essays.filter(q => q.year_roc === 113 && q.exam === '公務人員高等考試三級考試' && q.subject !== '交通政策與行政');  // 交通政策與行政另有測試
-assert.strictEqual(y113.length, 89);  // 含 113 年高考三級稅務法規 3 題；含 113 年中級會計學 2 題、會計學 3 題； 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 28 題經濟財政類 + 113 年高考三級民法 14 題 + 113 年觀光資源規劃 4 題
+assert.strictEqual(y113.length, 95);  // 含 113 年高考三級統計學 4 題；以下為合併前的說明：  // 含 113 年行政法 2 題（見檔尾）；  // 含 113 年高考三級稅務法規 3 題；含 113 年中級會計學 2 題、會計學 3 題； 含 113 年財務管理與投資學 4 題；含 113 年貨幣銀行學 4 題；  // 28 題經濟財政類 + 113 年高考三級民法 14 題 + 113 年觀光資源規劃 4 題
 assert.deepStrictEqual(sub(113, '農業經濟學').map(q => q.points), [15, 30, 30, 25]);          // 共 100 分
 assert.deepStrictEqual(sub(113, '工程經濟學').map(q => q.points), [25, 25, 25, 25]);
 sub(113, '農業經濟學').forEach(q => assert.deepStrictEqual(q.categories, ['農業行政']));
@@ -929,6 +929,16 @@ OVERLAP.push(['115-g3ftc-E1', '115-g3tax-E1'], ['113-g3ins-E1', '115-g3tax-E2'],
 OVERLAP.push(['115-g3law-E2', '115-tax-E2'], ['115-g3civj-E1', '115-tax-E2']);
 // 113 年高考三級稅務法規第 1 題（基本生活所需費用、人性尊嚴、中位數 60%）：與 114 年公共經濟學（租稅公平與基本生活）概念自然重疊
 OVERLAP.push(['114-g3tp-E3', '113-g3tax-E1']);
+// 113、114 年高考三級行政法申論題：授益處分的撤銷與返還（不當得利、解除與回復原狀）、判斷餘地與風險預測、補助款返還等概念，與民法、運輸規劃、考試與風險類題目的既有評分細目自然重疊
+OVERLAP.push(['114-pte-E4', '114-g3admin-E2'], ['114-g3tp-E1', '114-g3admin-E2'],
+  ['115-g3hr-E1', '113-g3admin-E1'], ['115-g3ip-E1', '113-g3admin-E1'], ['115-g3ftc-E1', '113-g3admin-E1'], ['113-g3ftc-E1', '113-g3admin-E1'],
+  ['115-g3ip-E2', '114-g3admin-E1'], ['115-g3civj-E1', '114-g3admin-E1'], ['113-g3land-E2', '114-g3admin-E1'], ['115-g3law-E4', '114-g3admin-E2']);
+// 115 年高考三級行政法申論題：行政罰（共同違法、追繳不法利益）與行政處分確定後的重開、廢止、管轄移送，與既有行政法、民法、戶政、地政題的評分細目（處分、撤銷／廢止、不當得利、返還、移送管轄）自然重疊
+OVERLAP.push(['115-g3land-E1', '115-g3admin-E2'], ['115-phh-E1', '115-g3admin-E2'], ['114-phh-E2', '115-g3admin-E1'], ['113-g3civj-E2', '115-g3admin-E2'],
+  ['113-pland-E2', '115-g3admin-E1'], ['113-g3admin-E1', '115-g3admin-E2'], ['114-g3admin-E1', '115-g3admin-E2'], ['114-g3admin-E1', '115-g3admin-E1'],
+  ['113-g3admin-E1', '115-g3admin-E1'], ['115-g3land-E2', '115-g3admin-E2'], ['115-g3law-E3', '115-g3admin-E2'], ['114-pcivil-E2', '115-g3admin-E2'], ['113-g3hr-E3', '115-g3admin-E2']);
+// 統計學：自由度、查表與百分比數字、Z 檢定的中央極限定理說明，與其他科目既有的較泛用評分細目自然重疊
+OVERLAP.push(['113-g3acct-E3', '114-g3stat-E2'], ['114-pstat-E1', '114-g3fmi-E3'], ['114-pstat-E1', '115-pacc-acc-E2']);
 const overlap = (a, b) => OVERLAP.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
 data.essays.forEach(q => q.parts.forEach(p => data.essays.forEach(q2 => {
   if (fam(q2.subject) === fam(q.subject) || overlap(q.id, q2.id)) return;  // 同領域（含「概要」版）內容本來就會重疊
@@ -3226,3 +3236,296 @@ console.log('115 年普考稅務法規概要申論題測試通過');
   assert.ok(gt('113-tax-E2', '3', '經常居住是指在境內居留滿 183 天').items.find(i => i.id === 'r1').earned < 3);
 }
 console.log('113 年財稅行政稅務法規申論題測試通過');
+
+// 113、114 年高考三級行政法申論題：各年 2 題，每題 25 分
+{
+  const adm = (y) => data.essays.filter(q => q.year_roc === y && q.subject === '行政法');
+  [113, 114].forEach(y => { const qs = adm(y); assert.strictEqual(qs.length, 2); assert.ok(qs.every(q => q.points === 25 && q.exam === '公務人員高等考試三級考試' && q.categories.includes('一般行政'))); });
+  assert.strictEqual(shape('113-g3admin-E1'), '7,9,9'); assert.strictEqual(shape('113-g3admin-E2'), '8,10,7');
+  assert.strictEqual(shape('114-g3admin-E1'), '8,10,7'); assert.strictEqual(shape('114-g3admin-E2'), '8,9,8');
+  // 行政法申論題與選擇題同科目、同考試別，類科才會在設定畫面對得上
+  const mcq = bank.questions.filter(q => q.subject === '行政法' && q.exam === '公務人員高等考試三級考試');
+  [113, 114].forEach(y => adm(y).forEach(e => e.categories.forEach(c => assert.ok(mcq.some(m => m.year_roc === y && m.categories.includes(c)), y + ' 年 ' + c + ' 有申論題但沒有選擇題類科'))));
+  const ga = (id, pid, t) => C.gradeEssayPart(part(id, pid), t);
+  // 113-1：撤銷與信賴保護
+  assert.ok(ga('113-g3admin-E1', '1', '補貼是授益處分，依行政程序法第117條，內政部作為原處分機關得依職權撤銷，但須在知悉後二年內').earned >= 4);
+  assert.ok(ga('113-g3admin-E1', '2', '甲有隱瞞，明知違法，信賴不值得保護').earned <= 5);
+  assert.ok(ga('113-g3admin-E1', '3', '依第118條但書另定失效日，自撤銷時起向後失效，不溯及').items.find(i => i.id === 'r1').earned === 3);
+  assert.ok(ga('113-g3admin-E1', '3', '甲必須全額返還').earned === 0);
+  // 113-2：催繳函不是處分，也不是執行名義；第 148 條要件
+  assert.ok(ga('113-g3admin-E2', '1', '催繳函是觀念通知，不是行政處分，不能作為執行名義').earned >= 3);
+  assert.ok(ga('113-g3admin-E2', '2', '依行政程序法第148條，行政契約一方為人民並約定自願接受執行，債務人不為給付，得以契約為執行名義；地方自治團體須經監督機關認可').earned >= 6);
+  assert.ok(ga('113-g3admin-E2', '3', '可以，催繳函就是執行名義').earned <= 1);
+  // 114-1：先判斷廢止而非撤銷
+  assert.ok(ga('114-g3admin-E1', '2', '依第123條第3款，受益人未履行負擔，得廢止；依第125條但書得溯及失效；依第127條返還').earned >= 6);
+  assert.ok(ga('114-g3admin-E1', '1', '甲偽造報告所以撤銷').earned <= 2);
+  // 114-2：判斷餘地
+  assert.ok(ga('114-g3admin-E2', '2', '即使有判斷餘地，法院仍審查程序是否合法、事實認定有無錯誤、有無違反平等原則與比例原則、有無不相關考慮').earned >= 3);
+  assert.ok(ga('114-g3admin-E2', '3', '核能許可涉及高度科技與風險預測，由核能安全委員會專業審查，應承認判斷餘地，但攸關生命與環境基本權，法院仍審查環評程序與法定安全標準').earned >= 5);
+  assert.ok(ga('114-g3admin-E2', '3', '核能很危險所以不能承認').earned <= 1);
+}
+console.log('113、114 年行政法申論題測試通過');
+
+// 115 年高考三級行政法申論題（試題代號 30150 等）：第 1 題行政罰（空污法、行政罰法），第 2 題行政處分確定後的請求
+{
+  const qs = data.essays.filter(q => q.year_roc === 115 && q.subject === '行政法');
+  assert.strictEqual(qs.length, 2);
+  assert.ok(qs.every(q => q.points === 25 && q.exam === '公務人員高等考試三級考試' && q.categories.includes('一般行政')));
+  assert.strictEqual(shape('115-g3admin-E1'), '8,9,8'); assert.strictEqual(shape('115-g3admin-E2'), '8,9,8');
+  // 類科要在選擇題題庫（同年、同科目、同考試別）找得到，設定畫面才對得上
+  const mcq = bank.questions.filter(q => q.subject === '行政法' && q.exam === '公務人員高等考試三級考試' && q.year_roc === 115);
+  qs.forEach(e => e.categories.forEach(c => assert.ok(mcq.some(m => m.categories.includes(c)), '115 年 ' + c + ' 有申論題但沒有選擇題類科')));
+  const ga = (id, pid, t) => C.gradeEssayPart(part(id, pid), t);
+  // 115-1（一）：處罰法定與義務主體
+  assert.ok(ga('115-g3admin-E1', '1', '依行政罰法第4條處罰法定，空污法第21條的義務人是公私場所甲，丙不是義務主體，不得直接依第62條裁罰丙').earned >= 7);
+  assert.ok(ga('115-g3admin-E1', '1', '丙偽造數據，應該直接依第62條裁罰丙').earned <= 2);
+  // 115-1（二）：第 14 條共同故意、無身分者仍處罰；特別規定
+  assert.ok(ga('115-g3admin-E1', '2', '行政罰法第14條，乙與丙商量並指示偽造，丙明知故意共同實施，無身分者仍處罰；但須證明共同故意，環檢法等個別法另有規定者優先').earned >= 7);
+  assert.ok(ga('115-g3admin-E1', '2', '丙沒有公私場所身分，所以不能處罰').earned <= 2);
+  // 115-1（三）：追繳與時效
+  assert.ok(ga('115-g3admin-E1', '3', '依行政罰法第20條第1項，為他人利益，甲應受處罰，丙受有財產上利益而未受處罰，得酌予追繳，以所受酬勞30萬為限，以行政處分為之').earned >= 5);
+  assert.ok(ga('115-g3admin-E1', '3', '第27條裁處權時效三年，自行為終了時起算，109年的申報已逾').items.find(i => i.id === 'r3').earned === 2);
+  assert.ok(ga('115-g3admin-E1', '3', '丙應被罰鍰').earned === 0);
+  // 115-2（一）：行政處分、作成時合法、救濟期間已過
+  assert.ok(ga('115-g3admin-E2', '1', '三月二十五日函是行政處分（第92條），為負擔處分；作成時合法，裁定在其後屬事後變更，非違法撤銷；訴願期間三十日已過，處分已確定').earned >= 7);
+  assert.ok(ga('115-g3admin-E2', '1', '甲請求撤銷，直接當訴願處理').earned <= 2);
+  // 115-2（二）：第 128 條重開、第 122 條廢止
+  assert.ok(ga('115-g3admin-E2', '2', '視為依第128條申請重新開始行政程序，持續效力不符，新事實難涵攝，可類推再審事由，三個月內申請；另可依第122條廢止非授益處分').earned >= 6);
+  assert.ok(ga('115-g3admin-E2', '2', '直接撤銷即可').earned <= 1);
+  // 115-2（三）：管轄與處理
+  assert.ok(ga('115-g3admin-E2', '3', '社會局無管轄權，依第17條移送市政府並通知甲；市政府依第129條，有理由則撤銷、廢止或變更，無理由駁回；以書面附記理由並教示，可訴願、行政訴訟').earned >= 7);
+  assert.ok(ga('115-g3admin-E2', '3', '社會局自己撤銷').earned <= 1);
+  // 回饋：法律題沒引用條文、沒結論時要提醒
+  const fb = C.feedbackEssayPart(part('115-g3admin-E1', '3'), { text: '丙應被罰鍰', scores: {} });
+  assert.ok(fb.points.some(x => /行政罰法第 20 條/.test(x.text)), '應提醒未引用行政罰法第 20 條');
+}
+console.log('115 年行政法申論題測試通過');
+
+// ---- 統計學申論題（113 普考統計學概要、114 高考三級統計學） ----
+{
+  const gs = (qid, pid, t) => C.gradeEssayPart(part(qid, pid), t);
+  const s113 = data.essays.filter(q => q.id.startsWith('113-pstat-')), s114 = data.essays.filter(q => q.id.startsWith('114-g3stat-'));
+  assert.strictEqual(s113.length, 4); assert.strictEqual(s114.length, 4);
+  assert.strictEqual(s113.reduce((a, q) => a + q.points, 0), 100);
+  assert.strictEqual(s114.reduce((a, q) => a + q.points, 0), 100);
+  s113.concat(s114).forEach(q => assert.ok(q.parts.every(p => p.calc)));
+  assert.deepStrictEqual(s114[0].categories, ['經建行政', '工業行政', '農業行政']);
+
+  // 數值驗算：參考答案中的關鍵數字
+  const phi = z => 0.5 * (1 + (function (x) { const t = 1 / (1 + 0.3275911 * Math.abs(x)); const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return x >= 0 ? y : -y; })(z / Math.SQRT2));
+  assert.ok(Math.abs(0.25 * 0.04 / (0.75 * 0.02 + 0.25 * 0.04) - 0.4) < 1e-12);
+  assert.ok(Math.abs(Math.pow(1.96, 2) * 0.24 / 0.0004 - 2304.96) < 1e-6);
+  assert.ok(Math.abs(3 * (4 + 1 + 9) / 2 / ((84 - 42) / 6) - 3) < 1e-12);               // F=3
+  assert.ok(Math.abs(1805 / 48.75 - 37.0256) < 1e-3 && Math.abs(9.5 / Math.sqrt(48.75 / 20) - 6.0849) < 1e-3);
+  assert.ok(Math.abs(2 / 3 * (1 / 2 + 1) - 1) < 1e-12 && Math.abs(22 / 27 - 0.8148) < 1e-4);
+  assert.ok(Math.abs((1 - phi((240 - 1.282 * 2 - 236) / 2)) - 0.2364) < 2e-3);           // β(236), n=36
+  assert.ok(Math.abs((1 - phi((240 - 1.282 * 1.2 - 235) / 1.2)) - 0.0020) < 1e-3);       // β(235), n=100
+
+  // 好答案得高分、常見錯誤不得高分
+  assert.strictEqual(gs('113-pstat-E1', '4', 'P(B|D)=P(B)P(D|B)/P(D)=0.25*0.04/0.025=0.4').earned, 8);
+  assert.strictEqual(gs('113-pstat-E1', '4', '答案是 0.04').earned, 0);
+  assert.strictEqual(gs('113-pstat-E1', '3', '(2%+4%)/2=3%').earned, 0);
+  assert.strictEqual(gs('113-pstat-E2', '1', 'p=400/1000=0.4, SE=sqrt(0.4*0.6/1000)=0.0155, 區間 0.4±1.96*0.0155=(0.37,0.43)').earned, 7);
+  assert.ok(gs('113-pstat-E3', '3', 'F=3 小於 5.14 所以拒絕H0，有差異').earned <= 2);
+  assert.strictEqual(gs('113-pstat-E3', '3', 'F=3<5.14，不拒絕H0，三區銷售量無顯著差異').earned, 4);
+  assert.ok(gs('113-pstat-E3', '2', '總平均=9, SSB=42, SST=9*10.5=94.5, SSW=52.5, F=2.4').earned < 14);
+  assert.strictEqual(gs('113-pstat-E4', '3', 'se=sqrt(48.75/20)=1.56, t=9.5/1.56=6.09 > 2.132 拒絕H0 斜率大於0').earned, 8);
+  assert.ok(gs('113-pstat-E4', '3', 't=6.09 小於 2.776 不拒絕').earned <= 3);   // 用錯臨界值且結論相反
+  assert.strictEqual(gs('114-g3stat-E3', '3', 'xc=237.436 μ=236: β=0.2364 power=0.7636; μ=235: β=0.1116 power=0.8884').earned, 8);
+  assert.strictEqual(gs('114-g3stat-E3', '4', 'xc=237.436, β=0.2364 power=0.7636, β=0.1116 power=0.8884').earned, 0); // 沿用 n=36
+  assert.ok(gs('114-g3stat-E4', '3', '用成對t檢定，差=-2.667，t=-3.2').earned <= 2);
+  assert.ok(gs('114-g3stat-E4', '4', '-2.667±2.228×0.7601 = (-4.36,-0.973)').earned >= 4);
+  assert.ok(gs('114-g3stat-E2', '7', 'z=-7.906, p值約0, 拒絕H0').earned >= 4);
+}
+console.log('統計學申論題（113 普考、114 高考三級）測試通過');
+
+// ---- 113 年高考三級統計學（經建行政、農業行政，代號 32720／32920）：純申論科目，4 題 ----
+{
+  const gs = (qid, pid, t) => C.gradeEssayPart(part(qid, pid), t);
+  const s = data.essays.filter(q => q.id.startsWith('113-g3stat-'));
+  assert.strictEqual(s.length, 4);
+  assert.deepStrictEqual(s.map(q => q.points), [25, 20, 20, 35]);
+  assert.strictEqual(s.reduce((a, q) => a + q.points, 0), 100);
+  assert.deepStrictEqual(s.map(q => q.parts.map(p => p.points).join(',')), ['4,10,5,6', '5,5,10', '8,8,4', '10,10,10,5']);
+  s.forEach(q => { assert.deepStrictEqual(q.categories, ['經建行政', '農業行政']); assert.strictEqual(q.exam, '公務人員高等考試三級考試'); assert.strictEqual(q.subject, '統計學'); assert.ok(q.parts.every(p => p.calc)); });
+  assert.ok(!bank.questions.some(b => b.year_roc === 113 && b.subject === '統計學'), '純申論科目，題庫沒有選擇題');
+
+  // 數值驗算：參考答案中的關鍵數字
+  const mp = 0.7 * 0.12 + 0.3 * 0.05; assert.ok(Math.abs(mp - 0.099) < 1e-12);
+  const vp = 0.49 * 0.0225 + 0.09 * 0.0064 + 2 * 0.7 * 0.3 * (-0.3) * 0.15 * 0.08, sp = Math.sqrt(vp);
+  assert.ok(Math.abs(vp - 0.010089) < 1e-9 && Math.abs(sp - 0.1004) < 5e-5);
+  assert.ok(Math.abs((mp + 0.1004) - 0.1994) < 1e-9 && Math.abs((mp - 0.1004) + 0.0014) < 1e-9);
+  assert.ok(Math.abs(0.15 / 0.12 - 1.25) < 1e-12 && Math.abs(0.08 / 0.05 - 1.6) < 1e-12 && Math.abs(0.1004 / 0.099 - 1.0141) < 1e-4 && sp / mp < 1.25);
+  // 第 2 題（三）：0/1 分組迴歸 a=ȳ2、b=ȳ1−ȳ2
+  { const y1 = [3, 5, 8, 10], y2 = [2, 4, 9], x = y1.map(() => 1).concat(y2.map(() => 0)), y = y1.concat(y2), n = y.length;
+    const mx = x.reduce((a, v) => a + v) / n, my = y.reduce((a, v) => a + v) / n;
+    const b = x.reduce((a, v, i) => a + (v - mx) * (y[i] - my), 0) / x.reduce((a, v) => a + (v - mx) ** 2, 0), a = my - b * mx, m1 = y1.reduce((u, v) => u + v) / y1.length, m2 = y2.reduce((u, v) => u + v) / y2.length;
+    assert.ok(Math.abs(b - (m1 - m2)) < 1e-12 && Math.abs(a - m2) < 1e-12); }
+  // 第 3 題：Z 與卡方
+  { const p = 160 / 200, se = Math.sqrt(p * (1 - p) * 0.02), z = 0.10 / se; assert.ok(Math.abs(p - 0.8) < 1e-12 && Math.abs(se - 0.0566) < 5e-5 && Math.abs(z - 1.7678) < 5e-4);
+    const chi = 2 * (25 / 80) + 2 * (25 / 20); assert.ok(Math.abs(chi - 3.125) < 1e-12 && Math.abs(z * z - 3.125) < 1e-3); assert.ok(z < 1.96 && chi < 3.8415); }
+  // 第 4 題：t、ANOVA、F = t²
+  { const A = [29, 31, 32, 32, 33, 35], B = [32, 33, 34, 35, 41, 41], mean = v => v.reduce((a, b) => a + b) / v.length, ss = v => v.reduce((a, b) => a + (b - mean(v)) ** 2, 0);
+    assert.strictEqual(mean(A), 32); assert.strictEqual(mean(B), 36); assert.strictEqual(ss(A), 20); assert.strictEqual(ss(B), 80);
+    const sp2 = (ss(A) + ss(B)) / 10, se = Math.sqrt(sp2 * (2 / 6)), t = (mean(A) - mean(B)) / se; assert.strictEqual(sp2, 10); assert.ok(Math.abs(se - 1.8257) < 5e-5 && Math.abs(t + 2.1909) < 5e-4);
+    const all = A.concat(B), gm = mean(all), sst = ss(all), ssb = 6 * (mean(A) - gm) ** 2 + 6 * (mean(B) - gm) ** 2, ssw = ss(A) + ss(B);
+    assert.strictEqual(gm, 34); assert.strictEqual(sst, 148); assert.strictEqual(ssb, 48); assert.strictEqual(ssw, 100); assert.ok(Math.abs(ssb / (ssw / 10) - 4.8) < 1e-12 && Math.abs(t * t - 4.8) < 1e-9);
+    assert.ok(Math.abs(2.228 ** 2 - 4.964) < 1e-3 && 4.8 < 2.228 ** 2); }
+
+  // 好答案得高分、常見錯誤不得高分
+  assert.strictEqual(gs('113-g3stat-E1', '1', 'E(Rp)=0.7×12%+0.3×5%=9.9%').earned, 4);
+  assert.ok(gs('113-g3stat-E1', '1', '(12%+5%)/2=8.5%').earned <= 1);
+  assert.ok(gs('113-g3stat-E1', '2', 'Var=0.7^2*0.15^2+0.3^2*0.08^2+2*0.7*0.3*(-0.3)*0.15*0.08=0.010089, σ=0.1004, 上限0.1994 下限-0.0014').earned >= 7);
+  assert.ok(gs('113-g3stat-E1', '2', 'σ=0.7*15%+0.3*8%=12.9%，上限22.8%，下限-3%').earned <= 1);   // 直接把標準差加權
+  assert.strictEqual(gs('113-g3stat-E1', '3', '下限 -0.0014 大於 -0.05，表示較差情況下損失有限，風險可接受').earned, 5);
+  assert.ok(gs('113-g3stat-E1', '3', '因為 -0.0014 比 -0.05 大').earned <= 3);
+  assert.strictEqual(gs('113-g3stat-E1', '4', 'CV_A=15/12=1.25, CV_B=8/5=1.6, CV_p=0.1004/0.099=1.0141，組合最小，風險最低').earned, 6);
+  assert.ok(gs('113-g3stat-E1', '4', 'CV_p=0.7*1.25+0.3*1.6=1.355').earned <= 3);                       // 變異係數不能加權平均
+  assert.strictEqual(gs('113-g3stat-E2', '1', 'Σ(x-x̄)=0 故 ū=v̄=0，d=Σ(x-x̄)(y-ȳ)/Σ(x-x̄)²=b，c=ū-dv̄=0').earned, 5);
+  assert.strictEqual(gs('113-g3stat-E2', '2', 'g=0，h=b*sx/sy=r 相關係數').earned >= 4, true);
+  assert.ok(gs('113-g3stat-E2', '2', 'g=0, h=b').earned <= 2);                                          // 漏掉 sx/sy
+  assert.strictEqual(gs('113-g3stat-E2', '3', 'x̄=n1/n, Σ(x-x̄)²=n1n2/n, Sxy=n1n2(ȳ1-ȳ2)/n, b=ȳ1-ȳ2, a=ȳ2').earned >= 8, true);
+  assert.ok(gs('113-g3stat-E2', '3', 'a=ȳ1, b=ȳ2-ȳ1').earned <= 2);                                    // a、b 對調
+  assert.strictEqual(gs('113-g3stat-E3', '1', 'H0:p1=p2 H1:p1≠p2, 合併比例=0.8, SE=0.0566, Z=1.7678<1.96 不拒絕，無顯著差異').earned, 8);
+  assert.ok(gs('113-g3stat-E3', '1', 'Z=1.77>1.645 拒絕H0').earned <= 3);                              // 單尾臨界值且結論相反
+  assert.strictEqual(gs('113-g3stat-E3', '2', '期望次數 80,20; (O-E)²/E 加總 χ²=3.125; df=1, 臨界值3.8415, 不拒絕H0').earned, 8);
+  assert.ok(gs('113-g3stat-E3', '2', 'χ²=3.125 大於 臨界值 拒絕').earned <= 4);
+  assert.strictEqual(gs('113-g3stat-E3', '3', '齊一性檢定，因為男女各自抽樣100人，比較兩母體比例是否相同').earned, 4);
+  assert.strictEqual(gs('113-g3stat-E3', '3', '適合度檢定').earned, 0);
+  assert.strictEqual(gs('113-g3stat-E4', '1', 'x̄A=32, x̄B=36, sA²=4, sB²=16, sp²=(20+80)/10=10, SE=1.8257, t=-2.1909, df=10, H0:μA=μB, H1:μA≠μB').earned, 10);
+  assert.ok(gs('113-g3stat-E4', '1', '成對t檢定，差=-4，t=-2.5').earned <= 2);
+  assert.strictEqual(gs('113-g3stat-E4', '2', '總平均34, SSB=48, SSW=100, SST=148, 自由度 1,10,11, MSB=48, MSW=10, F=4.8').earned, 10);
+  assert.ok(gs('113-g3stat-E4', '2', 'SSB=24, SSW=100, F=2.4').earned <= 4);                           // SSB 忘了乘樣本數
+  assert.strictEqual(gs('113-g3stat-E4', '3', 't=Z/√(U/n)，F=(W/m)/(U/n)，t²=Z²/(U/n)=F(1,n) 因為 Z²~χ²(1)').earned, 10);
+  assert.ok(gs('113-g3stat-E4', '3', 't=Z/U, F=W/U').earned <= 2);
+  assert.strictEqual(gs('113-g3stat-E4', '4', 'F0.05(1,10)=2.228²=4.964，拒絕域 F>4.964，F=4.8<4.964 不拒絕，兩產業起薪無顯著差異').earned, 5);
+  assert.ok(gs('113-g3stat-E4', '4', 'F=4.8>3.28 拒絕H0，有差異').earned <= 1);
+}
+console.log('113 年高考三級統計學申論題測試通過');
+
+// ===== 114 年普考統計學概要（41930）、115 年高考三級統計學（32920）申論題 =====
+{
+  const gt = (qid, pid, text) => C.gradeEssayPart(part(qid, pid), text);
+  const ids114 = [1, 2, 3, 4].map(i => '114-pstat-E' + i), ids115 = [1, 2, 3, 4].map(i => '115-g3stat-E' + i);
+  ids114.concat(ids115).forEach(id => assert.ok(E[id], id));
+  assert.deepStrictEqual(ids114.map(id => E[id].points), [15, 30, 25, 30]);
+  assert.deepStrictEqual(ids115.map(id => E[id].points), [30, 30, 20, 20]);
+  assert.strictEqual(ids114.reduce((a, id) => a + E[id].points, 0), 100);
+  assert.strictEqual(ids115.reduce((a, id) => a + E[id].points, 0), 100);
+  assert.deepStrictEqual(E['114-pstat-E2'].parts.map(p => p.points), [5, 5, 5, 5, 5, 5]);
+  assert.deepStrictEqual(E['114-pstat-E3'].parts.map(p => p.id), ['1a', '1b', '1c', '2a', '2b']);
+  assert.deepStrictEqual(E['114-pstat-E4'].parts.map(p => p.points), [15, 5, 10]);
+  assert.ok(E['114-pstat-E1'].categories.includes('經建行政') && E['115-g3stat-E1'].categories.length === 3);
+
+  // 數值驗算
+  const T = [[300, 100, 80, 120], [30, 200, 40, 30], [60, 90, 400, 50], [70, 90, 20, 120]];
+  const rs = T.map(r => r.reduce((a, b) => a + b)), cs = [0, 1, 2, 3].map(j => T.reduce((a, r) => a + r[j], 0));
+  let chi = 0; T.forEach((r, i) => r.forEach((o, j) => { const e = rs[i] * cs[j] / 1800; chi += (o - e) * (o - e) / e; }));
+  assert.ok(Math.abs(chi - 992.44) < 0.01); assert.ok(Math.abs((300 + 460 - 70) / 1800 - 0.3833) < 1e-4);
+  const x = [65, 70, 75, 80, 75, 80, 65, 90], m = x.reduce((a, b) => a + b) / 8, ss = x.reduce((a, b) => a + (b - m) * (b - m), 0);
+  assert.strictEqual(m, 75); assert.strictEqual(ss, 500); assert.ok(Math.abs(ss / 7 - 71.43) < 0.01);
+  assert.ok(Math.abs(500 / 16.0128 - 31.23) < 0.01 && Math.abs(Math.sqrt(500 / 1.6899) - 17.2) < 0.01);
+  assert.ok(Math.abs(1.895 * Math.sqrt(500 / 7 / 8) - 5.66) < 0.01); assert.ok(Math.abs(7 * 80 / 258.422 - 2.167) < 0.001);
+  assert.ok(Math.abs((105 - 100) / (6 / 9) - 7.5) < 1e-9);
+  assert.strictEqual(Math.ceil(Math.pow(1.645 * 6 / 0.5, 2)), 390); assert.strictEqual(Math.ceil(Math.pow(1.96 * 6 / 0.5, 2)), 554);
+  const ssb = 5 * (4 + 36 + 64), ssw = 4 * (27.5 + 26.5 + 31);
+  assert.strictEqual(ssb, 520); assert.strictEqual(ssw, 340); assert.ok(Math.abs((ssb / 2) / (ssw / 12) - 9.18) < 0.01);
+  assert.ok(Math.abs(10 / Math.sqrt(ssw / 12 * 0.4) - 2.97) < 0.01);
+  const pz = Math.exp(-3); assert.ok(Math.abs(pz * pz - 0.002479) < 1e-6); assert.ok(Math.abs(3 * pz * pz * (1 - pz) + pz ** 3 - 0.00719) < 1e-5);
+  assert.ok(Math.abs((12 - 9 - 1) / Math.sqrt(8 * 0.25) - 1.414) < 0.001); assert.strictEqual(8 + 8 - 2 * 0.5 * 8, 8); assert.strictEqual((3 - 1) / Math.sqrt(8 / 8), 2);
+  const bp = 0.0005 * 0.99999 / (0.0005 * 0.99999 + 0.9995 * 0.1); assert.ok(Math.abs(bp - 0.00498) < 1e-5);
+  const d = [322, 339, 340, 343, 356, 364, 391, 417, 476, 261, 269, 271, 274, 279, 280, 283, 283, 286, 287, 292, 293, 296, 300, 304, 305, 313, 321].sort((a, b) => a - b);
+  assert.strictEqual(d.length, 27); assert.strictEqual(d[6], 283); assert.strictEqual(d[20], 340);
+
+  // 好的作答與常見錯誤
+  assert.ok(gt('114-pstat-E1', '1', 'H0：兩者獨立；H1：不獨立。期望次數=列總和×欄總和/1800，如153.33、160。χ²=Σ(O-E)²/E=992.44，df=(4-1)(4-1)=9，臨界值16.919，拒絕H0，兩者相關').earned >= 9);
+  assert.ok(gt('114-pstat-E1', '1', 'H0：兩者獨立；H1：不獨立。卡方統計量 χ²=992.44，df=9，臨界值 16.919，不拒絕H0').items.find(i => i.id === 'r5').earned === 0, '不拒絕不應得結論分');
+  assert.ok(gt('114-pstat-E1', '2', '300/1800+460/1800=760/1800=0.4222').earned <= 3, '漏減交集');
+  assert.ok(gt('114-pstat-E1', '2', 'P=300/1800+460/1800-70/1800=690/1800=0.3833').earned === 5);
+  assert.ok(gt('114-pstat-E2', '1', 'S²=Σ(Xi-X̄)²/(n-1)=500/7=71.43，X̄=75').earned === 5);
+  assert.ok(gt('114-pstat-E2', '1', '樣本變異數=500/8=62.5').earned <= 2, '分母用 n 不得滿分');
+  assert.ok(gt('114-pstat-E2', '2', '(n-1)S²/σ² ~ 卡方分配 χ²(7)，母體為常態').earned === 5);
+  assert.ok(gt('114-pstat-E2', '3', '變異數區間 500/16.0128=31.23 到 500/1.6899=295.88，開根號得 (5.59, 17.20)').earned === 5);
+  assert.ok(gt('114-pstat-E2', '5', '用 z=1.645，75±1.645×8.45/√8，區間 (70.09, 79.91)').earned <= 2, 'σ 未知不應用 z');
+  assert.ok(gt('114-pstat-E2', '5', 'X̄±t×S/√n，t0.05(7)=1.895，S/√8=2.988，區間 (69.34, 80.66)').earned === 5);
+  assert.ok(gt('114-pstat-E2', '6', '(n-1)S²/σ²=7×80/258.422=2.167，χ²(7)，查表機率 P=0.95').earned === 5);
+  assert.ok(gt('114-pstat-E3', '1a', 'H0：μ≤100；H1：μ≠100').earned <= 2.5, 'H1 雙尾不得分');
+  assert.ok(gt('114-pstat-E3', '1b', '服從標準常態分配 Z').earned <= 1.5);
+  assert.ok(gt('114-pstat-E3', '1c', 't=(105-100)/(6/√81)=7.5，臨界值 1.664，p 值≈0，拒絕 H0').earned === 5);
+  assert.ok(gt('114-pstat-E3', '2a', '最佳估計量為樣本平均數 X̄。z0.05=1.645，n≥(1.645×6/0.5)²=389.67，取 390').earned === 5);
+  assert.ok(gt('114-pstat-E3', '2a', 'n=(1.96×6/0.5)²=553.2').earned <= 1.5, '誤用 z=1.96');
+  assert.ok(gt('114-pstat-E3', '2b', 'z=1.96，n≥(1.96×6/0.5)²=553.19，取 554，信賴程度提高樣本增加').earned === 5);
+  const f = gt('114-pstat-E4', '1', 'H0：μ1=μ2=μ3，H1：不全相等。組間 SSB=520，MSB=260；組內 SSW=340，MSW=28.33；F=9.18 ~ F(2,12)，F0.05(2,12)=3.89，拒絕H0，平均不全相等');
+  assert.strictEqual(f.earned, 15);
+  assert.ok(gt('114-pstat-E4', '1', '組間520 組內170 F=18.35').earned <= 6, 'SSW 漏乘 (n-1)');
+  assert.ok(gt('114-pstat-E4', '2', '各組樣本獨立、母體常態、變異數相等').earned === 5);
+  assert.ok(gt('114-pstat-E4', '2', '樣本數要相同').earned === 0);
+  assert.ok(gt('114-pstat-E4', '3', 'H0：μ1=μ3，H1：μ1≠μ3。t=(22-12)/√(28.33×(1/5+1/5))=2.97，t(12)，臨界值2.179，拒絕H0').earned === 10);
+  assert.ok(gt('115-g3stat-E1', '1', '查表 P(X≤5) 在 μ=3 為 0.9161，μ=2.5 為 0.9580，μ=3.5 為 0.8576，最接近 0.92，所以 μ=3').earned === 10);
+  assert.ok(gt('115-g3stat-E1', '2', '一個月零工安 e^{-3}，兩個月獨立相乘 e^{-6}≈0.0025').earned >= 9);
+  assert.ok(gt('115-g3stat-E1', '2', '2e^{-3}').earned <= 4, '相加是錯的');
+  assert.ok(gt('115-g3stat-E1', '3', 'Y~二項 B(3,p)，p=e^{-3}，P(Y≥2)=C(3,2)p²(1-p)+p³=3e^{-6}(1-e^{-3})+e^{-9}≈0.00719').earned === 10);
+  assert.ok(gt('115-g3stat-E1', '3', 'p³=e^{-9}').earned <= 4, '只算恰 3 個月');
+  assert.ok(gt('115-g3stat-E2', '1', '獨立樣本，變異數相等，合併變異數 Sp²=8，t=(12-9-1)/√(8×(1/8+1/8))=1.414，自由度14，臨界值1.761，不拒絕H0').earned === 15);
+  assert.ok(gt('115-g3stat-E2', '1', 'Sp²=8，t=(12-9)/√(8×(1/8+1/8))=2.12，臨界值1.761，拒絕H0').earned <= 10, '分子忘了減 1');
+  assert.ok(gt('115-g3stat-E2', '2', '成對樣本，D̄=3，SD²=8+8-2×0.5×8=8，t=(3-1)/√(8/8)=2，自由度7，t0.05(7)=1.895，拒絕H0').earned === 15);
+  assert.ok(gt('115-g3stat-E2', '2', '成對樣本，D̄=3，SD²=16，t=(3-1)/√(16/8)=1.414，自由度7，臨界值1.895，不拒絕').earned <= 9, '忽略 ρ');
+  assert.ok(gt('115-g3stat-E3', '1', '貝氏定理：P(D|+)=0.99999×0.0005/(0.99999×0.0005+0.1×0.9995)=0.00049999/0.10045=0.00498≈0.005，基本率很低所以仍很低').earned >= 17);
+  assert.ok(gt('115-g3stat-E3', '1', '答案約 0.99999').earned <= 5);
+  assert.ok(gt('115-g3stat-E4', '1', '先排序，位置(n+1)p=28×0.25=7，第7個為283，Q1=283').earned === 10);
+  assert.ok(gt('115-g3stat-E4', '2', 'Q1=283，Q3=340，IQR=Q3-Q1=57').earned >= 7);
+  assert.ok(gt('115-g3stat-E4', '2', 'IQR=340').earned <= 3);
+  // 整題回饋
+  const fe = C.feedbackEssay(E['115-g3stat-E2'], { 1: { r1: 2 }, 2: {} }, { 1: 'x', 2: 'y' });
+  assert.ok(fe && (Array.isArray(fe) ? fe.length : true));
+}
+console.log('114 年普考統計學概要、115 年高考三級統計學申論題測試通過');
+
+// ===== 115 年普考統計學概要（經建行政，42130）申論題 =====
+{
+  const gt = (qid, pid, text) => C.gradeEssayPart(part(qid, pid), text);
+  const ids = [1, 2, 3, 4].map(i => '115-pstat-E' + i);
+  ids.forEach(id => assert.ok(E[id], id));
+  assert.deepStrictEqual(ids.map(id => E[id].points), [20, 25, 25, 30]);
+  assert.strictEqual(ids.reduce((a, id) => a + E[id].points, 0), 100);
+  assert.deepStrictEqual(E['115-pstat-E2'].parts.map(p => p.points), [10, 15]);
+  assert.deepStrictEqual(E['115-pstat-E4'].parts.map(p => p.points), [15, 15]);
+  assert.ok(ids.every(id => E[id].categories.length === 1 && E[id].categories[0] === '經建行政' && E[id].subject === '統計學概要'));
+
+  // 數值驗算
+  const nn = [5000, 2000, 3000], mu = [4, 5, 6], sd = [2, 1, 2], N = 10000;
+  const m = nn.reduce((a, k, i) => a + k * mu[i], 0) / N;
+  const w = nn.reduce((a, k, i) => a + k * sd[i] * sd[i], 0) / N, b = nn.reduce((a, k, i) => a + k * (mu[i] - m) ** 2, 0) / N;
+  assert.ok(Math.abs(m - 4.8) < 1e-9 && Math.abs(w - 3.4) < 1e-9 && Math.abs(b - 0.76) < 1e-9 && Math.abs(w + b - 4.16) < 1e-9);
+  assert.ok(Math.abs(0.1 / (0.1 + 1 / 9) - 9 / 19) < 1e-12);
+  const cheat = [0.3, 0.3, 0.1, 0.1, 0.1, 0.1];
+  let gt1 = 0, lt1 = 0; cheat.forEach((p, i) => { gt1 += p * i / 6; lt1 += p * (5 - i) / 6; });
+  assert.ok(Math.abs(gt1 - 17 / 60) < 1e-12 && Math.abs(lt1 - 0.55) < 1e-12);
+  assert.ok(Math.abs((2 / 3) * 100 * (lt1 - gt1) - 160 / 9) < 1e-9);
+  const o3 = [[8, 13, 16, 10, 3], [4, 9, 14, 16, 7]]; let chi3 = 0;
+  for (let j = 0; j < 5; j++) { const e = (o3[0][j] + o3[1][j]) / 2; chi3 += (o3[0][j] - e) ** 2 / e + (o3[1][j] - e) ** 2 / e; }
+  assert.ok(Math.abs(chi3 - 5.1786) < 1e-3 && chi3 < 9.488);
+  const chi4 = 2 * 25 / 65 + 2 * 25 / 35; assert.ok(Math.abs(chi4 - 2.1978) < 1e-3 && chi4 < 3.841);
+  assert.ok(Math.abs(0.1 / Math.sqrt(0.65 * 0.35 * 0.02) - 1.482) < 1e-3);
+  assert.ok(Math.abs(100 / 26 - 3.846) < 1e-3 && 100 / 26 > 3.841 && 81 / 26 < 3.841);
+
+  // 好的作答與常見錯誤
+  assert.ok(gt('115-pstat-E1', '1', '加權平均=(5000×4+2000×5+3000×6)/10000=4.8').earned === 6);
+  assert.ok(gt('115-pstat-E1', '1', '(4+5+6)/3=5').earned <= 1, '未加權');
+  assert.ok(gt('115-pstat-E1', '2', '全變異數=組內+組間，組內=(5000×4+2000×1+3000×4)/10000=3.4，組間=Σn(μi-μ)²/N=0.76，合計4.16').earned === 14);
+  assert.ok(gt('115-pstat-E1', '2', '各區變異數加權平均=3.4').earned <= 8, '漏組間變異');
+  assert.ok(gt('115-pstat-E2', '1', '貝氏定理，P(作弊)=1/3，P(公正)=2/3，P(2|作弊)=0.3，P(2|公正)=1/6，P=0.1/(0.1+1/9)=9/19≈0.4737').earned === 10);
+  assert.ok(gt('115-pstat-E2', '1', '答案是 0.3').earned <= 2);
+  assert.ok(gt('115-pstat-E2', '2', '玩家選作弊骰 1/3 期望0，選公正骰 2/3；P(莊小)=0.55，P(莊大)=17/60=0.2833，對公正骰期望 100×(0.55-0.2833)=26.67，總期望 (2/3)×80/3=160/9≈17.78 元').earned === 15);
+  assert.ok(gt('115-pstat-E2', '2', '對公正骰期望26.67元').earned <= 9, '漏乘 2/3');
+  assert.ok(gt('115-pstat-E3', '1', 'H0：兩方案評價分布相同，H1：分布不同。欄合計12、22、30、26、10，期望次數6、11、15、13、5。χ²=Σ(O-E)²/E=5.18，df=(2-1)(5-1)=4，臨界值9.488，不拒絕H0，無顯著差異').earned === 25);
+  assert.ok(gt('115-pstat-E3', '1', 'χ²=5.18，df=4，臨界值9.488，拒絕H0').items.find(i => i.id === 'r5').earned === 0, '拒絕不應得結論分');
+  assert.ok(gt('115-pstat-E3', '1', 'χ²=5.18，df=9，臨界值16.919，不拒絕H0').items.find(i => i.id === 'r4').earned <= 2.5, 'df 錯誤');
+  assert.ok(gt('115-pstat-E4', '1', '獨立樣本，H0：辯論不影響，H1：影響。期望次數 65、35，χ²=Σ(O-E)²/E=2.198，df=1，臨界值3.841，不拒絕H0').earned === 15);
+  assert.ok(gt('115-pstat-E4', '1', '獨立樣本 χ²=Σ(O-E)²/E=2.198，df=1，3.841，拒絕H0').items.find(i => i.id === 'r5').earned === 0);
+  assert.ok(gt('115-pstat-E4', '2', '同一批人是成對樣本，用 McNemar 檢定。H0：辯論不影響，H1：影響。b=18，c=8，χ²=(b-c)²/(b+c)=100/26=3.846，df=1，臨界值3.841，拒絕H0，顯著影響').earned === 15);
+  assert.ok(gt('115-pstat-E4', '2', '獨立樣本卡方 χ²=2.198，df=1，臨界值3.841，不拒絕H0').earned <= 8, '把成對當獨立');
+  const fe4 = C.feedbackEssay(E['115-pstat-E4'], { 1: { r1: 3 }, 2: {} }, { 1: 'χ²=2.198', 2: '同上' });
+  assert.ok(fe4 && (Array.isArray(fe4) ? fe4.length : true));
+}
+console.log('115 年普考統計學概要申論題測試通過');
